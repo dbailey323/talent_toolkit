@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Holcim Potential Workshop</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script>
+/* Inlined from workshop_data.js so the file works when opened directly (file://). */
+// 4A Workshop Case Study Data
+window.WORKSHOP_DATA = {
+  cases: [
+    {
+      id: 'sarah',
+      name: 'Sarah Okonkwo',
+      role: 'Operations Manager',
+      location: 'UK - West Midlands Plant',
+      tenure: '8 years in current role',
+      performance: '4.8 / 5 - consistently exceeds targets',
+      bio: 'Sarah runs one of the most efficient plants in the region. Her KPIs are exemplary, her team has the lowest attrition in the business, and she is universally well-liked. She is frequently cited in leadership meetings as an example of excellence.',
+      photo: null,
+      dimensions: {
+        ability: {
+          question: 'Does Sarah demonstrate the capability, judgement and scale of thinking required to operate at the next leadership level?',
+          evidence: [
+            { text: 'Delivered 98% on-time production for three consecutive years - the best record in the region.', tag: 'Performance', warn: 'This tells us she executes brilliantly in her current role. Does it tell us she can operate at the next level of complexity?' },
+            { text: 'When asked to lead a cross-regional project last year, she delegated most key decisions back to the regional leads rather than driving them herself.', tag: 'Potential signal', warn: null },
+            { text: 'Team members describe her as "the best manager they\'ve ever had" - her 360 feedback is consistently top-rated.', tag: 'Performance', warn: 'A strong current-role indicator. What does it tell us about the level above?' },
+            { text: 'During a restructuring that affected her site, Sarah waited for central direction rather than proposing an independent plan.', tag: 'Potential signal', warn: null },
+          ],
+          suggestedRating: 'Medium',
+          nudge: {
+            High: 'Consider whether this is a performance halo. The evidence shows exceptional delivery in her current role - but does it demonstrate the judgement and scale of thinking needed one level up? These are different things.',
+            Medium: 'Good calibration. There is solid evidence of current-role capability, but limited demonstration of next-level thinking or independent judgement at scale.',
+            Low: 'Be careful not to underrate. Sarah has real strengths - the question is whether evidence of next-level capability exists, not whether she is capable today.',
+          }
+        },
+        aspiration: {
+          question: 'Does Sarah actively seek broader leadership responsibility? Is her ambition evidenced - or assumed?',
+          evidence: [
+            { text: 'In her last performance review, Sarah said she "loves what she does and wants to keep doing it well."', tag: 'Potential signal', warn: null },
+            { text: 'She has turned down two development secondments in the past 18 months, citing the importance of operational continuity.', tag: 'Potential signal', warn: null },
+            { text: 'Sarah always volunteers first for site improvement projects and goes beyond her remit to make them successful.', tag: 'Performance', warn: 'This shows commitment to her current role - not necessarily ambition for the next one.' },
+            { text: 'No formal career conversation has been recorded in the last 12 months.', tag: 'Process gap', warn: null },
+          ],
+          suggestedRating: 'Low',
+          nudge: {
+            High: 'What evidence supports high aspiration? She has turned down two development opportunities and expressed satisfaction with her current role. Are you projecting aspiration onto her because she performs well?',
+            Medium: 'There is limited evidence of aspiration for the next level. Declining two secondments and stating she wants to stay in her current role are meaningful signals. Be careful not to assume aspiration from performance.',
+            Low: 'The evidence supports this. Aspiration must be evidenced through behaviour and direct conversation - not assumed. This is exactly why a documented career conversation matters.',
+          }
+        },
+        agility: {
+          question: 'How quickly can Sarah adapt, learn and perform in unfamiliar, complex or changing environments?',
+          evidence: [
+            { text: 'Introduced a new shift scheduling system that reduced overtime costs by 14% across her site.', tag: 'Performance', warn: 'A strong initiative - but within a highly familiar context.' },
+            { text: 'When the business rolled out a new ERP system, Sarah\'s plant was the last in the region to complete migration.', tag: 'Potential signal', warn: null },
+            { text: 'Colleagues note she has strong views on "how things should be done" and can be resistant to input that challenges her methods.', tag: 'Potential signal', warn: null },
+            { text: 'Sarah has worked exclusively in operations, in the same country, for her entire career.', tag: 'Context', warn: null },
+          ],
+          suggestedRating: 'Low',
+          nudge: {
+            High: 'The evidence points the other way. She was slow to adopt the ERP change, resists challenge to her methods, and has limited cross-context exposure. High agility requires demonstrated adaptation - not just competence in a familiar environment.',
+            Medium: 'Being excellent at optimising within a known environment is different from demonstrating agility in unfamiliar, complex or changing situations. Review the evidence again.',
+            Low: 'A fair read. Limited cross-context exposure, resistance to challenge, and slow adaptation to change are meaningful signals when assessing potential at the next level.',
+          }
+        },
+        alignment: {
+          question: 'Does Sarah consistently demonstrate the values and behaviours needed - and is she aligned to where the organisation is going?',
+          evidence: [
+            { text: 'Consistently scores 5/5 on values behaviours in her annual review for six consecutive years.', tag: 'Performance', warn: 'Strong current alignment signal. But alignment to future direction is a different question.' },
+            { text: 'Sarah has expressed concern about the pace of organisational change, saying she prefers "stability over disruption."', tag: 'Potential signal', warn: null },
+            { text: 'Her team has the highest engagement scores in the business for four years running.', tag: 'Performance', warn: null },
+            { text: 'Has not engaged with the organisation\'s strategic direction-setting forums despite repeated invitations.', tag: 'Potential signal', warn: null },
+          ],
+          suggestedRating: 'Medium',
+          nudge: {
+            High: 'Alignment to current values is clear - but does she align to where the organisation is heading? Her preference for stability over change and non-engagement with strategy forums is worth weighing alongside the values scores.',
+            Medium: 'A balanced read. Strong current alignment, but some signals that the pace and direction of change may not match her preferences at the next level.',
+            Low: 'There is no evidence of a values problem here. Be careful not to conflate a preference for stability with misalignment.',
+          }
+        },
+      },
+      overallSuggested: 'Emerging Potential',
+      overallCoach: 'Sarah is an outstanding performer - and that is precisely what makes this assessment difficult. The evidence consistently shows excellence in her current role, but limited indicators of potential beyond it. This is the most common error in talent reviews: mistaking performance for potential. A potential rating is not a reward for delivery. Sarah may be exactly where she adds the most value to the organisation.',
+    },
+    {
+      id: 'marcus',
+      name: 'Marcus Teller',
+      role: 'Finance Business Partner',
+      location: 'Germany - Central Europe Region',
+      tenure: '3 years in current role',
+      performance: '3.8 / 5 - solid, not exceptional',
+      bio: 'Marcus is a reliable Finance BP who meets his targets. He is not the most visible person in a room. But those who work closely with him have noticed something different about the way he thinks.',
+      photo: null,
+      dimensions: {
+        ability: {
+          question: 'Does Marcus demonstrate the capability, judgement and scale of thinking required to operate at the next leadership level?',
+          evidence: [
+            { text: 'Redesigned the entire FP&A process for his region unprompted. The new model has since been adopted by two other regions.', tag: 'Potential signal', warn: null },
+            { text: 'His monthly close scores are on target but not outstanding - ranked 4th of 6 Finance BPs in his peer group.', tag: 'Performance', warn: 'Useful context about current delivery - but not the primary lens for assessing potential.' },
+            { text: 'Identified a €2.1M saving in procurement that had been missed for three years. Presented directly to the CFO without being asked.', tag: 'Potential signal', warn: null },
+            { text: 'When the CFO requested a scenario model for a potential acquisition, Marcus delivered it overnight - and included angles the CFO had not considered.', tag: 'Potential signal', warn: null },
+          ],
+          suggestedRating: 'High',
+          nudge: {
+            High: 'Strong read. The evidence shows next-level thinking: working beyond his defined scope, anticipating questions before they are asked, and reframing problems independently. This is what ability for the next level looks like.',
+            Medium: 'Look again at the evidence. His performance scores are mid-table - but potential is not about current delivery. The FP&A redesign and the acquisition scenario both suggest he operates at a level above his role.',
+            Low: 'You may be anchoring on his performance ranking. The question is: does his thinking operate above his current level? The evidence points strongly to yes.',
+          }
+        },
+        aspiration: {
+          question: 'Does Marcus actively seek broader responsibility? Is his ambition evidenced through behaviour and direct conversation?',
+          evidence: [
+            { text: 'In a documented career conversation last quarter, Marcus stated he wants to become a CFO within 10 years and has mapped out the experiences he needs to get there.', tag: 'Potential signal', warn: null },
+            { text: 'Enrolled in an external Executive Finance programme at his own cost, outside working hours.', tag: 'Potential signal', warn: null },
+            { text: 'Has asked his manager three times in the past year for a stretch project or a broader commercial remit.', tag: 'Potential signal', warn: null },
+            { text: 'Sometimes appears disengaged in team meetings - contributes less than his peers in group discussions.', tag: 'Behavioural note', warn: 'Visible engagement in meetings is not the same as aspiration. Check the direct evidence.' },
+          ],
+          suggestedRating: 'High',
+          nudge: {
+            High: 'The evidence is unusually clear. Documented career goals, self-funded development, and proactive requests for stretch. This is what evidenced aspiration looks like - as opposed to assumed aspiration.',
+            Medium: 'Do not let meeting-room behaviour anchor your rating. Aspiration is best evidenced through conversations and actions, not visibility. The direct evidence here is strong.',
+            Low: 'Review the evidence carefully. He has explicitly stated his ambition, funded his own development, and requested stretch assignments. It is difficult to build a case for Low aspiration here.',
+          }
+        },
+        agility: {
+          question: 'How quickly does Marcus adapt, learn and perform when the environment changes or becomes unfamiliar?',
+          evidence: [
+            { text: 'Relocated from Frankfurt to Nairobi with three weeks notice to cover an urgent gap. Rebuilt relationships and was fully operational within six weeks.', tag: 'Potential signal', warn: null },
+            { text: 'When his region restructured, Marcus was the first Finance BP to adapt his reporting model - others took an average of three months.', tag: 'Potential signal', warn: null },
+            { text: 'Missed a key deliverable in his first month in Nairobi due to an unfamiliar regulatory context.', tag: 'Performance', warn: 'One miss in a genuinely unfamiliar context says little about agility. The more useful question: how did he respond?' },
+            { text: 'Following the missed deliverable, he designed a new-context onboarding checklist now used by all Finance BPs entering new regions.', tag: 'Potential signal', warn: null },
+          ],
+          suggestedRating: 'High',
+          nudge: {
+            High: 'Excellent calibration. He adapted quickly in a genuinely new context, recovered from a setback by creating something useful, and was first to adapt to structural change. This is agility - not the absence of difficulty, but how you move through it.',
+            Medium: 'The missed deliverable may be weighing on your rating. But agility is about learning and adapting - which he demonstrably did. The recovery matters as much as the stumble.',
+            Low: 'You may be focusing on the miss rather than the response. Agility is not error-free performance in new situations - it is the capacity to adapt and recover through them.',
+          }
+        },
+        alignment: {
+          question: 'Does Marcus consistently role model the values and behaviours the organisation needs - including at the next level?',
+          evidence: [
+            { text: 'Has challenged his manager and the Finance Director in meetings. Some colleagues find this uncomfortable.', tag: 'Potential signal', warn: null },
+            { text: '360 feedback notes he "does not always read the room" and sometimes pushes too hard in discussions.', tag: 'Behavioural note', warn: null },
+            { text: 'When asked about his challenge style, Marcus said: "I only push back when I think we\'re leaving value on the table or heading the wrong way. I want the business to win."', tag: 'Potential signal', warn: null },
+            { text: 'Volunteer mentor for three junior colleagues outside his direct team. Not asked - chose to do it.', tag: 'Potential signal', warn: null },
+          ],
+          suggestedRating: 'High',
+          nudge: {
+            High: 'A thoughtful read. Challenge in service of organisational outcomes - backed by his own words and his behaviour - is a strength at senior levels, not a risk. This is aligned challenge, not misalignment.',
+            Medium: 'Is the discomfort his challenge creates a values concern, or simply a style one? Consider whether "doesn\'t always read the room" reflects misalignment or the friction that comes with honest thinking.',
+            Low: 'Alignment is not the same as agreement. Marcus challenges in service of the right outcomes. A Low alignment rating here is likely to be wrong, and worth revisiting.',
+          }
+        },
+      },
+      overallSuggested: 'High Potential',
+      overallCoach: 'Marcus is a high potential individual who is easy to underestimate. His performance scores are solid but not striking - and in many organisations, he would be invisible in a talent review. The 4A framework exists to surface people like Marcus: strong next-level thinking, clear and evidenced aspiration, demonstrated agility, and values-driven challenge. Ask yourself: would you have spotted him without this process?',
+    }
+  ]
+};
+
+</script>
+<template id="__bundler_thumbnail">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 56">
+  <rect width="80" height="56" fill="#0f1e38"/>
+  <rect x="8" y="8" width="30" height="6" rx="2" fill="#00868a"/>
+  <rect x="8" y="18" width="64" height="4" rx="2" fill="rgba(255,255,255,0.15)"/>
+  <rect x="8" y="26" width="64" height="4" rx="2" fill="rgba(255,255,255,0.1)"/>
+  <rect x="8" y="34" width="64" height="4" rx="2" fill="rgba(255,255,255,0.1)"/>
+  <rect x="8" y="42" width="40" height="6" rx="2" fill="#1a2e52"/>
+</svg>
+</template>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: #041739; color: #fff; min-height: 100vh; overflow-x: hidden; }
+  .slide { flex: 1; display: flex; flex-direction: column; }
+  textarea { resize: vertical; }
+  @media print { body { background: #fff; } }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useCallback } = React;
+
+const NAVY = '#041739';        // Holcim primary navy
+const CYAN = '#05b7ed';        // Holcim cyan
+const LIME = '#65c12a';        // Holcim bright green
+const TEAL = '#05b7ed';        // alias
+const TEAL2 = '#65c12a';       // alias
+const SLATE = '#3d5070';
+const GREEN = '#65c12a';
+const AMBER = '#d97706';
+const RED = '#dc2626';
+const WHITE = '#ffffff';
+
+const DIMS = ['ability','aspiration','agility','alignment'];
+const DIM_COLORS = { ability: NAVY, aspiration: TEAL, agility: TEAL2, alignment: SLATE };
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{"facilitatorFontScale": 1.15, "showTagBadges": true}/*EDITMODE-END*/;
+
+// ── helpers ──────────────────────────────────────────────────────────────────
+function computeOverall(ratings) {
+  const vals = DIMS.map(d => ratings[d]);
+  if (vals.some(v => !v)) return null;
+  const scores = { Low: 1, Medium: 2, High: 3 };
+  const sum = vals.reduce((a, v) => a + scores[v], 0);
+  const lows = vals.filter(v => v === 'Low').length;
+  const highs = vals.filter(v => v === 'High').length;
+  if (lows >= 2 || sum <= 5) return 'Emerging Potential';
+  if (highs >= 3 && sum >= 10) return 'High Potential';
+  if (sum >= 9) return 'High Potential';
+  if (sum >= 7) return 'Medium Potential';
+  return 'Emerging Potential';
+}
+
+const OVERALL_META = {
+  'High Potential':    { color: GREEN,  label: 'High Potential' },
+  'Medium Potential':  { color: AMBER,  label: 'Medium Potential' },
+  'Emerging Potential':{ color: '#e05c3a', label: 'Emerging Potential' },
+};
+
+// ── shared UI ────────────────────────────────────────────────────────────────
+
+// Signature stroke - gradient bar at the baseline.
+const Stroke = ({ children, fontSize = 28 }) => {
+  const h = Math.round(fontSize * 0.22);
+  const ext = Math.round(fontSize / 6);
+  return (
+    <span style={{ display: 'inline-block', position: 'relative' }}>
+      <span style={{
+        position: 'absolute', left: -ext, right: -ext,
+        bottom: Math.round(fontSize * 0.04),
+        height: h,
+        background: 'linear-gradient(90deg, #65c12a 0%, #05b7ed 50%, #164375 100%)',
+        zIndex: 0,
+      }}></span>
+      <span style={{ position: 'relative', zIndex: 1 }}>{children}</span>
+    </span>
+  );
+};
+
+const Btn = ({ children, onClick, variant = 'primary', disabled }) => (
+  <button onClick={onClick} disabled={disabled} style={{
+    padding: variant === 'ghost' ? '10px 20px' : '12px 28px',
+    borderRadius: 8, border: variant === 'ghost' ? '1px solid rgba(255,255,255,0.25)' : 'none',
+    background: variant === 'primary' ? TEAL : variant === 'secondary' ? 'rgba(255,255,255,0.1)' : 'transparent',
+    color: '#fff', fontFamily: 'DM Sans, sans-serif', fontWeight: 600, fontSize: 15,
+    cursor: disabled ? 'not-allowed' : 'pointer', opacity: disabled ? 0.4 : 1,
+    transition: 'all 0.15s', letterSpacing: '0.02em',
+  }}>{children}</button>
+);
+
+const Tag = ({ text, color }) => (
+  <span style={{
+    display: 'inline-block', padding: '2px 8px', borderRadius: 4,
+    fontSize: 11, fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase',
+    background: color === 'warn' ? 'rgba(220,38,38,0.15)' : color === 'green' ? 'rgba(45,157,107,0.2)' : 'rgba(255,255,255,0.12)',
+    color: color === 'warn' ? '#fca5a5' : color === 'green' ? '#6ee7b7' : 'rgba(255,255,255,0.7)',
+    border: `1px solid ${color === 'warn' ? 'rgba(220,38,38,0.3)' : color === 'green' ? 'rgba(45,157,107,0.3)' : 'rgba(255,255,255,0.15)'}`,
+  }}>{text}</span>
+);
+
+const ProgressBar = ({ step, total, labels, facilitator }) => (
+  <div style={{ background: 'rgba(0,0,0,0.3)', padding: facilitator ? '12px 40px' : '10px 32px', display: 'flex', alignItems: 'center', gap: 16 }}>
+    <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', minWidth: 60 }}>
+      {step + 1} / {total}
+    </div>
+    <div style={{ flex: 1, height: 3, background: 'rgba(255,255,255,0.1)', borderRadius: 99 }}>
+      <div style={{ height: '100%', width: `${((step + 1) / total) * 100}%`, background: TEAL, borderRadius: 99, transition: 'width 0.4s ease' }} />
+    </div>
+    <div style={{ fontSize: 12, fontWeight: 600, color: 'rgba(255,255,255,0.5)', textAlign: 'right', minWidth: 120 }}>
+      {labels[step] || ''}
+    </div>
+  </div>
+);
+
+// ── RatingPicker ─────────────────────────────────────────────────────────────
+const RatingPicker = ({ value, onChange, color, size = 'normal' }) => (
+  <div style={{ display: 'flex', gap: 0, borderRadius: 10, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.15)', width: 'fit-content' }}>
+    {['Low','Medium','High'].map((lvl, i) => {
+      const active = value === lvl;
+      return (
+        <button key={lvl} onClick={() => onChange(lvl)} style={{
+          padding: size === 'large' ? '14px 36px' : '10px 24px',
+          border: 'none', borderRight: i < 2 ? '1px solid rgba(255,255,255,0.12)' : 'none',
+          cursor: 'pointer', fontFamily: 'DM Sans, sans-serif', fontWeight: active ? 700 : 500,
+          fontSize: size === 'large' ? 17 : 14, letterSpacing: '0.03em', transition: 'all 0.15s',
+          background: active ? color : 'rgba(255,255,255,0.06)',
+          color: active ? '#fff' : 'rgba(255,255,255,0.5)',
+        }}>{lvl}</button>
+      );
+    })}
+  </div>
+);
+
+// ── SCREEN 0: Welcome ────────────────────────────────────────────────────────
+const WelcomeScreen = ({ onNext, facilitator }) => {
+  const fs = facilitator ? 1.15 : 1;
+  return (
+    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: facilitator ? '60px 80px' : '48px 40px', maxWidth: 900, margin: '0 auto', width: '100%' }}>
+      <div style={{ fontSize: 11 * fs, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: CYAN, marginBottom: 16 }}>Holcim Potential Workshop</div>
+      <h1 style={{ fontFamily: 'Montserrat, sans-serif', fontSize: 56 * fs, fontWeight: 800, lineHeight: 1.0, marginBottom: 24, letterSpacing: '-0.02em', textTransform: 'uppercase' }}>
+        What is<br/>
+        <Stroke fontSize={56 * fs}>potential</Stroke>,<br/>
+        really?
+      </h1>
+      <p style={{ fontSize: 18 * fs, lineHeight: 1.7, color: 'rgba(255,255,255,0.7)', maxWidth: 680, marginBottom: 48 }}>
+        Before we start: potential is not the same as performance. This is the single most common mistake made in talent reviews - and it is why the 4A framework exists.
+      </p>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 48, maxWidth: 720 }}>
+        {[
+          { label: 'Performance', color: 'rgba(255,255,255,0.05)', border: 'rgba(255,255,255,0.15)', text: 'How well someone delivers results in their current role, against current expectations, today.', icon: '✗' },
+          { label: 'Potential', color: 'rgba(5,183,237,0.12)', border: 'rgba(5,183,237,0.4)', text: 'The capacity to perform effectively at the next level of leadership - in new, more complex situations.', icon: '✓' },
+        ].map(c => (
+          <div key={c.label} style={{ background: c.color, border: `1px solid ${c.border}`, borderRadius: 12, padding: '24px' }}>
+            <div style={{ fontSize: 13 * fs, fontWeight: 700, letterSpacing: '0.07em', textTransform: 'uppercase', marginBottom: 8, color: c.label === 'Performance' ? 'rgba(255,255,255,0.5)' : CYAN }}>
+              {c.label}
+            </div>
+            <div style={{ fontSize: 15 * fs, lineHeight: 1.6, color: 'rgba(255,255,255,0.8)' }}>{c.text}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: 12, padding: '20px 24px', maxWidth: 680, marginBottom: 40, borderLeft: `3px solid ${TEAL}` }}>
+        <div style={{ fontSize: 15 * fs, lineHeight: 1.65, color: 'rgba(255,255,255,0.75)' }}>
+          <strong style={{ color: '#fff' }}>Today's exercise:</strong> You will assess two fictional managers using the 4As - step by step. The tool will give you coaching feedback on your ratings. The goal is not to get it right first time, but to learn to separate what someone <em>has done</em> from what they <em>could do</em>.
+        </div>
+      </div>
+      <Btn onClick={onNext}>Start with Case Study 1 →</Btn>
+    </div>
+  );
+};
+
+// ── SCREEN 1: Case Intro ─────────────────────────────────────────────────────
+const CaseIntroScreen = ({ caseData, caseIndex, onNext, onSelectCase, facilitator }) => {
+  const fs = facilitator ? 1.1 : 1;
+  return (
+    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: facilitator ? '60px 80px' : '48px 40px', maxWidth: 900, margin: '0 auto', width: '100%' }}>
+      <div style={{ fontSize: 11 * fs, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', marginBottom: 12 }}>Case Study {caseIndex + 1} of 2</div>
+      <h2 style={{ fontSize: 40 * fs, fontWeight: 700, marginBottom: 6, letterSpacing: '-0.01em' }}>Meet {caseData.name}</h2>
+      <div style={{ fontSize: 18 * fs, color: TEAL, fontWeight: 500, marginBottom: 32 }}>{caseData.role} · {caseData.location}</div>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 32, alignItems: 'start', marginBottom: 40 }}>
+        <p style={{ fontSize: 17 * fs, lineHeight: 1.7, color: 'rgba(255,255,255,0.75)' }}>{caseData.bio}</p>
+        <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: 12, padding: '20px 28px', minWidth: 220 }}>
+          {[['Tenure', caseData.tenure], ['Performance', caseData.performance]].map(([k, v]) => (
+            <div key={k} style={{ marginBottom: 16 }}>
+              <div style={{ fontSize: 11 * fs, fontWeight: 700, letterSpacing: '0.07em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', marginBottom: 4 }}>{k}</div>
+              <div style={{ fontSize: 14 * fs, color: '#fff', fontWeight: 500 }}>{v}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div style={{ background: `rgba(217,119,6,0.12)`, border: '1px solid rgba(217,119,6,0.3)', borderRadius: 10, padding: '16px 20px', maxWidth: 680, marginBottom: 40 }}>
+        <div style={{ fontSize: 13 * fs, color: '#fcd34d', fontWeight: 600, marginBottom: 4 }}>Remember as you assess</div>
+        <div style={{ fontSize: 14 * fs, color: 'rgba(255,255,255,0.7)', lineHeight: 1.6 }}>You are not rating how good {caseData.name.split(' ')[0]} is at her current job. You are asking: does the evidence suggest she has the capacity to perform effectively one level up?</div>
+      </div>
+      <Btn onClick={onNext}>Begin Assessment →</Btn>
+    </div>
+  );
+};
+
+// ── SCREEN 2–5: Dimension ────────────────────────────────────────────────────
+const DimensionScreen = ({ dim, caseData, rating, onRate, submitted, onSubmit, facilitator, showTags }) => {
+  const dimData = caseData.dimensions[dim];
+  const color = DIM_COLORS[dim];
+  const fs = facilitator ? 1.1 : 1;
+  const nudge = submitted && rating ? dimData.nudge[rating] : null;
+  const isCorrect = rating === dimData.suggestedRating;
+  const nudgeColor = isCorrect ? 'rgba(45,157,107,0.15)' : 'rgba(220,38,38,0.1)';
+  const nudgeBorder = isCorrect ? 'rgba(45,157,107,0.4)' : 'rgba(220,38,38,0.35)';
+  const nudgeIcon = isCorrect ? '✓' : '⚠';
+
+  return (
+    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: facilitator ? '40px 80px' : '32px 40px', maxWidth: 960, margin: '0 auto', width: '100%' }}>
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 28 }}>
+        <div style={{ background: color, borderRadius: 10, padding: '14px 24px' }}>
+          <div style={{ fontSize: 13, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.6)' }}>Dimension</div>
+          <div style={{ fontSize: 26 * fs, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase' }}>{dim}</div>
+        </div>
+        <div style={{ flex: 1 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.07em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', marginBottom: 6 }}>Assessment question</div>
+          <div style={{ fontSize: 16 * fs, lineHeight: 1.5, color: 'rgba(255,255,255,0.85)', fontStyle: 'italic' }}>"{dimData.question}"</div>
+        </div>
+      </div>
+
+      {/* Evidence */}
+      <div style={{ marginBottom: 28 }}>
+        <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', marginBottom: 14 }}>Evidence on record</div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+          {dimData.evidence.map((ev, i) => (
+            <div key={i} style={{
+              background: 'rgba(255,255,255,0.06)', borderRadius: 10, padding: '16px 18px',
+              border: '1px solid rgba(255,255,255,0.08)',
+            }}>
+              <div style={{ fontSize: 14 * fs, lineHeight: 1.6, color: 'rgba(255,255,255,0.85)', marginBottom: showTags ? 10 : 0 }}>
+                "{ev.text}"
+              </div>
+              {showTags && (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  <Tag text={ev.tag} color={ev.tag.includes('Performance') ? 'warn' : 'green'} />
+                  {submitted && ev.warn && (
+                    <div style={{ fontSize: 12, color: '#fca5a5', lineHeight: 1.5, marginTop: 2 }}>↳ {ev.warn}</div>
+                  )}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Rating */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 20, flexWrap: 'wrap' }}>
+        <div>
+          <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', marginBottom: 10 }}>Your rating for {dim}</div>
+          <RatingPicker value={rating} onChange={onRate} color={color} size={facilitator ? 'large' : 'normal'} />
+        </div>
+        {rating && !submitted && (
+          <Btn onClick={onSubmit} variant="secondary">Get coaching feedback →</Btn>
+        )}
+      </div>
+
+      {/* Nudge */}
+      {nudge && (
+        <div style={{
+          background: nudgeColor, border: `1px solid ${nudgeBorder}`,
+          borderRadius: 12, padding: '18px 22px', maxWidth: 760,
+          animation: 'fadeIn 0.3s ease',
+        }}>
+          <div style={{ fontSize: 13, fontWeight: 700, letterSpacing: '0.05em', marginBottom: 8, color: isCorrect ? '#6ee7b7' : '#fca5a5' }}>
+            {nudgeIcon} Coaching feedback
+          </div>
+          <div style={{ fontSize: 15 * fs, lineHeight: 1.65, color: 'rgba(255,255,255,0.85)' }}>{nudge}</div>
+          {!isCorrect && (
+            <div style={{ marginTop: 12, fontSize: 13, color: 'rgba(255,255,255,0.5)' }}>
+              Suggested rating: <strong style={{ color: '#fff' }}>{dimData.suggestedRating}</strong>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
+// ── SCREEN 6: Judgement ──────────────────────────────────────────────────────
+const JudgementScreen = ({ caseData, ratings, onNext, facilitator }) => {
+  const overall = computeOverall(ratings);
+  const meta = overall ? OVERALL_META[overall] : null;
+  const correct = overall === caseData.overallSuggested;
+  const fs = facilitator ? 1.1 : 1;
+  return (
+    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: facilitator ? '48px 80px' : '40px 40px', maxWidth: 900, margin: '0 auto', width: '100%' }}>
+      <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', marginBottom: 16 }}>Overall Judgement - {caseData.name}</div>
+      
+      {/* Dimension summary */}
+      <div style={{ display: 'flex', gap: 12, marginBottom: 32, flexWrap: 'wrap' }}>
+        {DIMS.map(d => (
+          <div key={d} style={{ background: DIM_COLORS[d], borderRadius: 8, padding: '10px 18px', display: 'flex', gap: 8, alignItems: 'center' }}>
+            <span style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'rgba(255,255,255,0.7)' }}>{d}</span>
+            <span style={{ fontSize: 15, fontWeight: 700 }}>{ratings[d] || '-'}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* Overall badge */}
+      {overall && (
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 28 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, background: `${meta.color}22`, border: `2px solid ${meta.color}`, borderRadius: 12, padding: '16px 28px' }}>
+            <div style={{ width: 14, height: 14, borderRadius: '50%', background: meta.color }} />
+            <span style={{ fontSize: 24 * fs, fontWeight: 700 }}>{meta.label}</span>
+          </div>
+          {correct ? (
+            <Tag text="Matches suggested rating" color="green" />
+          ) : (
+            <Tag text={`Suggested: ${caseData.overallSuggested}`} color="warn" />
+          )}
+        </div>
+      )}
+
+      {/* Coach reveal */}
+      <div style={{
+        background: 'rgba(255,255,255,0.06)', borderRadius: 12, padding: '24px 28px', maxWidth: 760,
+        borderLeft: `4px solid ${TEAL}`, marginBottom: 36,
+      }}>
+        <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.07em', textTransform: 'uppercase', color: TEAL, marginBottom: 12 }}>Facilitator debrief</div>
+        <div style={{ fontSize: 16 * fs, lineHeight: 1.7, color: 'rgba(255,255,255,0.85)' }}>{caseData.overallCoach}</div>
+      </div>
+
+      <Btn onClick={onNext}>Continue →</Btn>
+    </div>
+  );
+};
+
+// ── SCREEN 7: Calibration ────────────────────────────────────────────────────
+const CalibrationScreen = ({ cases, allRatings, facilitator }) => {
+  const [selected, setSelected] = useState([]);
+  const toggle = id => setSelected(s => s.includes(id) ? s.filter(x => x !== id) : [...s, id]);
+  const fs = facilitator ? 1.05 : 1;
+
+  return (
+    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: facilitator ? '48px 80px' : '40px 40px', maxWidth: 1100, margin: '0 auto', width: '100%' }}>
+      <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', marginBottom: 8 }}>Calibration</div>
+      <h2 style={{ fontSize: 32 * fs, fontWeight: 700, marginBottom: 8, letterSpacing: '-0.01em' }}>Comparing your two assessments</h2>
+      <p style={{ fontSize: 15 * fs, color: 'rgba(255,255,255,0.6)', marginBottom: 32, lineHeight: 1.6 }}>Calibration asks: are our ratings consistent and defensible when we compare people side by side? Look at the profiles together - do your ratings hold up?</p>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, marginBottom: 36 }}>
+        {cases.map((c, ci) => {
+          const ratings = allRatings[c.id] || {};
+          const overall = computeOverall(ratings);
+          const meta = overall ? OVERALL_META[overall] : null;
+          return (
+            <div key={c.id} style={{ background: 'rgba(255,255,255,0.06)', borderRadius: 14, padding: '24px', border: '1px solid rgba(255,255,255,0.1)' }}>
+              <div style={{ fontSize: 20 * fs, fontWeight: 700, marginBottom: 4 }}>{c.name}</div>
+              <div style={{ fontSize: 13 * fs, color: TEAL, marginBottom: 4 }}>{c.role}</div>
+              <div style={{ fontSize: 12 * fs, color: 'rgba(255,255,255,0.4)', marginBottom: 20 }}>Performance: {c.performance}</div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 20 }}>
+                {DIMS.map(d => (
+                  <div key={d} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ fontSize: 13 * fs, textTransform: 'capitalize', color: 'rgba(255,255,255,0.6)' }}>{d}</span>
+                    <div style={{ display: 'flex', gap: 4 }}>
+                      {['Low','Medium','High'].map(l => (
+                        <div key={l} style={{
+                          width: 56, height: 22, borderRadius: 4, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          fontSize: 11, fontWeight: 700, letterSpacing: '0.04em',
+                          background: ratings[d] === l ? DIM_COLORS[d] : 'rgba(255,255,255,0.06)',
+                          color: ratings[d] === l ? '#fff' : 'rgba(255,255,255,0.25)',
+                        }}>{l}</div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              {meta && (
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: `${meta.color}22`, border: `1px solid ${meta.color}66`, borderRadius: 8, padding: '8px 16px' }}>
+                  <div style={{ width: 8, height: 8, borderRadius: '50%', background: meta.color }} />
+                  <span style={{ fontSize: 14 * fs, fontWeight: 700 }}>{meta.label}</span>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Calibration questions */}
+      <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: 12, padding: '22px 26px', borderLeft: `4px solid ${AMBER}` }}>
+        <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.07em', textTransform: 'uppercase', color: '#fcd34d', marginBottom: 14 }}>Discussion questions for the room</div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+          {[
+            'If both were rated High Potential - what would that say about how you separated potential from performance?',
+            'Marcus has lower performance scores than Sarah. Does your rating reflect that - and should it?',
+            'If you were presenting these two people to an ExCo, could you defend each rating with specific evidence?',
+            'What development action follows from each rating? If you can\'t name one, the rating may not be right.',
+          ].map((q, i) => (
+            <div key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+              <span style={{ color: AMBER, fontWeight: 700, fontSize: 16, lineHeight: 1.3 }}>›</span>
+              <span style={{ fontSize: 14 * fs, color: 'rgba(255,255,255,0.75)', lineHeight: 1.6 }}>{q}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ── SCREEN 8: Checklist ──────────────────────────────────────────────────────
+const ChecklistScreen = ({ facilitator }) => {
+  const fs = facilitator ? 1.05 : 1;
+  const items = [
+    { cat: 'Evidence quality', color: GREEN, checks: [
+      'Evidence is specific - it names an action, outcome and context', 'Evidence describes behaviour at the next level, not just the current one',
+      'Evidence comes from observation or documented conversation - not reputation', 'Performance evidence is noted, but not confused for potential evidence',
+    ]},
+    { cat: 'Aspiration', color: TEAL, checks: [
+      'A documented career conversation is on record', 'Aspiration has been stated by the individual - not assumed by the manager',
+      'Declining development opportunities has been explored - not ignored', 'Aspiration has been assessed for the right level, not just ambition in general',
+    ]},
+    { cat: 'Calibration', color: AMBER, checks: [
+      'Every rating can be defended with specific evidence', 'Unanimous High across four dimensions has been challenged', 
+      'Ratings have been compared across the cohort for consistency', 'A development action follows from each rating',
+    ]},
+    { cat: 'Common errors to avoid', color: RED, checks: [
+      'Rating High because they are a strong performer', 'Rating High because they are well-liked or visible',
+      'Assuming aspiration from ambition signals in the current role', 'Treating succession readiness as the same as High Potential',
+    ]},
+  ];
+  return (
+    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: facilitator ? '48px 80px' : '40px 40px', maxWidth: 1000, margin: '0 auto', width: '100%' }}>
+      <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', marginBottom: 8 }}>Workshop Takeaway</div>
+      <h2 style={{ fontSize: 32 * fs, fontWeight: 700, marginBottom: 8 }}>Evidence quality checklist</h2>
+      <p style={{ fontSize: 15 * fs, color: 'rgba(255,255,255,0.6)', marginBottom: 32 }}>Use this when completing your own assessments in the official talent review.</p>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+        {items.map(item => (
+          <div key={item.cat} style={{ background: 'rgba(255,255,255,0.05)', borderRadius: 12, padding: '20px', border: `1px solid rgba(255,255,255,0.08)`, borderTop: `3px solid ${item.color}` }}>
+            <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.07em', textTransform: 'uppercase', color: item.color, marginBottom: 14 }}>{item.cat}</div>
+            {item.checks.map((c, i) => (
+              <div key={i} style={{ display: 'flex', gap: 10, marginBottom: 10, alignItems: 'flex-start' }}>
+                <div style={{ width: 18, height: 18, borderRadius: 4, border: `1.5px solid rgba(255,255,255,0.2)`, flexShrink: 0, marginTop: 1 }} />
+                <span style={{ fontSize: 13.5 * fs, color: 'rgba(255,255,255,0.75)', lineHeight: 1.55 }}>{c}</span>
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+      <div style={{ marginTop: 32, padding: '20px 24px', background: `rgba(0,134,138,0.12)`, borderRadius: 12, border: `1px solid rgba(0,134,138,0.3)` }}>
+        <div style={{ fontSize: 16 * fs, fontWeight: 600, color: TEAL, marginBottom: 6 }}>You're ready for the talent review</div>
+        <div style={{ fontSize: 14 * fs, color: 'rgba(255,255,255,0.7)', lineHeight: 1.65 }}>
+          The 4A framework works when it is applied rigorously and evidence is held to account. Your job in the review is not to advocate for your people - it is to assess them honestly, so the organisation can develop and deploy talent where it matters most.
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ── App ──────────────────────────────────────────────────────────────────────
+const STEP_LABELS = ['Introduction','Case Study 1','Ability','Aspiration','Agility','Alignment','Judgement','Case Study 2','Ability','Aspiration','Agility','Alignment','Judgement','Calibration','Checklist'];
+
+function App() {
+  const [step, setStep] = useState(() => parseInt(localStorage.getItem('ws_step') || '0'));
+  const [facilitator, setFacilitator] = useState(false);
+  const [showTags, setShowTags] = useState(true);
+  const [tweaks, setTweaks] = useState(TWEAK_DEFAULTS);
+  const [tweaksVisible, setTweaksVisible] = useState(false);
+
+  // Per-case ratings and submission state
+  const [ratings, setRatings] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('ws_ratings')) || { sarah: {}, marcus: {} }; }
+    catch { return { sarah: {}, marcus: {} }; }
+  });
+  const [submitted, setSubmitted] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('ws_submitted')) || { sarah: {}, marcus: {} }; }
+    catch { return { sarah: {}, marcus: {} }; }
+  });
+
+  useEffect(() => { localStorage.setItem('ws_step', step); }, [step]);
+  useEffect(() => { localStorage.setItem('ws_ratings', JSON.stringify(ratings)); }, [ratings]);
+  useEffect(() => { localStorage.setItem('ws_submitted', JSON.stringify(submitted)); }, [submitted]);
+
+  useEffect(() => {
+    const handler = e => {
+      if (e.data?.type === '__activate_edit_mode') setTweaksVisible(true);
+      if (e.data?.type === '__deactivate_edit_mode') setTweaksVisible(false);
+    };
+    window.addEventListener('message', handler);
+    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+    return () => window.removeEventListener('message', handler);
+  }, []);
+
+  const cases = window.WORKSHOP_DATA.cases;
+  // Step mapping: 0=welcome, 1=case1intro, 2-5=case1dims, 6=case1judge, 7=case2intro, 8-11=case2dims, 12=case2judge, 13=calibration, 14=checklist
+  const TOTAL = 15;
+  const getCaseAndDim = (s) => {
+    if (s >= 2 && s <= 5) return { caseId: 'sarah', dim: DIMS[s - 2] };
+    if (s >= 8 && s <= 11) return { caseId: 'marcus', dim: DIMS[s - 8] };
+    return {};
+  };
+
+  const next = () => setStep(s => Math.min(s + 1, TOTAL - 1));
+
+  const renderStep = () => {
+    if (step === 0) return <WelcomeScreen onNext={next} facilitator={facilitator} />;
+    if (step === 1) return <CaseIntroScreen caseData={cases[0]} caseIndex={0} onNext={next} facilitator={facilitator} />;
+    if (step >= 2 && step <= 5) {
+      const { caseId, dim } = getCaseAndDim(step);
+      return <DimensionScreen
+        dim={dim} caseData={cases[0]}
+        rating={ratings[caseId]?.[dim] || null}
+        onRate={v => setRatings(r => ({ ...r, [caseId]: { ...r[caseId], [dim]: v } }))}
+        submitted={!!submitted[caseId]?.[dim]}
+        onSubmit={() => setSubmitted(s => ({ ...s, [caseId]: { ...s[caseId], [dim]: true } }))}
+        facilitator={facilitator} showTags={showTags}
+      />;
+    }
+    if (step === 6) return <JudgementScreen caseData={cases[0]} ratings={ratings.sarah} onNext={next} facilitator={facilitator} />;
+    if (step === 7) return <CaseIntroScreen caseData={cases[1]} caseIndex={1} onNext={next} facilitator={facilitator} />;
+    if (step >= 8 && step <= 11) {
+      const { caseId, dim } = getCaseAndDim(step);
+      return <DimensionScreen
+        dim={dim} caseData={cases[1]}
+        rating={ratings[caseId]?.[dim] || null}
+        onRate={v => setRatings(r => ({ ...r, [caseId]: { ...r[caseId], [dim]: v } }))}
+        submitted={!!submitted[caseId]?.[dim]}
+        onSubmit={() => setSubmitted(s => ({ ...s, [caseId]: { ...s[caseId], [dim]: true } }))}
+        facilitator={facilitator} showTags={showTags}
+      />;
+    }
+    if (step === 12) return <JudgementScreen caseData={cases[1]} ratings={ratings.marcus} onNext={next} facilitator={facilitator} />;
+    if (step === 13) return <CalibrationScreen cases={cases} allRatings={ratings} facilitator={facilitator} />;
+    if (step === 14) return <ChecklistScreen facilitator={facilitator} />;
+  };
+
+  const canGoNext = () => {
+    const { caseId, dim } = getCaseAndDim(step);
+    if (dim && caseId) return !!submitted[caseId]?.[dim];
+    return true;
+  };
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      {/* Hub Bar removed for now */}
+    <div className="slide" style={{ background: `linear-gradient(145deg, #041739 0%, #0a2150 60%, #041739 100%)`, flex: 1 }}>
+      {/* Top bar */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 32px', borderBottom: '1px solid rgba(255,255,255,0.08)', background: 'rgba(0,0,0,0.2)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAABFCAYAAADw8dtTAAAPVElEQVR4AeydCbAcVRWG57GvisgiBrBkkUJELGQThEISIQJl3IgCGgtKEgtFLC20XEIShKpYuBE2WcQtRCKRKqNgIghRIhBEQwC3RFzAgAhugBICJH7/ezOpmfdmus/t7ultzqtz3u2+99xzzv2n+3T37Xtvb9Qo8d/69es3hU+HZ8K3wd1oDZnXwefCx5a4Oe6aI+AIpESglAGLwDMRnkfb1sJfg2fAR8PdaHMy3w3PghdTT3Qe/3Zj38kRcARqhECpAhZB5kj4F+D7I/hkOClNp+JD6LoG3oltJ0fAEagBAqUIWASVzeH54Pkz+CA4KzoNRY+heybpwJMD4AhUHYHCAxbB5HWA+AA8Ge4XzcDOtfCL+2XA9ToCjkD/ESg0YBFADqeJd8N7wf2mUzCwApvjSJ0cAUeggggUFrAIHLqzWgJmm8J50Ssw9HNsb0/q5AjUF4GatqyQgEXAUJBaAKZKSXIlBa3Lc7XoxhwBRyATBAoJWHj+A3hPuCiaTND0jvii0He7jkBCBHIPWASK8fh6HFw0qSN+j6KdcPuOgCNgRyD3gIVrX4bLQhqQOtYXz3EEHIFSIpBrwOLu6q2gsD9cFpqCT3uXxRn3wxFwBKIRyDVg4cpZcNloWtkccn8cAUegOwJ5B6wJ3d0oNPfjhVp34wUj4OarhEBuAYtHrw8kBEbzAq2sCdPBZvDtncGVvIIj4AjkjkBuAYuWTYKDaWho6Hwro/x6OAnlMdI+iV9exxFwBNoQyDNgbddmt2ybbyibQ+6PI+AIjEUgZcAaqzAiZ7+IsqKLjinaAbfvCDgC8QjkGbBeEu9OYRLbFmbZDTsCjoAZgTwDltkpFywXAryU2AE+FD6sydNIxa19lfmsgebPBjYbw4fALXymsi28jiVt5R3M9ibNKp4YEfCAZQQqToyDbzPYQhfF6RpdjtKL4ThaN7pemn2MjYN1kknv441G4y703dnkr5KKW/sqexD5dfCZsFbiQCQbQp90kkRTNtaSacGzLeEj4DVoeB5eBrfwuYJt4bWYtJWnZZWeQ/5x+CB4C8oSE/VNZDGAIvlDYqLUc4KxshQ2kQcsyy84QDIcNbvCOqn+SrN1kg2RWkmylyK8HB3Pw69lu9ZEG7eGtdba/2joUljfGCAx0w5IalnwZ9BzKrwx+1WiG9M4S3v1hv4Iqw4PWCNI/WMkGdz/HDhbwPrgx8OgcBiclnTiacHElegtYhmhtP7H1qddJyD0NHwtnAXNRclT6FUQY7MStA/+pglaWhbd3FAPWCNQfX8kGcz/HHC70HIF7dNJsybN1VyLjTK/JQ5qM23R4/8nqPRDOGvaEoV6TOz1lSiK+0+BFo4Hk+CvVFHnDuzo2COxkQesEZx+P5IM3n8OmpfR6kfgreB+0gPYelM/DeShmzbokU9fdfp8n+3pO5xJZ4f02bWu6n/SNbdHJjhqqfLg8Y8esEYADbotHalS/f8cNPoE2qM5tuRWbB6So71MTeG7+ui+idK8xu1dhc2q9APuja+3gI2V7rcKtst5wGo0nh0aGtJbrnZcar/NwaVX6qsKaOgybKd6I1aAzy2T57Chj/aS5EZ6AZKbsZSGxvPb6iIYqQaZ2xBINC7TA1ajoYMQ/LKjimjSY82LCvJV/WUFmU5mlpPsKGr2+zEQEx30H/aq9sGUyAALjmpP4v65QQ9Y6zkgLoMHijho1NEZutSPxmKN5260gwDuVPgJOIS2wocyLJMd4vPCEGFkNX5NfYM7twNG/odgYaljj82edAP1toOf7SlRzoI9+G1/GuGaMIkoji5KFLBwaAhW52O09s5SXVWTcKeWbPfO4oB4IVuVldB2Q4CXGgi5FzjtBN86uh558+AdyX85/BxspUUcQ+oTssoXJoefH8Z4yEd4V4LJxvA4+O/U3UDsXwbrsUlvAzV2a0NZc0PH4xRkqrzk0VFgNubunTy9VQ2NG01YRpKggIVBjebVFUJXD11ZR7QY/vMD7JCEDaqTiqzFHw1yTFq/kvX4DXVLbh1ntQaMtoQfjGssMuq810mtUd5x4q3yia2Nkqef6enf2IIlYLHP2OzOHGTUd7o1uRo0SjJMCmC7Uvbt4b1q//t1u/scdzo2NG6tPTt42xSwMKa5UXPQLkAvIa0DBQXcOjS42QbrmLN1nDi6C2hWi0+QfwapkGWELkS+1MSxvw0OaugHSSytAIOgoRvI663pPWj+E9tbw39juw6kGRM3qyFgqDvpf2s7LccGLIwJUF01y7gee9L2n8aBoQ+5Jq2fpp4ep3UBMDPG9IOTZELWu6tEHczg+l+8/BJsof04vrJsm8VmqMxHjRXW0/ZEcyipdzBcx8njE/h9NcvhW0YMY8V6BiwM6cTSx0Y1iTNWUYUErufg+EaB/irw6wIQwnoMz8plDWeI1QVGn44V6i2gUeBxncqt2m9rbZQ0jX28a/q9opl60onAWnbfC2dCPQMW2jWwq7/f7cNIzqQ3L5Nztlkac1yE3md05otGua5iBDt1HIu7llcs8z1Gf613rkZ1lRBTX3ZWjpoucF0DFgf2L/GiNnO/aIuo6m9e1Ia0/BGjAk3oNYr2FNu3Z0lngSZJd+aUa896R1q14QdZoHxoFkrQMQvWcjsk0TQmYBGsPkmVA+E60b5c9evw5iWv3yT13RF4/8HobNkDlqUZGldlkaubjN4eW+9Ao9qugBVVvqGsI2ARrKZQMhuuC51JQzQe5nekTnYEsrzVb1qtdZLFHWlVAfoujq+Ek9KeXNxMj4MysCFgEaz0tkbrISm/6nwkDdgCIC6H/eQDjEDK867HfLAGtiFPcQ2czdNeaWxxfun3S/R2lEZMoP4fSc20IWBRQ4PjTM/ryAYTAfGJJBxo6EYAEC3l3yD2KQTC1VO8/bjoKRRVwG89Naq8rUxvS9t2K7mpsVqVdDwLpznXNP7uxEBd6nYYM3MiTsfwgcnBpWH0n4sTTln+UuonYarZCOBCpobYlNZL6oPG5pxtlIsSs84i0BU6Sk/RZToZY33gHHpNrFCNBTj3tOpo6wnN0lLNkwz+7YcDFtqtV0NEnVIisIT6mpsWwlGTSVFnpl8ZJbfjBNzZKDtGjLq6UxePKeuSsbxLXpmyLjY6k9UyyUZzpRRTn7HFMb0ES9Tv1wpYF1isuEwmCNzH1ejSEMaqxsSRpCNs6opmnfqhL70kNWjul8CnPyc1klO9J4129m8GaqN4pxh1Q1fP6FRQgj1+Sw0SfX2MK6spT7zC70YApbVpNkOJ02AgYB1uMIljY3ooJNTRhF7r+t79WEM+1OU4+a/ECTTL9dIq0dIpYKZ1r24mbZ8I3VRbrYSgpbv4qKEOuyOjC2eihukO642JanqlfiHQb73HBxg4j5PoXKs8spr4HHKrn9WjrtXFYDlOLs2N1GKHlro7gsG9FsGWDPLCS33IytL3AB8jb3/tVJi/h+/d3s7vBp7d8hG3kQLWQHcW2mCqjxQHzFO0JnJVSMrbaRYnkNYxas8bs43M7WT+C7bSInwxPzpalfZJLmTQ8QFg8SS8e5QvlM+HtdaY7kjbRbVW1n2UaQB3e35ltvld9eZ39AoXV5Ovb12maocC1ttTafDKVUQgdF3yEziB9Kmu+0m18N5upFo+5BJS5ekVdeidugYpZ4odvujLPGm4a9cIJ9p3cFQBmcRE2yL1F/wRK/gsYPtK+F5Y++rr0ZzWqMXsZiO7Gq7k+vdgptH/rX65p9k/A0xSkwJW1x8ptWZXUFoEOHj0sdRFgQ5qmRDdjWtp44eoKx1aRUJ5Oo7IMtP78UEHtLmCUVDzX9Ow+qF6mXpHr4KIfN1l6fFOq4fqhD0AWe0LSzYbjZh/WsX1nwStSTFyZS3Wxyb0kkc4ZOJj6IGWiVFXUjwCBIy34EURfUgKVHOxXSkCL61bX8QHS67BtnXRxVJhit9aBHIX0pCugsg2eMCKhKf2hbpyZ7ISpBEpvR16JQdwqo5Xo63MxfD7Cyg1T9RFNi2p78y6wkZaW5Wo7wGrEj9Tf5zkBNTrdD2mpO4MNXioILUNNvXWzSBeThH816KW5jenKVqhScVnYE+4pVBTr6plD1i6De+JuBekR4ATQv1Re6Kpn48dWoF0K2zpmwCYqjbRDk1j6+fjoe7kTsGOz4cddagoYIW84h5Vve+7lR9I13eEMjDAiaEvCGmp4jdnoG60ionovxCu1clHexRUxtHYrNt1IrrPgfXmFfVO7QgoYA1/2aI9s0TbGqdSInfq7QonyS20UK/RTyZNQ+qr0ie8tBbZ4jSKylwXvB6BhZfamtZVfexie/RpEnFaXbWtr4ClfowkDZzK69Z5Vk5igDrz4KqQrojn42wcJzmBNQQhTq/KMZ+OOGH0vbzr0KJjQyfiZ9m2kNp/EoLHoWMjeDGcVf/LPY1GQ+3rN6sNNCGMaKfaqiERR1DTum4+og114OtbfZui4yI4zds0KzayG8ePImDRl+UNxdctNnVQXoVgEtJ6zroSWznYBj9gUZ/iSuLrC/g73cA3hSpHp9b5itOdaUcwNvXZKp2IF7Ctk1GrL6iDXm8W2/lVtEd3UpsgtwD+MfuZEjrvhuPan0W5Rmgn9h0f74DnwsJLiyBqTFg7VtrW8uObSQaeCd8Ep7Irh9Fhar9k4xhdq2GLPtPSO3H2VI69K+BYm7oSaqqGPuSoemVivzUu0a/BwaSArJUmFrLdzqvYz+pOqkQtTueKMIF/A7djpe3l5Pm6bQnh1R2Wql6tfyVjvT4umUvujiPgCPQfgd4WWgHrSkTKdJW8natQGe/6gMnJEXAEikJgOGARHPRWZ1pRTnSx+7EueZ7lCDgCA47AcMASBgQtPRbepe2CeT6++N1VwT+Cm3cEyojAhoDVdC7zJT+aeq3JnQSrqNUKrXoGWM6b7gjUF4GOgEWwWEVTD4OLII39eFcRht2mI+AIVAOBjoAllwlay0g1XoQkN9Lk26OxnWhN7Ny8dEOOgCNQKAJjApa8IXAsJD0czoP0McUDsZnmc9d5+Ok2HIGyITBw/nQNWEKBAKJJ0VopMGRpWFUN4dnYGQ9rUbeQei7rCDgCA4hAz4AlLAgkD8NHsX02nHr6ADpapCk3r0b3p1oZnjoCjoAjEIdAZMBqVSawzGFba78rcGmdZnYTkZbk2Ad9J8G/TaTBKzkCjsDAImAKWEKHAKPJsHNIj2Ffi+hr6dYZbGvOX7eF2fSFV43tksyR1BNpnZ+y9FXhupMj4AhUCYH/AwAA///TiYDqAAAABklEQVQDAEg7IYs2CV6GAAAAAElFTkSuQmCC" alt="Holcim" style={{ height: 20, filter: 'brightness(0) invert(1)' }} />
+          <span style={{ fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,0.6)', borderLeft: '1px solid rgba(255,255,255,0.18)', paddingLeft: 10, marginLeft: 4 }}>Potential Workshop</span>
+        </div>
+        <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+          <button onClick={() => setShowTags(s => !s)} style={{
+            padding: '6px 14px', borderRadius: 6, border: '1px solid rgba(255,255,255,0.15)',
+            background: showTags ? 'rgba(0,134,138,0.2)' : 'transparent',
+            color: showTags ? TEAL : 'rgba(255,255,255,0.4)', fontSize: 12, fontWeight: 600,
+            cursor: 'pointer', fontFamily: 'DM Sans, sans-serif',
+          }}>Evidence labels {showTags ? 'on' : 'off'}</button>
+          <button onClick={() => setFacilitator(f => !f)} style={{
+            padding: '6px 14px', borderRadius: 6, border: '1px solid rgba(255,255,255,0.15)',
+            background: facilitator ? 'rgba(45,157,107,0.2)' : 'transparent',
+            color: facilitator ? GREEN : 'rgba(255,255,255,0.4)', fontSize: 12, fontWeight: 600,
+            cursor: 'pointer', fontFamily: 'DM Sans, sans-serif',
+          }}>📽 {facilitator ? 'Facilitator mode' : 'Individual mode'}</button>
+          <button onClick={() => { if (confirm('Reset all progress?')) { localStorage.clear(); setStep(0); setRatings({ sarah: {}, marcus: {} }); setSubmitted({ sarah: {}, marcus: {} }); }}} style={{ padding: '6px 12px', borderRadius: 6, border: '1px solid rgba(255,255,255,0.1)', background: 'transparent', color: 'rgba(255,255,255,0.3)', fontSize: 12, cursor: 'pointer', fontFamily: 'DM Sans, sans-serif' }}>↺ Reset</button>
+        </div>
+      </div>
+
+      <ProgressBar step={step} total={TOTAL} labels={STEP_LABELS} facilitator={facilitator} />
+
+      {/* Main content */}
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+        {renderStep()}
+      </div>
+
+      {/* Bottom nav */}
+      <div style={{ padding: '16px 32px', borderTop: '1px solid rgba(255,255,255,0.08)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(0,0,0,0.2)' }}>
+        <Btn variant="ghost" onClick={() => setStep(s => Math.max(s - 1, 0))} disabled={step === 0}>← Back</Btn>
+        <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.25)' }}>
+          {getCaseAndDim(step).dim && !canGoNext() ? 'Rate this dimension and submit to continue' : ''}
+        </span>
+        <Btn onClick={next} disabled={!canGoNext() || step === TOTAL - 1}>
+          {step === TOTAL - 1 ? 'Complete' : 'Next →'}
+        </Btn>
+      </div>
+
+      {/* Tweaks */}
+      {tweaksVisible && (
+        <div style={{ position: 'fixed', bottom: 72, right: 24, background: '#1a2940', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 12, padding: '18px 20px', width: 260, zIndex: 999, boxShadow: '0 8px 32px rgba(0,0,0,0.4)' }}>
+          <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.07em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)', marginBottom: 14 }}>Tweaks</div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+            <label style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)' }}>Evidence labels</label>
+            <button onClick={() => setShowTags(s => !s)} style={{ width: 38, height: 20, borderRadius: 99, border: 'none', cursor: 'pointer', background: showTags ? TEAL : 'rgba(255,255,255,0.15)', position: 'relative', transition: 'background 0.2s' }}>
+              <div style={{ width: 14, height: 14, borderRadius: '50%', background: '#fff', position: 'absolute', top: 3, left: showTags ? 21 : 3, transition: 'left 0.2s' }} />
+            </button>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <label style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)' }}>Facilitator mode</label>
+            <button onClick={() => setFacilitator(f => !f)} style={{ width: 38, height: 20, borderRadius: 99, border: 'none', cursor: 'pointer', background: facilitator ? GREEN : 'rgba(255,255,255,0.15)', position: 'relative', transition: 'background 0.2s' }}>
+              <div style={{ width: 14, height: 14, borderRadius: '50%', background: '#fff', position: 'absolute', top: 3, left: facilitator ? 21 : 3, transition: 'left 0.2s' }} />
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+<style>
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+</style>
+</body>
+</html>

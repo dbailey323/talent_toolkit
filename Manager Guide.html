@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Talent Review Guide for Managers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Reddit+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: 'Reddit Sans', system-ui, sans-serif; background: #f5f6f8; color: #1f2937; }
+  html { scroll-behavior: smooth; scroll-padding-top: 70px; }
+</style>
+<template id="__bundler_thumbnail">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 56">
+  <rect width="80" height="56" fill="#1a2e52"/>
+  <rect x="10" y="10" width="16" height="16" rx="3" fill="#00868a"/>
+  <rect x="30" y="10" width="16" height="16" rx="3" fill="#2a9d8f"/>
+  <rect x="50" y="10" width="16" height="16" rx="3" fill="#3d5070"/>
+  <rect x="10" y="30" width="56" height="3" rx="1" fill="rgba(255,255,255,0.3)"/>
+  <rect x="10" y="38" width="40" height="3" rx="1" fill="rgba(255,255,255,0.2)"/>
+  <rect x="10" y="46" width="48" height="3" rx="1" fill="rgba(255,255,255,0.15)"/>
+</svg>
+</template>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel">
+const { useState, useEffect } = React;
+
+// Holcim brand
+const NAVY = '#041739';        // Holcim primary navy
+const CYAN = '#05b7ed';        // Holcim cyan
+const LIME = '#65c12a';        // Holcim Bright Green
+const TEAL = '#041739';        // alias
+const TEAL2 = '#05b7ed';       // alias
+const SLATE = '#3d5070';
+const AMBER = '#b45309';
+const GREEN = '#65c12a';       // Holcim Bright Green
+const RED = '#b91c1c';
+const LIGHT = '#f4f6fa';
+
+// ── Nine steps ────────────────────────────────────────────────────────────────
+const STEPS = [
+  { key: 'land', label: 'Land the message', color: TEAL },
+  { key: 'convo', label: 'The pre-assessment conversation', color: TEAL2 },
+  { key: 'assess', label: 'Your 4A assessment', color: NAVY },
+  { key: 'prep', label: 'Prepare for calibration', color: SLATE },
+  { key: 'room', label: 'In the calibration room', color: '#4a5d8a' },
+  { key: 'decide', label: 'Decide: rating, readiness, roles, development', color: '#4a1d96' },
+  { key: 'feedback', label: 'The feedback conversation', color: AMBER },
+  { key: 'live', label: 'Keep development live', color: GREEN },
+];
+
+// ── 4A examples: weak vs strong evidence ──────────────────────────────────────
+const FOUR_AS_EVIDENCE = [
+  {
+    key: 'ability', label: 'Ability', color: NAVY,
+    definition: 'The capacity to perform effectively one level up - thinking, judgement, scale.',
+    keyQ: 'Can you describe a specific moment where their thinking or judgement stood out as above their current level?',
+    strong: '"In the crisis in Q3, when the supply chain issue escalated to her, she pulled together a cross-functional group within 48 hours and reset the plan. Her framing of the problem - not just the fix - was what senior leaders responded to. She was operating at a scale above her role."',
+    weak: '"She’s a strong performer, always delivers, people respect her."',
+  },
+  {
+    key: 'aspiration', label: 'Aspiration', color: TEAL,
+    definition: 'The drive to take on more - scope, complexity, impact.',
+    keyQ: 'Have you had a documented career conversation where they articulated what they want?',
+    strong: '"In our career conversation in February, he told me directly he wants a regional role with P&L responsibility in the next 2 years. He’s asked for two specific stretch projects in the last 12 months and taken on the one he got."',
+    weak: '"He’s ambitious. He wants to grow."',
+  },
+  {
+    key: 'agility', label: 'Agility', color: TEAL2,
+    definition: 'Adapting well in unfamiliar, complex or changing situations.',
+    keyQ: 'When did this person last operate well outside their comfort zone?',
+    strong: '"When we moved her into the new region for 6 months, she didn’t have the playbook. She spent the first 3 weeks listening, not deciding - and the approach she then built was better than the one I’d have put in. She adapted to the context, not the other way round."',
+    weak: '"She handles change well. She’s resilient."',
+  },
+  {
+    key: 'alignment', label: 'Alignment', color: SLATE,
+    definition: 'Consistently demonstrating the values and behaviours Holcim needs - at the next level, in the direction the business is going.',
+    keyQ: 'Would they take a move that was good for Holcim but inconvenient for them? What’s your evidence?',
+    strong: '"When we asked him to take the secondment into a function he didn’t want, he did it and made it work. He’s also challenged me directly when he thought we were making a call that wasn’t in the business’s interest. He does the right thing when it’s hard."',
+    weak: '"He lives the values. He’s a good person."',
+  },
+];
+
+// ── Readiness levels ──────────────────────────────────────────────────────────
+const READINESS = [
+  { key: 'now', label: 'Ready Now', color: GREEN, desc: 'Could take the next role tomorrow. Has the capability and the scope experience.' },
+  { key: '1-2', label: '1–2 Years', color: TEAL, desc: 'A specific gap to close. With the right stretch experience or exposure, would be ready.' },
+  { key: '3+', label: '3+ Years', color: SLATE, desc: 'Clear potential but earlier in the development curve. Longer runway needed.' },
+];
+
+// ── Calibration do's and don'ts ───────────────────────────────────────────────
+const CALIB_STRONG = [
+  'Bring specific, named evidence - not impressions',
+  'Accept challenge without taking it personally',
+  'If evidence is thin, say so - don’t invent',
+  'Compare your person to others in the room, not just your team',
+  'Be willing to move your rating when the evidence says you should',
+];
+const CALIB_WEAK = [
+  'Defending a rating with tenure, loyalty or likability',
+  'Rating someone High because they’ve waited their turn',
+  'Confusing "strong performer" with "high potential"',
+  'Protecting your person from challenge',
+  'Smoothing over real disagreement to keep it comfortable',
+];
+
+// ── Feedback conversation structure ───────────────────────────────────────────
+const FEEDBACK_STEPS = [
+  { title: 'Open with what you observed', body: 'Start with specific, named examples of what they do well. Grounded in behaviour you’ve seen - not general praise. This signals that the conversation is honest, not performance theatre.' },
+  { title: 'Name the one development gap that matters most', body: 'Be direct about the single most important gap to close for their next step. Vague is not kind. "You need to deliver a full year as deputy plant manager, owning safety and production targets, before you\u2019re ready for a plant manager role" is specific. "Keep developing your leadership" is not.' },
+  { title: 'Connect it to a specific action', body: 'End with one concrete next thing that will actually happen - a project, a move, an exposure, a sponsor. Not a list of five things. One real commitment.' },
+  { title: 'Do not share the potential rating', body: 'You are not obliged to share it, and you should not. If asked, redirect: "The review informs how we plan development and succession. What matters for you is this conversation and what happens next."' },
+  { title: 'Leave space for their response', body: 'Ask: "How does that land?" or "Is there anything in your self-assessment you feel wasn’t picked up?" This is a dialogue - not a debrief.' },
+  { title: 'Close with what happens next', body: 'Confirm the development action, who owns it, and when you’ll check in. Write it down in front of them. This is how you make the commitment real.' },
+];
+
+// ── FAQs ──────────────────────────────────────────────────────────────────────
+const FAQS = [
+  { q: '"I don’t have enough evidence yet for some of my team. What do I do?"', a: 'This is normal - especially in year one. Rate what you can rate, flag what you can’t. Don’t invent evidence to fill gaps. A flagged "insufficient evidence" is more credible than a guessed rating. In calibration, name it directly: "I don’t have enough on Agility yet - here’s why, and here’s what I’m going to do about it."', tag: 'Common' },
+  { q: '"One of my team is asking directly what their rating is. What do I say?"', a: '"The review informs how we plan development and succession - what matters for you is this conversation and the specific action we’re committing to." Don’t apologise for the approach. Potential ratings are a calibration tool for the organisation, not an entitlement for the individual. The commitment is feedback and action, not a rating.', tag: 'Sensitive' },
+  { q: '"I think one of my team is better than my peer’s - how do I argue that in calibration?"', a: 'With evidence, not loyalty. Describe specific moments where they’ve operated above their level. Compare them to the other person on behaviour, not relationship. If your peer’s evidence is stronger, accept that - and ask what they did to generate that evidence, so you can do the same.', tag: 'Calibration' },
+  { q: '"What if I honestly think my team member is a strong performer but not high potential?"', a: 'Say so. High potential is not a reward for strong performance. Some of your best performers will be most valuable where they are - and a good review recognises that. You can rate someone as Medium or Low potential and still give them a brilliant feedback conversation about what they do well and where to go next.', tag: 'Common' },
+  { q: '"Someone I rated High didn’t get agreed in calibration. How do I handle the feedback conversation?"', a: 'Don’t share the rating. Focus on the things that came out in calibration - development gaps, stretch areas, what would make the case stronger next time. If you treat the conversation as an apology for a rating they shouldn’t see, you’ll undermine the process.', tag: 'Sensitive' },
+  { q: '"My direct report is going to compare notes with someone who isn’t in scope - what do I say?"', a: 'Be honest. Scope is defined by role, not by person. This cycle is focused on colleagues in P&L roles and in feeder roles that lead into P&L positions - because career growth into P&L is critical for this business. It will roll out to other roles over time. Being in scope reflects the role someone is in, not a judgement on them as a person.', tag: 'Scope' },
+  { q: '"I’m busy. How much time do I actually need to spend on this?"', a: 'Plan for 45–60 minutes per direct report on the assessment itself, plus the pre-assessment conversation (30 mins) and the feedback conversation later (45–60 mins). Skimping produces thin evidence that gets challenged in calibration - which costs you more time, not less.', tag: 'Practical' },
+  { q: '"What if my own manager is being assessed too?"', a: 'Same rules. They participate in the process and get a development conversation. They don’t see their rating. Don’t speculate about it with them or anyone else - the credibility of the process depends on that discipline at every level.', tag: 'Sensitive' },
+  { q: '"A development action was agreed in feedback but six months later nothing has happened. What now?"', a: 'Fix it. That is on you as the line manager - not on your direct report to chase. If the action needs a sponsor, get one. If it needs budget, escalate. If the action turns out to be wrong, agree a new one explicitly and document it. What destroys trust is the action quietly disappearing.', tag: 'Development' },
+  { q: '"What do I get out of this as a manager?"', a: 'See the Benefits section. Short version: a stronger team, a credible view of your own succession, a defensible case for your people when resources are competed for, and a visible track record as a developer of talent - which is itself a differentiator for your own progression.', tag: 'Benefits' },
+];
+
+// ── Shared ────────────────────────────────────────────────────────────────────
+const Section = ({ id, children, bg }) => (
+  <section id={id} style={{ background: bg || '#fff', borderRadius: 16, padding: '40px', marginBottom: 24, boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>{children}</section>
+);
+// Signature Stroke - gradient bar at the baseline, overlapping the bottom of the letters
+// slightly. Matches the "ONE HOLCIM EXPERIENCE" brand reference.
+const Stroke = ({ children, fontSize = 28 }) => {
+  const h = Math.round(fontSize * 0.22);   // slightly thinner than 1/3 for better feel
+  const ext = Math.round(fontSize / 6);    // 1/6 cap height extension on each side
+  return (
+    <span style={{ display: 'inline-block', position: 'relative' }}>
+      <span style={{
+        position: 'absolute',
+        left: -ext, right: -ext,
+        bottom: Math.round(fontSize * 0.04),  // sit right at the baseline, overlapping letters slightly
+        height: h,
+        background: 'linear-gradient(90deg, #65c12a 0%, #05b7ed 50%, #164375 100%)',
+        zIndex: 0,
+      }}></span>
+      <span style={{ position: 'relative', zIndex: 1 }}>{children}</span>
+    </span>
+  );
+};
+
+// Split a title so the last word can be wrapped in a Stroke. stroke=true enables.
+const SectionTitle = ({ label, title, color, stroke = false }) => {
+  const words = (title || '').trim().split(' ');
+  const last = words.pop();
+  const head = words.join(' ');
+  return (
+    <div style={{ marginBottom: 28 }}>
+      <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: color || TEAL, marginBottom: 6 }}>{label}</div>
+      <h2 style={{ fontFamily: 'Montserrat, sans-serif', fontSize: 28, fontWeight: 800, color: NAVY, letterSpacing: '-0.005em', lineHeight: 1.15, margin: 0, textTransform: 'uppercase' }}>
+        {head && <>{head} </>}
+        {stroke ? <Stroke fontSize={28}>{last}</Stroke> : last}
+      </h2>
+    </div>
+  );
+};
+const Pill = ({ text, color }) => (
+  <span style={{ display: 'inline-block', padding: '2px 10px', borderRadius: 99, fontSize: 11, fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase', background: `${color}18`, color, border: `1px solid ${color}44` }}>{text}</span>
+);
+
+function NavBar({ active }) {
+  const links = [
+    { id: 'start', label: 'Start Here' },
+    { id: 'benefits', label: 'Why it matters' },
+    { id: 'land', label: 'Land it' },
+    { id: 'convo', label: 'Pre-chat' },
+    { id: 'assess', label: 'Assess' },
+    { id: 'prep', label: 'Prep calibration' },
+    { id: 'room', label: 'In the room' },
+    { id: 'decide', label: 'Decide' },
+    { id: 'feedback', label: 'Feedback' },
+    { id: 'live', label: 'Keep it live' },
+    { id: 'faq', label: 'FAQ' },
+  ];
+  return (
+    <nav style={{ position: 'sticky', top: 0, zIndex: 50, background: NAVY, display: 'flex', alignItems: 'center', padding: '0 24px', height: 52, gap: 4, boxShadow: '0 2px 12px rgba(0,0,0,0.2)', overflowX: 'auto' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginRight: 20, flexShrink: 0 }}>
+        <img src="data:image/png;base64,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" alt="Holcim" style={{ height: 20, filter: 'brightness(0) invert(1)' }} />
+        <span style={{ fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,0.6)', borderLeft: '1px solid rgba(255,255,255,0.2)', paddingLeft: 10 }}>For Managers</span>
+      </div>
+      {links.map(l => (
+        <a key={l.id} href={`#${l.id}`} style={{
+          padding: '8px 12px', borderRadius: 6, textDecoration: 'none', fontSize: 12.5, fontWeight: 500, whiteSpace: 'nowrap',
+          color: active === l.id ? '#fff' : 'rgba(255,255,255,0.65)',
+          background: active === l.id ? 'rgba(255,255,255,0.1)' : 'transparent',
+        }}>{l.label}</a>
+      ))}
+    </nav>
+  );
+}
+
+function EvidenceCompare() {
+  const [activeA, setActiveA] = useState('ability');
+  const a = FOUR_AS_EVIDENCE.find(x => x.key === activeA);
+  return (
+    <div>
+      <div style={{ display: 'flex', gap: 8, marginBottom: 22, flexWrap: 'wrap' }}>
+        {FOUR_AS_EVIDENCE.map(a => (
+          <button key={a.key} onClick={() => setActiveA(a.key)} style={{
+            padding: '10px 20px', borderRadius: 8, border: 'none', cursor: 'pointer',
+            background: activeA === a.key ? a.color : '#f0f2f5',
+            color: activeA === a.key ? '#fff' : SLATE,
+            fontFamily: 'Reddit Sans, sans-serif', fontWeight: 700, fontSize: 14,
+            letterSpacing: '0.04em', textTransform: 'uppercase',
+          }}>{a.label}</button>
+        ))}
+      </div>
+      <div style={{ background: LIGHT, borderLeft: `4px solid ${a.color}`, padding: '18px 22px', borderRadius: '0 10px 10px 0', marginBottom: 16 }}>
+        <div style={{ fontSize: 14.5, color: '#1f2937', marginBottom: 8, fontWeight: 500 }}>{a.definition}</div>
+        <div style={{ fontSize: 13, fontStyle: 'italic', color: a.color }}>Ask: '{a.keyQ}'</div>
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+        <div style={{ background: `${GREEN}0d`, border: `1px solid ${GREEN}33`, borderRadius: 10, padding: '18px 20px' }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: GREEN, marginBottom: 10, letterSpacing: '0.07em', textTransform: 'uppercase' }}>✓ Strong evidence</div>
+          <div style={{ fontSize: 14, lineHeight: 1.7, color: '#065f46' }}>{a.strong}</div>
+        </div>
+        <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 10, padding: '18px 20px' }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: RED, marginBottom: 10, letterSpacing: '0.07em', textTransform: 'uppercase' }}>✗ Weak evidence</div>
+          <div style={{ fontSize: 14, lineHeight: 1.7, color: '#991b1b' }}>{a.weak}</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function FAQBlock() {
+  const [open, setOpen] = useState(0);
+  const tagColors = { Common: TEAL, Sensitive: AMBER, Calibration: NAVY, Scope: SLATE, Practical: TEAL2, Development: GREEN, Benefits: '#4a1d96' };
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+      {FAQS.map((f, i) => (
+        <div key={i} style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: 10, overflow: 'hidden' }}>
+          <button onClick={() => setOpen(open === i ? -1 : i)} style={{
+            width: '100%', textAlign: 'left', padding: '18px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+            background: 'none', border: 'none', cursor: 'pointer', gap: 16, fontFamily: 'Reddit Sans, sans-serif',
+          }}>
+            <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+              <span style={{ fontSize: 14.5, fontWeight: 600, color: NAVY, lineHeight: 1.5, textAlign: 'left' }}>{f.q}</span>
+            </div>
+            <span style={{ fontSize: 20, color: '#9ca3af', transform: open === i ? 'rotate(45deg)' : 'none', flexShrink: 0 }}>+</span>
+          </button>
+          {open === i && <div style={{ padding: '0 20px 20px 20px', fontSize: 14, lineHeight: 1.75, color: '#374151' }}>{f.a}</div>}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function App() {
+  const [activeSection, setActiveSection] = useState('start');
+  useEffect(() => {
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) setActiveSection(e.target.id); });
+    }, { threshold: 0.3 });
+    document.querySelectorAll('section[id]').forEach(el => obs.observe(el));
+    return () => obs.disconnect();
+  }, []);
+
+  return (
+    <>
+      <NavBar active={activeSection} />
+      <div style={{ background: NAVY, color: '#fff', padding: '70px 40px 80px' }}>
+        <div style={{ maxWidth: 980, margin: '0 auto' }}>
+          <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: TEAL, marginBottom: 16 }}>For Managers</div>
+          <h1 style={{ fontFamily: 'Montserrat, sans-serif', fontSize: 64, fontWeight: 800, color: '#fff', letterSpacing: '-0.015em', margin: '0 0 24px', lineHeight: 1.0, textTransform: 'uppercase' }}>
+            The <Stroke fontSize={64}>Talent</Stroke><br/>
+            Review<br/>
+            Guide
+          </h1>
+          <p style={{ fontSize: 17, color: 'rgba(255,255,255,0.7)', lineHeight: 1.6, maxWidth: 580, margin: 0 }}>Your step-by-step guide to running talent review 2026. From scoping your team to committing to development actions.</p>
+        </div>
+      </div>
+
+      <div style={{ maxWidth: 980, margin: '0 auto', padding: '32px 24px 80px' }}>
+
+        {/* Start Here */}
+        <Section id="start">
+          <SectionTitle label="Start Here" title="Your role in this process" />
+          <div style={{ fontSize: 15.5, lineHeight: 1.8, color: '#374151', marginBottom: 20 }}>
+            You own the outcome for each of your direct reports in scope. This guide covers every moment where you need to act: scoping, pre-assessment conversation, your 4A assessment, calibration prep, the calibration room, the decision, the feedback conversation, and follow-through.
+          </div>
+          <div style={{ background: LIGHT, borderRadius: 12, padding: '22px 26px', borderLeft: `4px solid ${TEAL}` }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: TEAL, marginBottom: 8, letterSpacing: '0.07em', textTransform: 'uppercase' }}>The central principle</div>
+            <div style={{ fontSize: 15.5, lineHeight: 1.75, color: '#1f2937' }}>
+              Potential is not the same as performance. Performance is how well someone delivers in their current role today. Potential is whether they have the capacity to operate one level up - in more complex, unfamiliar and higher-stakes situations. Your job in this process is to assess potential, not to reward performance. This is harder than it sounds.
+            </div>
+          </div>
+        </Section>
+
+        {/* Benefits */}
+        <Section id="benefits">
+          <SectionTitle label="Why This Matters to You" title="What’s in it for you as a manager" color={TEAL2} />
+          <div style={{ background: NAVY, color: '#fff', borderRadius: 12, padding: '26px 30px', marginBottom: 24 }}>
+            <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: TEAL, marginBottom: 10 }}>The bigger picture</div>
+            <div style={{ fontSize: 15.5, lineHeight: 1.75, color: 'rgba(255,255,255,0.88)' }}>
+              In 2025 we rebranded as Holcim UK - one business, not a collection of separate units. In 2026 we launched <strong style={{ color: '#fff' }}>the Holcim Way</strong>: a single commercial operating model, so how we sell and serve customers looks the same wherever you sit. That's what makes this process possible now. When every business unit runs on the same commercial language and processes, a move between them stops being a leap - much of what someone knows already applies. Which means, for the first time, we can seriously plan careers <strong style={{ color: '#fff' }}>across</strong> Holcim, not just within a single unit. But that only works if we actually know who we have and where they could go. That's what this review is for - the foundation for <strong style={{ color: '#fff' }}>Holcim-first career moves</strong>.
+            </div>
+          </div>
+          <div style={{ fontSize: 15, lineHeight: 1.75, color: '#374151', marginBottom: 24 }}>
+            Done well, this isn’t paperwork - it’s one of the most concrete things you can do for your team and for yourself. Here’s the honest case for spending time on it.
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+            {[
+              { title: 'A stronger team, faster', body: 'Every person in your team gets a real development conversation and one specific action. That’s not a soft benefit - it’s how your team’s capability compounds.' },
+              { title: 'A credible view of your own succession', body: 'You’ll leave this process knowing who in your team is ready for what, when. That’s what lets you take bigger roles yourself - because you know who can step up.' },
+              { title: 'Holcim-first career moves are now possible', body: 'The Holcim Way means sales and commercial processes look the same across business units. For the first time, a move into a different part of Holcim isn’t a leap into the unknown - it’s familiar ground. Your direct reports benefit; you get a wider pool to draw from too.' },
+              { title: 'Visibility as a developer of talent', body: 'ExCo track what happens after this review. Managers who land real development actions and follow through are visible. That matters for your own career.' },
+              { title: 'A structured moment for career conversations', body: 'This process gives you a protected space - and the right evidence base - to have a proper, on-the-record career conversation with each of your direct reports. It complements your ongoing 1:1s; it doesn’t replace them.' },
+              { title: 'Less firefighting on moves', body: 'When colleagues’ aspirations and readiness are properly captured, you’re not caught off guard by people leaving for the move you didn’t know they wanted.' },
+            ].map((b, i) => (
+              <div key={i} style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: 10, padding: '20px 22px' }}>
+                <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start', marginBottom: 10 }}>
+                  <div style={{ width: 28, height: 28, borderRadius: '50%', background: TEAL2, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 13, flexShrink: 0 }}>{i+1}</div>
+                  <div style={{ fontSize: 15, fontWeight: 700, color: NAVY, lineHeight: 1.3 }}>{b.title}</div>
+                </div>
+                <div style={{ fontSize: 13.5, color: '#374151', lineHeight: 1.65 }}>{b.body}</div>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        {/* 1. Land the message */}
+        <Section id="land">
+          <SectionTitle label="Before the form" title="Landing the message with your team" color={TEAL} />
+          <div style={{ fontSize: 15, lineHeight: 1.75, color: '#374151', marginBottom: 20 }}>
+            This cycle is really about career conversations. The form is the prompt that helps those conversations go deeper. Before colleagues receive it, they should already know it's coming, what it's for, and why you care. A warm signal from you first makes the difference between a thoughtful response and a tick-box answer.
+          </div>
+          <div style={{ background: LIGHT, borderRadius: 12, padding: '22px 26px', borderLeft: `4px solid ${TEAL}`, marginBottom: 20 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: TEAL, marginBottom: 10, letterSpacing: '0.07em', textTransform: 'uppercase' }}>What to say</div>
+            <div style={{ fontSize: 14.5, lineHeight: 1.8, color: '#1f2937', fontStyle: 'italic' }}>
+              "I want us to have a proper conversation about your career. Where you are, where you want to go, and what would help you get there. To make it a good conversation, I need your thinking upfront. You'll get a form next week that walks you through the questions I want us to discuss: your aspirations, the experiences you want to build, where you see yourself heading. Take time with it. Once you've shared it, we'll sit down properly and agree real next steps we both commit to."
+            </div>
+          </div>
+          <div style={{ background: '#fef3c7', border: '1px solid #fcd34d', borderRadius: 10, padding: '18px 22px', marginBottom: 16 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: AMBER, marginBottom: 10 }}>The harder conversation: people not in scope</div>
+            <div style={{ fontSize: 14, color: '#92400e', lineHeight: 1.75, fontStyle: 'italic' }}>
+              "You may have noticed that not everyone is getting a form this cycle. I wanted to explain where this fits. This is step one of how we're getting better at talent at Holcim - moving from ad-hoc conversations to a proper, consistent way of understanding our people and planning their careers. We're starting with P&L roles and the feeder roles into them, because growth into P&L is critical for where the business is going. Other roles come next as this matures. So you're not out - you're further along the rollout, and what we learn this cycle makes it better by the time it reaches you. Your development isn't on pause in the meantime. That's what our one-to-ones are for, and I want us to keep that live."
+            </div>
+          </div>
+          <div style={{ fontSize: 14, lineHeight: 1.7, color: '#4b5563' }}>
+            <strong>What not to do:</strong> don’t send the briefing email and hope it lands. Don’t promise specific outcomes (roles, promotions, ratings) you can’t guarantee. Don’t soften the ask with phrases like <em>"it’s just a form"</em> or <em>"don’t worry about it too much"</em> - it signals this doesn’t matter, and your team member will put in the minimum. Be clear it’s genuinely their career conversation, and you want them to take it seriously.
+          </div>
+        </Section>
+
+        {/* 2. Pre-assessment conversation */}
+        <Section id="convo">
+          <SectionTitle label="After they submit" title="The pre-assessment conversation" color={TEAL2} />
+          <div style={{ fontSize: 15, lineHeight: 1.75, color: '#374151', marginBottom: 20 }}>
+            Once your direct report submits their self-assessment, have a 30-minute conversation <strong>before</strong> you complete your own. This is not a sign-off on their view - it’s a chance to hear their thinking so your assessment is informed, not anchored.
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 12 }}>
+            {[
+              { step: 'Read their form first', detail: 'Don’t walk into the conversation cold. Read their self-assessment carefully and note where their view might differ from yours.' },
+              { step: 'Start with their aspirations', detail: 'Ask: "What you wrote about what you want next - tell me more about that." Aspiration is the A where self-awareness matters most, and where colleagues often underclaim.' },
+              { step: 'Probe the examples, not the claims', detail: 'Rather than asking them to justify what they’ve written, ask: "Can you tell me about a time when..." Concrete examples give you both a better read on what they’ve actually done - and where the stretch might come from next.' },
+              { step: 'Signal what will happen next', detail: 'Close by telling them you’ll take what they’ve shared, reflect on it, and bring your own perspective to a follow-up conversation where you build the right direction together. Frame it as a two-way process - not an assessment they\u2019re waiting on.' },
+              { step: 'Keep ratings out of it entirely', detail: 'Don’t hint at, confirm or debate how you might rate them - not now, not later, not in the feedback conversation. Ratings are a manager-side input for calibration and succession planning. The conversations you have with your colleague are about their career, their development and the actions you commit to together.' },
+            ].map((item, i) => (
+              <div key={i} style={{ background: LIGHT, border: '1px solid #e5e7eb', borderRadius: 10, padding: '16px 20px', display: 'grid', gridTemplateColumns: '40px 1fr', gap: 16, alignItems: 'flex-start' }}>
+                <div style={{ width: 32, height: 32, borderRadius: '50%', background: TEAL2, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 13 }}>{i+1}</div>
+                <div>
+                  <div style={{ fontSize: 15, fontWeight: 700, color: NAVY, marginBottom: 4 }}>{item.step}</div>
+                  <div style={{ fontSize: 14, color: '#374151', lineHeight: 1.65 }}>{item.detail}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        {/* 3. Assessment */}
+        <Section id="assess">
+          <SectionTitle label="Your turn" title="Your independent 4A assessment" color={NAVY} />
+          <div style={{ fontSize: 15, lineHeight: 1.75, color: '#374151', marginBottom: 20 }}>
+            Now you complete your own form. The quality of what you submit determines what happens in calibration. Thin evidence produces weak ratings that don’t survive challenge. Specific, named evidence holds up.
+          </div>
+          <div style={{ background: `${NAVY}08`, border: `1px solid ${NAVY}22`, borderRadius: 10, padding: '18px 22px', marginBottom: 24 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: NAVY, marginBottom: 8 }}>The test for every rating</div>
+            <div style={{ fontSize: 14.5, lineHeight: 1.7, color: '#374151' }}>
+              Before you lock in a rating, ask: <strong>"Can I name a specific situation, what they did, and what the outcome was?"</strong> If not, you may not have enough to rate it yet - and that’s fine to flag.
+            </div>
+          </div>
+          <h3 style={{ fontSize: 18, fontWeight: 700, color: NAVY, margin: '0 0 16px' }}>Strong vs. weak evidence - click each A</h3>
+          <EvidenceCompare />
+          <div style={{ marginTop: 24, background: '#fef3c7', border: '1px solid #fcd34d', borderRadius: 10, padding: '16px 20px' }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: AMBER, marginBottom: 8 }}>Watch-outs</div>
+            <div style={{ fontSize: 14, color: '#92400e', lineHeight: 1.7 }}>
+              Rating all four As the same (suggests you haven’t really differentiated). Rating High on Aspiration without a documented career conversation. Rating someone High because they’ve been in role a long time. Rating potential when you’re actually describing performance.
+            </div>
+          </div>
+        </Section>
+
+        {/* 4. Prep calibration */}
+        <Section id="prep">
+          <SectionTitle label="Before the room" title="Preparing for calibration" color={SLATE} />
+          <div style={{ fontSize: 15, lineHeight: 1.75, color: '#374151', marginBottom: 20 }}>
+            Calibration is a <strong>regional</strong> session - not within your business unit. That’s a significant shift: your people are being compared to colleagues across the region, not just your team. Prep matters.
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+            {[
+              { title: 'Pre-read everyone’s submissions, not just your own', body: 'If you walk in only knowing your people, you can’t calibrate. Read the cohort and form views before you arrive.' },
+              { title: 'Have your evidence ready per person', body: 'For each direct report, know the one or two specific moments you’d cite under challenge. Don’t try to remember in the room.' },
+              { title: 'Flag your shaky ratings yourself', body: 'If you’re not confident about a rating, say so upfront. Self-flagging is more credible than being challenged.' },
+              { title: 'Think about readiness and roles before you arrive', body: 'For each person: ready now, 1–2 years, or 3+ years? Against which next role? If you turn up without a view, you won’t land one.' },
+            ].map((item, i) => (
+              <div key={i} style={{ background: LIGHT, borderRadius: 10, padding: '18px 20px', borderLeft: `3px solid ${SLATE}` }}>
+                <div style={{ fontSize: 15, fontWeight: 700, color: NAVY, marginBottom: 8 }}>{item.title}</div>
+                <div style={{ fontSize: 13.5, color: '#374151', lineHeight: 1.65 }}>{item.body}</div>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        {/* 5. In the room */}
+        <Section id="room">
+          <SectionTitle label="In the room" title="How to challenge and defend" color="#4a5d8a" />
+          <div style={{ fontSize: 15, lineHeight: 1.75, color: '#374151', marginBottom: 20 }}>
+            Calibration sessions are co-facilitated by your Head of People and Head of Talent. Your job is to bring evidence for your people - and to challenge your peers’ evidence on theirs. A session where no one challenges is a session that failed.
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+            <div style={{ background: `${GREEN}0d`, border: `1px solid ${GREEN}33`, borderRadius: 10, padding: '20px 22px' }}>
+              <div style={{ fontSize: 12, fontWeight: 700, color: GREEN, marginBottom: 12, letterSpacing: '0.07em', textTransform: 'uppercase' }}>Strong calibration behaviour</div>
+              {CALIB_STRONG.map((t,i) => (
+                <div key={i} style={{ display: 'flex', gap: 8, marginBottom: 8, fontSize: 13.5, color: '#065f46', lineHeight: 1.55 }}><span style={{ color: GREEN, fontWeight: 700 }}>✓</span>{t}</div>
+              ))}
+            </div>
+            <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 10, padding: '20px 22px' }}>
+              <div style={{ fontSize: 12, fontWeight: 700, color: RED, marginBottom: 12, letterSpacing: '0.07em', textTransform: 'uppercase' }}>Weak calibration behaviour</div>
+              {CALIB_WEAK.map((t,i) => (
+                <div key={i} style={{ display: 'flex', gap: 8, marginBottom: 8, fontSize: 13.5, color: '#991b1b', lineHeight: 1.55 }}><span style={{ color: RED, fontWeight: 700 }}>✗</span>{t}</div>
+              ))}
+            </div>
+          </div>
+          <div style={{ marginTop: 20, background: LIGHT, borderRadius: 10, padding: '18px 22px', borderLeft: `4px solid ${NAVY}` }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: NAVY, marginBottom: 8 }}>How to challenge a peer well</div>
+            <div style={{ fontSize: 14, lineHeight: 1.7, color: '#374151', fontStyle: 'italic' }}>
+              "Can you walk me through a specific moment when she demonstrated that?" - not "I don’t think she’s that good." Challenge evidence, not opinion. And if your evidence is thinner than your peer’s on the same A, move your rating. That’s calibration working.
+            </div>
+          </div>
+        </Section>
+
+        {/* 6. Decide */}
+        <Section id="decide">
+          <SectionTitle label="Landing the outcome" title="Rating, readiness, next roles, development" color="#4a1d96" />
+          <div style={{ fontSize: 15, lineHeight: 1.75, color: '#374151', marginBottom: 24 }}>
+            Every calibrated colleague leaves the room with four things agreed: a <strong>potential rating</strong>, a <strong>readiness</strong>, one or two <strong>candidate next roles</strong>, and one <strong>development action</strong>. If any of those are vague, the process has failed that person.
+          </div>
+          <h3 style={{ fontSize: 16, fontWeight: 700, color: NAVY, margin: '0 0 14px' }}>Readiness</h3>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, marginBottom: 28 }}>
+            {READINESS.map(r => (
+              <div key={r.key} style={{ background: '#fff', border: `2px solid ${r.color}`, borderRadius: 10, padding: '18px 20px' }}>
+                <div style={{ fontSize: 13, fontWeight: 700, color: r.color, letterSpacing: '0.07em', textTransform: 'uppercase', marginBottom: 8 }}>{r.label}</div>
+                <div style={{ fontSize: 13.5, color: '#374151', lineHeight: 1.6 }}>{r.desc}</div>
+              </div>
+            ))}
+          </div>
+          <h3 style={{ fontSize: 16, fontWeight: 700, color: NAVY, margin: '0 0 14px' }}>Four decisions to land per person</h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {[
+              { n: 1, title: 'Potential rating', body: 'Low / Medium / High - calibrated across the regional cohort. Not shared with the individual.' },
+              { n: 2, title: 'Readiness', body: 'Against what time horizon could they take a next role? Ready now, 1–2 years, or 3+ years.' },
+              { n: 3, title: 'Candidate next roles', body: 'One or two specific roles they could move into, not generic job families. If you can’t name a next role, the readiness call is theoretical.' },
+              { n: 4, title: 'One development action', body: 'One concrete thing that will happen in the next 12 months. A project, a move, a sponsor, a specific exposure. Not a list. Not a course title. One real action.' },
+            ].map(d => (
+              <div key={d.n} style={{ background: LIGHT, border: '1px solid #e5e7eb', borderRadius: 10, padding: '16px 20px', display: 'grid', gridTemplateColumns: '36px 1fr', gap: 14, alignItems: 'flex-start' }}>
+                <div style={{ width: 30, height: 30, borderRadius: '50%', background: '#4a1d96', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 13 }}>{d.n}</div>
+                <div>
+                  <div style={{ fontSize: 15, fontWeight: 700, color: NAVY, marginBottom: 4 }}>{d.title}</div>
+                  <div style={{ fontSize: 14, color: '#374151', lineHeight: 1.65 }}>{d.body}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        {/* 7. Feedback */}
+        <Section id="feedback">
+          <SectionTitle label="August" title="The feedback conversation" color={AMBER} />
+          <div style={{ fontSize: 15, lineHeight: 1.75, color: '#374151', marginBottom: 20 }}>
+            After calibration, every colleague gets a development conversation with you. This is the payback the process promised them. It is not a debrief of their rating - it’s a forward-looking conversation about the specific action that’s been agreed for them.
+          </div>
+          <div style={{ background: '#fef3c7', border: '1px solid #fcd34d', borderRadius: 10, padding: '16px 20px', marginBottom: 20 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: AMBER, marginBottom: 6 }}>You do not share the potential rating</div>
+            <div style={{ fontSize: 14, color: '#92400e', lineHeight: 1.7 }}>This is a firm position across the whole process. If your direct report asks: "The review informs how we plan development - what matters for you is this conversation and what happens next." Don’t apologise for it. Don’t hint.</div>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {FEEDBACK_STEPS.map((s, i) => (
+              <div key={i} style={{ background: LIGHT, border: '1px solid #e5e7eb', borderRadius: 10, padding: '16px 20px', display: 'grid', gridTemplateColumns: '36px 1fr', gap: 14, alignItems: 'flex-start' }}>
+                <div style={{ width: 30, height: 30, borderRadius: '50%', background: AMBER, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 13 }}>{i+1}</div>
+                <div>
+                  <div style={{ fontSize: 15, fontWeight: 700, color: NAVY, marginBottom: 4 }}>{s.title}</div>
+                  <div style={{ fontSize: 14, color: '#374151', lineHeight: 1.65 }}>{s.body}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        {/* 8. Keep it live */}
+        <Section id="live">
+          <SectionTitle label="Ongoing" title="Keeping development actions live" color={GREEN} />
+          <div style={{ fontSize: 15, lineHeight: 1.75, color: '#374151', marginBottom: 20 }}>
+            Most talent processes fail at the point of the agreed action. The conversation happens, the commitment gets made, and then nothing changes. That is not what this is. Development is a shared responsibility: it is your colleague's job to actively seek and drive their own development, and it is your job as their manager to keep the conversation live, track progress, and remove the barriers that get in their way. ExCo will regularly discuss talent across the organisation and challenge whether the development that was committed to is actually happening.
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 20 }}>
+            <div style={{ background: `${GREEN}0d`, border: `1px solid ${GREEN}33`, borderRadius: 10, padding: '20px 22px' }}>
+              <div style={{ fontSize: 13, fontWeight: 700, color: GREEN, marginBottom: 10, letterSpacing: '0.07em', textTransform: 'uppercase' }}>Their responsibility</div>
+              <div style={{ fontSize: 13.5, color: '#065f46', lineHeight: 1.7 }}>Your direct report owns the drive. They bring the appetite, the curiosity, and the proactive ask for stretch, exposure, and feedback. Development happens to people who go looking for it.</div>
+            </div>
+            <div style={{ background: `${TEAL}0d`, border: `1px solid ${TEAL}33`, borderRadius: 10, padding: '20px 22px' }}>
+              <div style={{ fontSize: 13, fontWeight: 700, color: TEAL, marginBottom: 10, letterSpacing: '0.07em', textTransform: 'uppercase' }}>Your responsibility</div>
+              <div style={{ fontSize: 13.5, color: '#065f46', lineHeight: 1.7 }}>Keep the conversation alive in your regular 1:1s. Notice when progress has stalled. Unblock things they cannot unblock alone: introductions, exposure, stretch assignments, time, and air cover.</div>
+            </div>
+            <div style={{ background: `${NAVY}08`, border: `1px solid ${NAVY}33`, borderRadius: 10, padding: '20px 22px' }}>
+              <div style={{ fontSize: 13, fontWeight: 700, color: NAVY, marginBottom: 10, letterSpacing: '0.07em', textTransform: 'uppercase' }}>ExCo visibility</div>
+              <div style={{ fontSize: 13.5, color: '#374151', lineHeight: 1.7 }}>ExCo will regularly review talent across the organisation and question whether the committed development is actually happening. Expect to be asked, and be ready to answer specifically, not generically.</div>
+            </div>
+            <div style={{ background: `${AMBER}12`, border: `1px solid ${AMBER}44`, borderRadius: 10, padding: '20px 22px' }}>
+              <div style={{ fontSize: 13, fontWeight: 700, color: AMBER, marginBottom: 10, letterSpacing: '0.07em', textTransform: 'uppercase' }}>When actions stall</div>
+              <div style={{ fontSize: 13.5, color: '#92400e', lineHeight: 1.7 }}>If the action is not happening, fix it. Get a sponsor, escalate, or agree a new action explicitly and document the change. What destroys trust is a commitment that quietly disappears.</div>
+            </div>
+          </div>
+        </Section>
+
+        {/* FAQ */}
+        <Section id="faq">
+          <SectionTitle label="Pick up and go" title="FAQ - real answers to real questions" color={SLATE} />
+          <FAQBlock />
+        </Section>
+
+        <div style={{ textAlign: 'center', padding: '24px 0 48px', fontSize: 13, color: '#9ca3af' }}>
+          Your Head of People is your first call when this gets hard. Use them.
+        </div>
+      </div>
+
+      {/* Holcim sign-off */}
+      <div style={{ background: NAVY, color: '#fff', padding: '90px 40px 60px' }}>
+        <div style={{ maxWidth: 1000, margin: '0 auto', position: 'relative' }}>
+          <h2 style={{ fontFamily: 'Montserrat, sans-serif', fontSize: 72, fontWeight: 800, color: '#fff', letterSpacing: '-0.02em', lineHeight: 0.95, margin: 0, textTransform: 'uppercase' }}>
+            One <Stroke fontSize={72}>Holcim</Stroke><br/>
+            Team
+          </h2>
+          <div style={{ marginTop: 40, fontSize: 16, fontWeight: 700, letterSpacing: '0.08em', color: CYAN, textTransform: 'uppercase', maxWidth: 700 }}>
+            With this end vision in mind, join us on our journey.
+          </div>
+          <div style={{ marginTop: 80, display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 20 }}>
+            <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+              Holcim People &amp; Culture · People Review 2026
+            </div>
+            <img src="data:image/png;base64,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" alt="Holcim" style={{ height: 32, filter: 'brightness(0) invert(1)' }} />
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

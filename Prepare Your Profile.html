@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Prepare your Colleague Talent Profile · Holcim UK</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Reddit+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: 'Reddit Sans', system-ui, sans-serif; background: #f4f6fa; color: #1f2937; -webkit-font-smoothing: antialiased; }
+  html { scroll-behavior: smooth; }
+  textarea, input, button { font-family: inherit; }
+  textarea:focus, input:focus { outline: none; }
+  button { cursor: pointer; border: none; background: none; }
+  a { color: inherit; text-decoration: none; }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
+</style>
+<template id="__bundler_thumbnail">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 56">
+  <rect width="80" height="56" fill="#041739"/>
+  <rect x="16" y="10" width="48" height="36" rx="2" fill="#fff" opacity="0.92"/>
+  <rect x="20" y="14" width="22" height="3" fill="#041739"/>
+  <rect x="20" y="20" width="40" height="1.5" fill="#65c12a"/>
+  <rect x="20" y="24" width="32" height="1.5" fill="#05b7ed"/>
+  <rect x="20" y="28" width="36" height="1.5" fill="#164375"/>
+  <rect x="20" y="34" width="20" height="6" rx="1" fill="#05b7ed"/>
+</svg>
+</template>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel">
+const { useState, useEffect, useMemo } = React;
+
+const NAVY = '#041739';
+const NAVY2 = '#164375';
+const CYAN = '#05b7ed';
+const LIME = '#65c12a';
+const SLATE = '#3d5070';
+const AMBER = '#d97706';
+const BRAND_GRADIENT = 'linear-gradient(90deg, #65c12a 0%, #05b7ed 50%, #164375 100%)';
+const PAPER = '#ffffff';
+const BG = '#f4f6fa';
+const MUTE = '#6b7280';
+const LINE = '#e5e7eb';
+const SOFT = '#f1f5f9';
+
+const STORAGE_KEY = 'holcim_profile_draft_v1';
+
+function loadDraft() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch { return {}; }
+}
+function saveDraft(d) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(d));
+  return d;
+}
+
+function wordCount(s) {
+  if (!s) return 0;
+  return s.trim().split(/\s+/).filter(Boolean).length;
+}
+
+function Stroke({ children, fontSize = 44, darkBg = false }) {
+  const h = Math.round(fontSize * 0.24);
+  const ext = Math.round(fontSize / 6);
+  return (
+    <span style={{ display: 'inline-block', position: 'relative' }}>
+      <span style={{ position: 'absolute', left: -ext, right: -ext, bottom: Math.round(fontSize * 0.05), height: h, background: BRAND_GRADIENT, zIndex: 0 }} />
+      <span style={{ position: 'relative', zIndex: 1, color: darkBg ? '#fff' : 'inherit' }}>{children}</span>
+    </span>
+  );
+}
+
+// ── Field guide ────────────────────────────────────────────────────────────
+const FIELDS = [
+  {
+    group: 'About you',
+    items: [
+      { label: 'Employee ID, name, band, Holcim tenure, current role, time in role, business unit, location, region', body: 'Mostly pre-filled or short answers. Double-check accuracy.' },
+    ],
+  },
+  {
+    group: 'Mobility and direction',
+    items: [
+      { label: 'Current working region', body: 'Which UK regions you could realistically cover from your current location.' },
+      { label: 'Regional mobility', body: 'Which UK regions you would be willing to physically relocate to. Be honest about what you would actually do.' },
+      { label: 'Global mobility', body: 'Whether you would relocate internationally. Yes, no, or only under certain conditions.' },
+      { label: 'Preferred future career direction', body: 'Your preferred direction over the next few years, not your immediate next job. Examples: progress within current business area, broaden across functions, technical or specialist track, leadership track.' },
+    ],
+  },
+  {
+    group: 'Experience and contribution',
+    items: [
+      { label: 'Experience overview to date', body: 'A short table of your roles, the size of teams you have led, the scale you have operated at, and any commercial responsibility (EBIT, revenue).' },
+      { label: 'Standout achievements to date', body: 'Up to four. 50 words each. Pick achievements that show what you can do, not what your team did. Lead with the outcome.' },
+      { label: 'Key development priorities', body: 'Up to four. 50 words each. The experiences or skills you need to be ready for the role you have in mind.' },
+      { label: 'Career aspirations', body: '200 words max. Where you see your career heading and why. Be specific where you can.' },
+    ],
+  },
+  {
+    group: 'Qualifications and performance',
+    items: [
+      { label: 'Professional and academic qualifications', body: 'Qualification, institution, year, grade, status. Keep it to what is current and relevant.' },
+      { label: 'Holcim performance trajectory', body: 'Your last three performance ratings. Pre-filled. Double-check the years.' },
+    ],
+  },
+  {
+    group: 'Submit',
+    items: [
+      { label: 'Form status, confirmation and submitted date', body: 'Submit when you are satisfied this reflects your current view. You can revisit before the form closes.' },
+    ],
+  },
+];
+
+const DEFAULT_DRAFT = {
+  achievements: ['', '', '', ''],
+  priorities: ['', '', '', ''],
+  aspirations: '',
+};
+
+function App() {
+  const [draft, setDraft] = useState(() => ({ ...DEFAULT_DRAFT, ...loadDraft() }));
+  const update = (patch) => { const next = saveDraft({ ...draft, ...patch }); setDraft(next); };
+
+  const setAch = (i, v) => update({ achievements: draft.achievements.map((x, j) => j === i ? v : x) });
+  const setPri = (i, v) => update({ priorities: draft.priorities.map((x, j) => j === i ? v : x) });
+
+  const onJump = (id) => { const el = document.getElementById(id); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); };
+
+  return (
+    <div style={{ minHeight: '100vh', background: BG }}>
+      <Header />
+      <div style={{ maxWidth: 1040, margin: '0 auto', padding: '32px 24px 80px' }}>
+        <Hero onJump={onJump} />
+        <ImportantBanner />
+        <FormOverview />
+        <DraftingSection draft={draft} setAch={setAch} setPri={setPri} setAspirations={(v) => update({ aspirations: v })} />
+        <Closer />
+      </div>
+      <Footer />
+    </div>
+  );
+}
+
+function Header() {
+  return (
+    <header style={{ background: NAVY, color: '#fff', position: 'sticky', top: 0, zIndex: 10 }}>
+      <div style={{ height: 3, background: BRAND_GRADIENT }} />
+      <div style={{ maxWidth: 1040, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, padding: '14px 24px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+          <img src="data:image/png;base64,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" alt="Holcim" style={{ height: 24, filter: 'brightness(0) invert(1)' }} />
+          <div>
+            <div style={{ fontSize: 10, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 1.6, color: CYAN, textTransform: 'uppercase' }}>For colleagues in scope for Talent Review</div>
+            <div style={{ fontFamily: 'Montserrat', fontWeight: 700, fontSize: 15.5, lineHeight: 1.1, marginTop: 2 }}>Prepare your Colleague Talent Profile</div>
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+}
+
+function Footer() {
+  return (
+    <footer style={{ borderTop: `1px solid ${LINE}`, padding: '20px 32px', textAlign: 'center', fontSize: 12, color: MUTE, fontFamily: 'Reddit Sans' }}>
+      Prepare your Colleague Talent Profile · Holcim UK · Drafts saved only on this device
+    </footer>
+  );
+}
+
+function Hero({ onJump }) {
+  return (
+    <div style={{ background: NAVY, color: '#fff', borderRadius: 20, padding: '44px 44px 40px', position: 'relative', overflow: 'hidden', marginBottom: 36 }}>
+      <div aria-hidden style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 4, background: BRAND_GRADIENT }} />
+      <div aria-hidden style={{ position: 'absolute', right: -120, bottom: -140, width: 320, height: 320, borderRadius: '50%', background: `radial-gradient(circle, ${CYAN}33, transparent 70%)` }} />
+      <div style={{ position: 'relative', maxWidth: 720 }}>
+        <h1 style={{ fontFamily: 'Montserrat', fontWeight: 800, fontSize: 40, lineHeight: 1.08, margin: '0 0 18px', letterSpacing: -1 }}>
+          Get your profile ready, in your <Stroke fontSize={40} darkBg>own words.</Stroke>
+        </h1>
+        <p style={{ fontSize: 16, lineHeight: 1.65, color: 'rgba(255,255,255,0.85)', maxWidth: 660, margin: '0 0 12px' }}>
+          You will receive a Colleague Talent Profile form to complete as part of Talent Review. This page walks you through what is in the form, gives you a private place to draft the harder answers, and helps you turn up with something you would put your name to.
+        </p>
+        <p style={{ fontSize: 14, lineHeight: 1.65, color: 'rgba(255,255,255,0.7)', maxWidth: 660, margin: '0 0 24px' }}>
+          Drafts are saved on this device. Nothing reaches Holcim until you fill in the actual form.
+        </p>
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+          <button onClick={() => onJump('drafting')} style={{ padding: '12px 20px', borderRadius: 10, background: CYAN, color: NAVY, fontFamily: 'Montserrat', fontWeight: 700, fontSize: 13.5, letterSpacing: 0.3, display: 'inline-flex', alignItems: 'center', gap: 10 }}>
+            Start drafting <span>→</span>
+          </button>
+          <button onClick={() => onJump('overview')} style={{ padding: '12px 20px', borderRadius: 10, background: 'transparent', color: '#fff', border: '1px solid rgba(255,255,255,0.3)', fontFamily: 'Montserrat', fontWeight: 600, fontSize: 13.5, letterSpacing: 0.3 }}>
+            See what is in the form
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ImportantBanner() {
+  return (
+    <div style={{
+      background: '#fef8e8', border: `1px solid #fcd34d`, borderLeft: `4px solid ${AMBER}`,
+      borderRadius: 12, padding: '18px 22px', marginBottom: 36,
+      display: 'flex', gap: 16, alignItems: 'flex-start',
+    }}>
+      <div style={{ flexShrink: 0, width: 28, height: 28, borderRadius: '50%', background: AMBER, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Montserrat', fontWeight: 800, fontSize: 14 }}>!</div>
+      <div>
+        <div style={{ fontFamily: 'Montserrat', fontWeight: 700, fontSize: 14, color: '#92400e', marginBottom: 8, letterSpacing: 0.2 }}>Two things to know before you start</div>
+        <ul style={{ margin: 0, paddingLeft: 18, fontSize: 13.5, lineHeight: 1.7, color: '#1f2937' }}>
+          <li style={{ marginBottom: 4 }}><strong style={{ fontFamily: 'Montserrat', fontWeight: 700 }}>Complete the form sent to you.</strong> Your Colleague Talent Profile is sent to you personally. Fill it in there. Do not copy or share the file. Copying it will not save your responses.</li>
+          <li><strong style={{ fontFamily: 'Montserrat', fontWeight: 700 }}>Your manager will see it once you submit.</strong> When their input window opens, they will have a read-only view of your profile. This is to help them understand your experience and aspirations before they prepare their part. It is not the assessment.</li>
+        </ul>
+      </div>
+    </div>
+  );
+}
+
+function FormOverview() {
+  return (
+    <section id="overview" style={{ marginBottom: 56, scrollMarginTop: 96 }}>
+      <div style={{ fontSize: 11, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 1.8, color: NAVY, textTransform: 'uppercase', marginBottom: 8 }}>What is in the form</div>
+      <h2 style={{ fontFamily: 'Montserrat', fontWeight: 700, fontSize: 26, color: NAVY, margin: '0 0 22px', letterSpacing: -0.4 }}>A short tour, before you open it.</h2>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+        {FIELDS.map((g, i) => (
+          <div key={i} style={{ background: PAPER, border: `1px solid ${LINE}`, borderRadius: 12, padding: '18px 22px' }}>
+            <div style={{ fontSize: 11, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 1.2, color: CYAN, textTransform: 'uppercase', marginBottom: 12 }}>{g.group}</div>
+            <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {g.items.map((it, j) => (
+                <li key={j} style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: 16, alignItems: 'baseline' }}>
+                  <div style={{ fontFamily: 'Montserrat', fontWeight: 600, fontSize: 13.5, color: NAVY }}>{it.label}</div>
+                  <div style={{ fontSize: 13.5, color: SLATE, lineHeight: 1.6 }}>{it.body}</div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function DraftingSection({ draft, setAch, setPri, setAspirations }) {
+  return (
+    <section id="drafting" style={{ marginBottom: 48, scrollMarginTop: 96 }}>
+      <div style={{ fontSize: 11, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 1.8, color: NAVY, textTransform: 'uppercase', marginBottom: 8 }}>Draft the harder answers</div>
+      <h2 style={{ fontFamily: 'Montserrat', fontWeight: 700, fontSize: 26, color: NAVY, margin: '0 0 14px', letterSpacing: -0.4 }}>Three sections, the ones most people get stuck on.</h2>
+      <p style={{ fontSize: 14.5, lineHeight: 1.65, color: SLATE, margin: '0 0 24px', maxWidth: 800 }}>
+        Use these boxes to draft your achievements, development priorities and career aspirations. You can copy each one across when you fill in the real form. Word counts match the limits in the form itself.
+      </p>
+
+      <DraftBlock
+        accent={LIME}
+        title="Standout achievements to date"
+        intro="Up to four. 50 words each. Pick achievements that show what you can do, not what your team did. Lead with the outcome, then how you got there."
+        items={draft.achievements}
+        setItem={setAch}
+        wordLimit={50}
+        placeholder={'e.g. "Led the integration of two regional teams into a single commercial function, delivering £1.4M of synergy in the first year while keeping voluntary attrition below 5%."'}
+        examples={{
+          good: [
+            'Leads with the outcome.',
+            'Names a specific role you played.',
+            'Includes numbers where they help.',
+            'Sounds like you, not a job advert.',
+          ],
+          bad: [
+            'Generic strengths like "strong leader".',
+            'A list of responsibilities, not results.',
+            'Credit that really belongs to your team.',
+          ],
+        }}
+      />
+
+      <DraftBlock
+        accent={CYAN}
+        title="Key development priorities"
+        intro="Up to four. 50 words each. The experiences or skills you need to be ready for the direction you want to go. Be honest. Vague priorities produce vague feedback."
+        items={draft.priorities}
+        setItem={setPri}
+        wordLimit={50}
+        placeholder={'e.g. "Direct P&L responsibility. I have led operations and led commercial separately, but never owned the full P&L. A rotation or stretch where the numbers stop at me."'}
+        examples={{
+          good: [
+            'Names a specific experience or skill.',
+            'Connects to where you want to go.',
+            'Honest about what you have not yet done.',
+          ],
+          bad: [
+            '"Develop my leadership."',
+            '"Get better at communication."',
+            '"More strategic thinking."',
+          ],
+        }}
+      />
+
+      <SingleDraftBlock
+        accent={NAVY2}
+        title="Career aspirations"
+        intro="One block, up to 200 words. Where you see your career heading and why. Be specific where you can. If your view has changed in the last year, say so."
+        value={draft.aspirations}
+        setValue={setAspirations}
+        wordLimit={200}
+        placeholder={'e.g. "Over the next three to five years I want to broaden into a regional commercial role with P&L responsibility, moving from operations into general management..."'}
+      />
+
+      <PrepareTips />
+    </section>
+  );
+}
+
+function DraftBlock({ accent, title, intro, items, setItem, wordLimit, placeholder, examples }) {
+  return (
+    <div style={{ background: PAPER, border: `1px solid ${LINE}`, borderLeft: `4px solid ${accent}`, borderRadius: 12, padding: '20px 22px', marginBottom: 18 }}>
+      <h3 style={{ fontFamily: 'Montserrat', fontWeight: 700, fontSize: 17, color: NAVY, margin: '0 0 6px', letterSpacing: -0.2 }}>{title}</h3>
+      <p style={{ fontSize: 13.5, color: SLATE, lineHeight: 1.6, margin: '0 0 16px' }}>{intro}</p>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 16 }}>
+        {items.map((v, i) => (
+          <DraftItem key={i} idx={i} value={v} onChange={(x) => setItem(i, x)} wordLimit={wordLimit} placeholder={i === 0 ? placeholder : ''} />
+        ))}
+      </div>
+
+      {examples && (
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+          <ExamplePanel kind="good" lines={examples.good} />
+          <ExamplePanel kind="bad" lines={examples.bad} />
+        </div>
+      )}
+    </div>
+  );
+}
+
+function SingleDraftBlock({ accent, title, intro, value, setValue, wordLimit, placeholder }) {
+  const wc = wordCount(value);
+  const over = wc > wordLimit;
+  const [copied, setCopied] = useState(false);
+  const copy = async () => {
+    if (!value) return;
+    try { await navigator.clipboard.writeText(value); setCopied(true); setTimeout(() => setCopied(false), 1400); } catch { /* */ }
+  };
+  return (
+    <div style={{ background: PAPER, border: `1px solid ${LINE}`, borderLeft: `4px solid ${accent}`, borderRadius: 12, padding: '20px 22px', marginBottom: 18 }}>
+      <h3 style={{ fontFamily: 'Montserrat', fontWeight: 700, fontSize: 17, color: NAVY, margin: '0 0 6px', letterSpacing: -0.2 }}>{title}</h3>
+      <p style={{ fontSize: 13.5, color: SLATE, lineHeight: 1.6, margin: '0 0 14px' }}>{intro}</p>
+      <textarea
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        placeholder={placeholder}
+        rows={6}
+        style={{
+          width: '100%', resize: 'vertical', border: `1px solid ${over ? '#fca5a5' : LINE}`, borderRadius: 10,
+          padding: '12px 14px', fontFamily: 'Reddit Sans', fontSize: 14.5, color: '#1f2937',
+          background: '#fff', lineHeight: 1.55,
+        }}
+        onFocus={e => e.target.style.borderColor = CYAN}
+        onBlur={e => e.target.style.borderColor = over ? '#fca5a5' : LINE}
+      />
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 8 }}>
+        <div style={{ fontSize: 11.5, fontFamily: 'Montserrat', fontWeight: 600, color: over ? '#b91c1c' : MUTE }}>{wc} / {wordLimit} words</div>
+        <button onClick={copy} disabled={!value} style={{
+          fontSize: 11.5, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 0.3,
+          padding: '5px 11px', borderRadius: 6,
+          background: copied ? LIME : (value ? NAVY : '#e5e7eb'),
+          color: copied ? '#fff' : (value ? '#fff' : MUTE),
+          cursor: value ? 'pointer' : 'not-allowed',
+        }}>{copied ? 'Copied' : 'Copy'}</button>
+      </div>
+    </div>
+  );
+}
+
+function DraftItem({ idx, value, onChange, wordLimit, placeholder }) {
+  const wc = wordCount(value);
+  const over = wc > wordLimit;
+  const [copied, setCopied] = useState(false);
+  const copy = async () => {
+    if (!value) return;
+    try { await navigator.clipboard.writeText(value); setCopied(true); setTimeout(() => setCopied(false), 1400); } catch { /* */ }
+  };
+  return (
+    <div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 5 }}>
+        <div style={{ fontSize: 11, fontFamily: 'Montserrat', fontWeight: 700, color: NAVY, letterSpacing: 0.4, textTransform: 'uppercase' }}>Entry {idx + 1}</div>
+        <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+          <div style={{ fontSize: 11, fontFamily: 'Montserrat', fontWeight: 600, color: over ? '#b91c1c' : MUTE }}>{wc} / {wordLimit}</div>
+          <button onClick={copy} disabled={!value} style={{
+            fontSize: 11, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 0.2,
+            padding: '3px 8px', borderRadius: 5,
+            background: copied ? LIME : (value ? NAVY : '#e5e7eb'),
+            color: copied ? '#fff' : (value ? '#fff' : MUTE),
+            cursor: value ? 'pointer' : 'not-allowed',
+          }}>{copied ? '✓' : 'Copy'}</button>
+        </div>
+      </div>
+      <textarea
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        rows={3}
+        style={{
+          width: '100%', resize: 'vertical', border: `1px solid ${over ? '#fca5a5' : LINE}`, borderRadius: 8,
+          padding: '10px 12px', fontFamily: 'Reddit Sans', fontSize: 14, color: '#1f2937',
+          background: '#fff', lineHeight: 1.55,
+        }}
+        onFocus={e => e.target.style.borderColor = CYAN}
+        onBlur={e => e.target.style.borderColor = over ? '#fca5a5' : LINE}
+      />
+    </div>
+  );
+}
+
+function ExamplePanel({ kind, lines }) {
+  const styles = kind === 'good'
+    ? { bg: '#f0fbf3', border: `${LIME}55`, label: 'Sounds like good', labelColor: '#3d7d18' }
+    : { bg: '#fef3f2', border: '#fca5a555', label: 'Watch out for', labelColor: '#b91c1c' };
+  return (
+    <div style={{ background: styles.bg, border: `1px solid ${styles.border}`, borderRadius: 8, padding: '10px 12px' }}>
+      <div style={{ fontSize: 10.5, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 1, color: styles.labelColor, textTransform: 'uppercase', marginBottom: 6 }}>{styles.label}</div>
+      <ul style={{ margin: 0, paddingLeft: 16, fontSize: 12.5, lineHeight: 1.5, color: '#1f2937' }}>
+        {lines.map((l, i) => <li key={i} style={{ marginBottom: 2 }}>{l}</li>)}
+      </ul>
+    </div>
+  );
+}
+
+function PrepareTips() {
+  return (
+    <div style={{ background: NAVY, color: '#fff', borderRadius: 14, padding: '24px 26px', marginTop: 10, position: 'relative', overflow: 'hidden' }}>
+      <div aria-hidden style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: BRAND_GRADIENT }} />
+      <div style={{ fontSize: 11, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 1.6, color: CYAN, textTransform: 'uppercase', marginBottom: 10 }}>If you are stuck</div>
+      <p style={{ fontSize: 14, lineHeight: 1.65, color: 'rgba(255,255,255,0.85)', margin: '0 0 10px' }}>
+        Open <a href="Holcim Career Reflections.html" style={{ color: '#fff', textDecoration: 'underline' }}>Career Reflections</a> in another tab and spend ten minutes on the Self and Work lenses. Most of what goes into your achievements and aspirations falls out of that thinking. Come back here and write the form-ready versions.
+      </p>
+    </div>
+  );
+}
+
+function Closer() {
+  return (
+    <section style={{ background: PAPER, border: `1px solid ${LINE}`, borderRadius: 14, padding: '28px 30px', marginTop: 12 }}>
+      <div style={{ fontSize: 11, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 1.8, color: NAVY, textTransform: 'uppercase', marginBottom: 8 }}>When you are ready</div>
+      <h3 style={{ fontFamily: 'Montserrat', fontWeight: 700, fontSize: 20, color: NAVY, margin: '0 0 12px', letterSpacing: -0.3 }}>Open the form and paste your drafts across.</h3>
+      <p style={{ fontSize: 14.5, lineHeight: 1.65, color: SLATE, margin: '0 0 14px', maxWidth: 760 }}>
+        Use the Copy buttons next to each draft to lift your text into the right rows of the Colleague Talent Profile. Tick the confirmation, set the status to Submitted, and that part of your Talent Review is done. You can revisit the form before it closes if your view shifts.
+      </p>
+      <p style={{ fontSize: 13.5, lineHeight: 1.65, color: MUTE, margin: '0 0 16px', maxWidth: 760 }}>
+        Once submitted, your manager will get a read-only view of your profile when their input window opens. It is there so they can understand your experience and ambitions before they prepare their part of the review.
+      </p>
+      <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+        <a href="Colleague Guide.html" style={{ padding: '11px 18px', borderRadius: 10, background: '#fff', color: NAVY, border: `1px solid ${LINE}`, fontFamily: 'Montserrat', fontWeight: 600, fontSize: 13.5 }}>
+          Read the Colleague Guide
+        </a>
+        <a href="For Colleagues.html" style={{ padding: '11px 18px', borderRadius: 10, background: '#fff', color: NAVY, border: `1px solid ${LINE}`, fontFamily: 'Montserrat', fontWeight: 600, fontSize: 13.5 }}>
+          Back to career tools
+        </a>
+      </div>
+    </section>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

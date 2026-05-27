@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Applying the 4As · For Managers · Holcim UK</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Reddit+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: 'Reddit Sans', system-ui, sans-serif; background: #f4f6fa; color: #1f2937; -webkit-font-smoothing: antialiased; }
+  html { scroll-behavior: smooth; }
+  button { cursor: pointer; border: none; background: none; font-family: inherit; }
+  a { color: inherit; text-decoration: none; }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
+</style>
+<template id="__bundler_thumbnail">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 56">
+  <rect width="80" height="56" fill="#041739"/>
+  <circle cx="14" cy="28" r="3" fill="#65c12a"/>
+  <circle cx="26" cy="28" r="3" fill="#05b7ed"/>
+  <circle cx="38" cy="28" r="3" fill="#05b7ed"/>
+  <circle cx="50" cy="28" r="3" fill="#05b7ed"/>
+  <circle cx="62" cy="28" r="3" fill="#164375"/>
+  <rect x="11" y="27" width="54" height="2" fill="#fff" opacity="0.3"/>
+</svg>
+</template>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel">
+const { useState } = React;
+
+const NAVY = '#041739';
+const NAVY2 = '#164375';
+const CYAN = '#05b7ed';
+const LIME = '#65c12a';
+const SLATE = '#3d5070';
+const AMBER = '#d97706';
+const BRAND_GRADIENT = 'linear-gradient(90deg, #65c12a 0%, #05b7ed 50%, #164375 100%)';
+const PAPER = '#ffffff';
+const BG = '#f4f6fa';
+const MUTE = '#6b7280';
+const LINE = '#e5e7eb';
+const SOFT = '#f1f5f9';
+
+function Stroke({ children, fontSize = 44, darkBg = false }) {
+  const h = Math.round(fontSize * 0.24);
+  const ext = Math.round(fontSize / 6);
+  return (
+    <span style={{ display: 'inline-block', position: 'relative' }}>
+      <span style={{ position: 'absolute', left: -ext, right: -ext, bottom: Math.round(fontSize * 0.05), height: h, background: BRAND_GRADIENT, zIndex: 0 }} />
+      <span style={{ position: 'relative', zIndex: 1, color: darkBg ? '#fff' : 'inherit' }}>{children}</span>
+    </span>
+  );
+}
+
+const PHASES = [
+  {
+    id: 'brief',
+    n: '01',
+    label: 'Brief and prepare',
+    when: 'Before forms go out',
+    accent: LIME,
+    promise: 'Get comfortable with the framework before you open the form.',
+    blurb: 'The 4A framework, the difference between performance and potential, and what evidence actually looks like in writing. Worth a single, careful read at the start of the cycle. The Manager Guide takes about ten minutes. Most of the quality of everything you write later is set here.',
+    tools: [
+      { title: 'Manager Guide', href: 'Manager Guide.html', time: '10 min read', blurb: 'Your full briefing. The 4A framework, the difference between performance and potential, how to write evidence that holds up in calibration.', primary: true },
+    ],
+  },
+  {
+    id: 'share',
+    n: '02',
+    label: 'The input conversation',
+    when: 'Late July, before you write the assessment',
+    accent: LIME,
+    promise: 'Hear your colleague before you write a word about them.',
+    blurb: 'Your direct report has completed their career form. Before you write your assessment, they bring their thinking, in their own words, to a structured conversation with you. Your job here is to listen and ask. You leave with a much better starting point than a blank form. Skipping this step is the single biggest reason an assessment ends up reflecting the manager rather than the colleague.',
+    tools: [
+      { title: 'Manager Career Conversation Kit', href: 'Manager Career Conversation Kit.html', time: '20 min prep', blurb: 'Use the Prepare and Run sections. Openers, prompts to go deeper on what your colleague is bringing, and listening cues. The Follow-up section comes later.', primary: true },
+    ],
+  },
+  {
+    id: 'assessment',
+    n: '03',
+    label: 'Write the assessment',
+    when: 'Through July, closing 24 July',
+    accent: CYAN,
+    promise: 'Evidence-led across all four dimensions.',
+    blurb: 'With your colleague\'s own thinking on the table, write a 4A assessment for each direct report in scope. The quality of what you write is what calibration will be working with. A weak assessment cannot be rescued in the room. A strong one earns the room\'s time on cases that need it more, and protects you from being asked to defend a rating without the evidence to back it.',
+    tools: [
+      { title: 'Potential Workshop', href: 'Holcim Potential Workshop.html', time: '20 min', blurb: 'A facilitated walk through two case studies. Trains you to read evidence the way calibration will read yours. The most useful preparation before you write.', primary: true },
+      { title: '4A Assessment', href: '4A Assessment.html', time: '45 min per report', blurb: 'The form itself, with prompts and quality checks per dimension. Use this when you are ready to write.' },
+      { title: 'Conversation Cards', href: 'Conversation Cards.html', time: 'Reference', blurb: 'A printable reference. Questions to ask yourself against each of the 4As before you submit, and the patterns calibrators will look for.' },
+    ],
+  },
+  {
+    id: 'calibration',
+    n: '04',
+    label: 'Regional calibration',
+    when: '1 to 31 August',
+    accent: CYAN,
+    promise: 'Take part in the regional calibration session.',
+    blurb: 'Regional calibration sessions run across North, Midlands and South. You may be asked to talk through your assessments with other managers and Heads of People. The skill is being clear on the evidence behind every rating you wrote, and being open to seeing what others see. If you have done the work earlier in the cycle, this is where it pays off.',
+    tools: [
+      { title: 'Evidence Challenge Trainer', href: 'Evidence Challenge Trainer.html', time: '12 min', blurb: 'Pre-work for the regional session. Four short cases drawn from the patterns that come up most. Sharpens how you read evidence, including your own.', primary: true },
+      { title: 'Conversation Cards', href: 'Conversation Cards.html', time: 'Reference', blurb: 'Open in the room. Questions against each of the 4As, and the patterns that come up most often. Single double-sided A4 sheet when printed.' },
+    ],
+  },
+  {
+    id: 'feedback',
+    n: '05',
+    label: 'The development conversation',
+    when: 'September onwards',
+    accent: NAVY2,
+    promise: 'A real conversation about development, kept live afterwards.',
+    blurb: 'After calibration, every direct report in scope gets a development conversation with you. You do not share ratings. You do not share succession plans. What you do share is honest feedback on their strengths and the areas where they can grow, and an agreed development action you will support. The conversation is then kept live in your ongoing one-to-ones. This is where the cycle pays back, or fails to.',
+    tools: [
+      { title: 'Manager Career Conversation Kit', href: 'Manager Career Conversation Kit.html', time: '20 min', blurb: 'Use the Run and Follow-up sections. Built so the conversation focuses on development and the action, not the rating behind it.', primary: true },
+    ],
+  },
+];
+
+function App() {
+  const onJump = (id) => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+  return (
+    <div style={{ minHeight: '100vh', background: BG }}>
+      <Header />
+      <div style={{ maxWidth: 1080, margin: '0 auto', padding: '32px 24px 80px' }}>
+        <Hero onJump={onJump} />
+        <DualRoleCallout />
+        <Strip onJump={onJump} />
+        {PHASES.map(p => <PhaseSection key={p.id} phase={p} />)}
+      </div>
+      <Footer />
+    </div>
+  );
+}
+
+function Header() {
+  return (
+    <header style={{ background: NAVY, color: '#fff', position: 'sticky', top: 0, zIndex: 10 }}>
+      <div style={{ height: 3, background: BRAND_GRADIENT }} />
+      <div style={{ maxWidth: 1080, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, padding: '16px 24px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+          <img src="data:image/png;base64,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" alt="Holcim" style={{ height: 24, filter: 'brightness(0) invert(1)' }} />
+          <div>
+            <div style={{ fontSize: 10, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 1.8, color: CYAN, textTransform: 'uppercase' }}>For managers</div>
+            <div style={{ fontFamily: 'Montserrat', fontWeight: 700, fontSize: 16, lineHeight: 1.1, marginTop: 2 }}>Applying the 4As</div>
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+}
+
+function Footer() {
+  return (
+    <footer style={{ borderTop: `1px solid ${LINE}`, padding: '24px 32px', textAlign: 'center', fontSize: 12, color: MUTE, fontFamily: 'Reddit Sans' }}>
+      Applying the 4As · For Managers · Holcim UK
+    </footer>
+  );
+}
+
+function Hero({ onJump }) {
+  return (
+    <div style={{ background: NAVY, color: '#fff', borderRadius: 20, padding: '52px 48px 44px', position: 'relative', overflow: 'hidden', marginBottom: 24 }}>
+      <div aria-hidden style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 4, background: BRAND_GRADIENT }} />
+      <div aria-hidden style={{ position: 'absolute', right: -120, bottom: -140, width: 360, height: 360, borderRadius: '50%', background: `radial-gradient(circle, ${CYAN}33, transparent 70%)` }} />
+      <div style={{ position: 'relative', maxWidth: 720 }}>
+        <div style={{ fontSize: 11, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 2, color: CYAN, textTransform: 'uppercase', marginBottom: 18 }}>Your part of the cycle, in five phases</div>
+        <h1 style={{ fontFamily: 'Montserrat', fontWeight: 800, fontSize: 48, lineHeight: 1.06, margin: '0 0 22px', letterSpacing: -1.2 }}>
+          Your guide to <Stroke fontSize={48} darkBg>talent review.</Stroke>
+        </h1>
+        <p style={{ fontSize: 17, lineHeight: 1.6, color: 'rgba(255,255,255,0.85)', maxWidth: 660, margin: '0 0 24px' }}>
+          As a line manager you sit at the centre of the cycle. You listen to your direct reports, write the assessment, take part in calibration, and run the development conversation that follows. Each phase has its own work and the tools we use for it.
+        </p>
+        <button onClick={() => onJump('brief')} style={{ padding: '13px 22px', borderRadius: 10, background: '#fff', color: NAVY, fontFamily: 'Montserrat', fontWeight: 700, fontSize: 14.5, letterSpacing: 0.3, display: 'inline-flex', alignItems: 'center', gap: 10 }}>
+          Start at the briefing <span>→</span>
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function DualRoleCallout() {
+  return (
+    <div style={{ background: '#fef8e8', border: `1px solid #fcd34d`, borderRadius: 12, padding: '16px 20px', marginBottom: 36, display: 'flex', gap: 14, alignItems: 'flex-start' }}>
+      <div style={{ flexShrink: 0, width: 26, height: 26, borderRadius: '50%', background: AMBER, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Montserrat', fontWeight: 800, fontSize: 13 }}>!</div>
+      <div>
+        <div style={{ fontFamily: 'Montserrat', fontWeight: 700, fontSize: 13.5, color: '#92400e', letterSpacing: 0.2, marginBottom: 4 }}>If your role is also in scope, you wear two hats this cycle.</div>
+        <div style={{ fontSize: 13.5, lineHeight: 1.55, color: '#1f2937' }}>You complete a self-assessment as a colleague before you assess your team as a manager. Start with Career Reflections and your own form. Your manager will run the input conversation with you, the same way you will run it with your team.</div>
+      </div>
+    </div>
+  );
+}
+
+function Strip({ onJump }) {
+  return (
+    <div style={{ marginBottom: 48 }}>
+      <div style={{ fontSize: 11, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 1.8, color: NAVY, textTransform: 'uppercase', marginBottom: 14 }}>The five phases</div>
+      <div style={{ position: 'relative', padding: '12px 0 4px' }}>
+        <div aria-hidden style={{ position: 'absolute', left: 40, right: 40, top: 46, height: 2, background: BRAND_GRADIENT, opacity: 0.35, borderRadius: 999 }} />
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 10, position: 'relative' }}>
+          {PHASES.map(p => (
+            <button key={p.id} onClick={() => onJump(p.id)} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', padding: '0 4px' }}>
+              <div style={{
+                width: 56, height: 56, borderRadius: '50%', background: '#fff',
+                border: `3px solid ${p.accent}`,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontFamily: 'Montserrat', fontWeight: 800, fontSize: 15, color: NAVY,
+                boxShadow: '0 4px 12px rgba(4,23,57,0.06)',
+                marginBottom: 12, transition: 'transform .15s',
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
+              onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+              >{p.n}</div>
+              <div style={{ fontFamily: 'Montserrat', fontWeight: 700, fontSize: 12.5, color: NAVY, lineHeight: 1.3, marginBottom: 3, maxWidth: 160 }}>{p.label}</div>
+              <div style={{ fontSize: 11, color: MUTE, fontFamily: 'Reddit Sans' }}>{p.when}</div>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PhaseSection({ phase }) {
+  return (
+    <section id={phase.id} style={{ marginBottom: 56, scrollMarginTop: 96 }}>
+      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 22, marginBottom: 24 }}>
+        <div style={{
+          flexShrink: 0,
+          width: 72, height: 72, borderRadius: '50%',
+          background: '#fff', border: `3px solid ${phase.accent}`,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontFamily: 'Montserrat', fontWeight: 800, fontSize: 22, color: NAVY,
+          boxShadow: '0 6px 18px rgba(4,23,57,0.07)',
+        }}>{phase.n}</div>
+        <div style={{ flex: 1, paddingTop: 6 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 6, flexWrap: 'wrap' }}>
+            <div style={{ fontSize: 11, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 1.8, color: phase.accent, textTransform: 'uppercase' }}>Phase {phase.n} · {phase.label}</div>
+            <div style={{ fontSize: 11.5, color: MUTE, fontFamily: 'Reddit Sans', padding: '3px 9px', borderRadius: 999, background: SOFT, fontWeight: 500 }}>{phase.when}</div>
+          </div>
+          <h2 style={{ fontFamily: 'Montserrat', fontWeight: 700, fontSize: 24, color: NAVY, margin: '0 0 10px', letterSpacing: -0.3 }}>{phase.promise}</h2>
+          <p style={{ fontSize: 14.5, color: SLATE, lineHeight: 1.65, margin: 0, maxWidth: 760 }}>{phase.blurb}</p>
+        </div>
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 14, marginLeft: 94 }}>
+        {phase.tools.map((t, i) => <ToolCard key={i} tool={t} accent={phase.accent} />)}
+      </div>
+    </section>
+  );
+}
+
+function ToolCard({ tool, accent }) {
+  const [hover, setHover] = useState(false);
+  return (
+    <a href={tool.href} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}
+      style={{
+        display: 'flex', flexDirection: 'column',
+        background: '#fff', border: `1px solid ${hover ? accent : LINE}`,
+        borderLeft: `3px solid ${accent}`, borderRadius: 12, padding: '20px 22px 18px',
+        cursor: 'pointer', textDecoration: 'none',
+        transition: 'transform .15s ease, box-shadow .15s ease, border-color .15s ease',
+        transform: hover ? 'translateY(-2px)' : 'translateY(0)',
+        boxShadow: hover ? '0 12px 28px rgba(4,23,57,0.10)' : '0 1px 0 rgba(4,23,57,0.02)',
+        position: 'relative', overflow: 'hidden',
+      }}>
+      {tool.primary && (
+        <div style={{ position: 'absolute', top: 14, right: 14, fontSize: 9.5, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 0.8, color: '#3d7d18', background: '#f0fbf3', border: `1px solid ${LIME}55`, padding: '3px 7px', borderRadius: 4, textTransform: 'uppercase' }}>Start here</div>
+      )}
+      <div style={{ fontSize: 11.5, color: MUTE, fontFamily: 'Montserrat', fontWeight: 600, marginBottom: 8 }}>{tool.time}</div>
+      <h3 style={{ fontFamily: 'Montserrat', fontWeight: 700, fontSize: 17, color: NAVY, margin: '0 0 8px', letterSpacing: -0.3 }}>{tool.title}</h3>
+      <p style={{ fontSize: 13.5, lineHeight: 1.6, color: SLATE, margin: '0 0 14px', flex: 1 }}>{tool.blurb}</p>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: NAVY, fontFamily: 'Montserrat', fontWeight: 700, fontSize: 13 }}>
+        <span>Open</span>
+        <span style={{ transition: 'transform .15s ease', transform: hover ? 'translateX(4px)' : 'translateX(0)' }}>→</span>
+      </div>
+    </a>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

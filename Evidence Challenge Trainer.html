@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Evidence Challenge Trainer · Holcim</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Reddit+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: 'Reddit Sans', system-ui, sans-serif; background: #f4f6fa; color: #1f2937; -webkit-font-smoothing: antialiased; }
+  html { scroll-behavior: smooth; }
+  textarea, input, button { font-family: inherit; }
+  textarea:focus, input:focus { outline: none; }
+  button { cursor: pointer; border: none; background: none; }
+  a { color: inherit; text-decoration: none; }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+  @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes slideInRight { from { opacity: 0; transform: translateX(16px); } to { opacity: 1; transform: translateX(0); } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .anim-in { animation: slideIn .35s ease-out both; }
+  .anim-twist { animation: slideInRight .45s ease-out both; }
+  .anim-fade { animation: fadeIn .3s ease-out both; }
+</style>
+<template id="__bundler_thumbnail">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 56">
+  <rect width="80" height="56" fill="#041739"/>
+  <circle cx="26" cy="28" r="11" fill="none" stroke="#05b7ed" stroke-width="2.5"/>
+  <path d="M21 28 l4 4 l8 -9" stroke="#65c12a" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="43" y="20" width="22" height="3" rx="1.5" fill="#fff" opacity="0.85"/>
+  <rect x="43" y="27" width="18" height="3" rx="1.5" fill="#fff" opacity="0.55"/>
+  <rect x="43" y="34" width="14" height="3" rx="1.5" fill="#fff" opacity="0.35"/>
+</svg>
+</template>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script>
+/* Inlined from evidence_cases.js so the file works when opened directly (file://). */
+// Evidence Challenge Trainer - Case Data (v2)
+// UK-anchored cases, varied shapes, twists, no "best" labels.
+
+window.EVIDENCE_CASES = [
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // CASE 1: Daniel Whitford
+  // SHAPE: standard submission, with a self-assessment twist
+  // The manager is more ambitious for Daniel than Daniel is for himself.
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    id: 'daniel',
+    variant: 'standard',
+    name: 'Daniel Whitford',
+    initials: 'DW',
+    role: 'Aggregates Plant Manager',
+    business: 'Holcim UK, Northern Aggregates',
+    location: 'North Yorkshire',
+    tenure: '6 years in current role',
+
+    submitter: 'Steve Lawson',
+    submitterRole: 'Northern Aggregates Director',
+    submitterRelationship: "Daniel's line manager for the last 4 years",
+
+    rating: { ability: 'High', aspiration: 'High', agility: 'High', alignment: 'High' },
+    overall: 'High Potential',
+
+    summary: "Daniel is the strongest plant manager in the north. Top quartile cost-per-tonne, lowest TRIFR in the cohort, and he built the capex case for the site expansion. He is ready for a regional role within 12 months and I'd back him for one.",
+
+    evidence: {
+      ability: [
+        "Top quartile cost-per-tonne across the Northern Aggregates portfolio for three consecutive years.",
+        "Lowest TRIFR in the cohort. 0.4 against a regional average of 1.1.",
+        "Built and presented the site expansion capex case. £24M approved on the strength of his analysis.",
+      ],
+      aspiration: [
+        "High energy. Always engaged in regional forums.",
+        "Universally respected by his peers.",
+      ],
+      agility: [
+        "Has been across two sites in his career. Handles operational complexity well.",
+        "Picked up the new ERP system faster than anyone in the region.",
+      ],
+      alignment: [
+        "Lives the values. Strong on safety.",
+        "No alignment concerns.",
+      ],
+    },
+
+    framing: "The form has just landed on your desk for the West Yorkshire calibration. You have ten minutes to read it before the chair turns to you.",
+
+    // No "best" label. Each question opens a different door.
+    // After picking, the user sees commentary on what their question would surface,
+    // and what each of the others would have surfaced. Then the twist.
+    questions: [
+      {
+        text: "What is the evidence that Daniel operates at a level above his current role, rather than brilliantly within it?",
+        opens: "A direct challenge on the performance versus potential distinction, which is useful muscle to have. Steve will likely point to the capex case, and the discussion will move briefly onto next-level evidence. The risk is that the conversation stays inside what Daniel has done in role, rather than what he is looking for or how he sees himself. You will probably learn something useful, but not the most material thing.",
+      },
+      {
+        text: "When did Daniel last tell you, in his own words, what he wants from his career?",
+        opens: "A question about the source of the Aspiration rating, and in this case the one that brings the missing evidence into the room. Steve will need to pause. The discussion will turn to what Daniel has actually said in his last career conversation and in his self-assessment. Only Steve has read those, so it is Steve who surfaces them. The High Aspiration rating is unlikely to hold in its current form once he does.",
+        pivotal: true,
+      },
+      {
+        text: "What is a moment in the last 18 months when Daniel's agility was genuinely tested?",
+        opens: "A targeted probe on the Agility rating. It would expose that Daniel has been in the same role for six years and that the ERP migration is the only meaningful data point on offer. Worth knowing, but not the central issue in this case.",
+      },
+      {
+        text: "The submission is detailed and Steve has worked with Daniel for years. I am comfortable with the rating as it stands.",
+        opens: "A wrong turn, and the one that does the most damage. The submission reads as well-evidenced because it is comfortably written, not because the evidence holds up to a question. Without one, the rating goes through unexamined. Daniel's own reservations, which sit in his self-assessment, never reach the room. The development action that should be the most valuable output of the session never gets the conversation it needs, and Daniel ends the cycle being readied for a role he privately knows he is not yet equipped for. Passive acceptance is the most consequential failure mode of a calibration session, more so than any of the dramatic disagreements.",
+        trap: true,
+      },
+    ],
+
+    twist: {
+      kicker: "What the question brings into the room",
+      label: "What Daniel has actually said about himself",
+      sourceNote: "The room does not have access to Daniel's self-assessment, but Steve does. Pressed by the question, Steve goes back to it and to his last career conversation with Daniel, and brings the substance into the room.",
+      quote: "Honestly, looking again at what Daniel has said. He told me in our last career conversation he is not sure he is ready for a regional role yet. He wants another 18 months in operations first. In his self-assessment he wrote that the capex case was 60% my framing, that he delivered the analysis but not the strategic call. He is proud of where the site is, but he knows the gap to regional level. I think I have been ahead of him on this.",
+      attribution: "Steve, when the room asks what Daniel has said about his own career",
+      lesson: "Steve has assessed Daniel's aspiration without first asking him directly. Daniel's own read, which only Steve has seen, is far more cautious. The High Aspiration rating reflects Steve's ambition for Daniel rather than Daniel's ambition for himself. The room could only get to this evidence through Steve, and only because the question was asked.",
+    },
+
+    takeaway: "When the manager is more ambitious for the person than the person is for themselves, the rating is about the manager. Aspiration is the one dimension where the colleague's own words are the primary evidence.",
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // CASE 2: Priya Patel
+  // SHAPE: under-recognition. The seductive option is to let the Medium through.
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    id: 'priya',
+    variant: 'underclaim',
+    name: 'Priya Patel',
+    initials: 'PP',
+    role: 'Finance Business Partner, Group FP&A',
+    business: 'Holcim UK, Group Finance',
+    location: 'London',
+    tenure: '4 years in role',
+
+    submitter: 'David Murray',
+    submitterRole: 'Group FP&A Director',
+    submitterRelationship: "Priya's line manager for 3 years",
+
+    rating: { ability: 'Medium', aspiration: 'Medium', agility: 'Medium', alignment: 'Medium' },
+    overall: 'Medium Potential',
+
+    summary: "Reliable. Solid. Gets the job done. Priya delivers her commitments but doesn't push beyond them. Not the most ambitious. I see her in a similar role for the foreseeable future.",
+
+    evidence: {
+      ability: [
+        "Delivers on time. Quality of analysis is consistent.",
+        "Doesn't seek visibility.",
+      ],
+      aspiration: [
+        "Has not requested a career conversation in the last year.",
+        "Steady. Doesn't seem to want more.",
+      ],
+      agility: [
+        "Hasn't had much cross-functional exposure.",
+      ],
+      alignment: [
+        "No concerns.",
+      ],
+    },
+
+    framing: "The room is five hours in. Most cases this morning have been pushes on over-claims. The chair is moving briskly through the Mediums. Yours next. You have about a minute to decide whether this one is worth slowing down for.",
+
+    questions: [
+      {
+        text: "David, is there anyone in your team you might be quietly under-recognising?",
+        opens: "A generous, non-confrontational opener that gives David explicit permission to look again. The question costs nothing to ask and occasionally surfaces something the room would otherwise have walked past. In this case it does exactly that, because David has not yet been asked to consider his own visibility bias.",
+        pivotal: true,
+      },
+      {
+        text: "What is the most ambitious piece of work anyone on your team has done in the last 12 months, and who did it?",
+        opens: "An indirect challenge that lets David name the work first, then the room reads the rating against the work. Likely to surface the same evidence as the first option, but more slowly, and only if David has genuinely thought about it before he answers.",
+      },
+      {
+        text: "Has Priya had a career conversation in the last year?",
+        opens: "A procedural question. David will say she has not requested one, which is true but not the point. The manager initiates the career conversation, not the colleague. This question lets him off the hook without surfacing what the conversation might have revealed.",
+      },
+      {
+        text: "Medium feels fair. Recommend we move on.",
+        opens: "The most common wrong turn in a regional calibration room, and the easiest one to take. The rating looks defensible on the surface, the room is tired, the case is quiet, and no one is going to push back if you let it through. Three months later, Priya hands in her notice for a Finance Director role at a competitor, and in her exit conversation she mentions the cash flow model the CFO still uses every Monday. The most consequential calibration failures are not the loud ones. They are the quiet cases the room had the chance to slow down on, and did not.",
+        trap: true,
+      },
+    ],
+
+    twist: {
+      kicker: "What the question brings into the room",
+      label: "What David has not yet brought forward",
+      sourceNote: "The room presses David to look again. He sits with the question for a moment, then names things he has been told by colleagues but has not put in the assessment.",
+      quote: "Honestly. The cash flow model the CFO uses every Monday. I had assumed our team lead built it, but he told me last month it was Priya, and she had specifically not put her name on it. She has been mentoring two of our new joiners on her own time. Neither of them flagged it to me. On the working capital initiative, the team lead told me Priya pushed back when he wanted to claim it for himself. She said the team did it, and she meant it. I think I have been measuring her on what is visible to me, rather than on what she has actually contributed.",
+      attribution: "David, when pressed by the room to look again at Priya's contribution",
+      lesson: "David has not missed Priya because she is unremarkable. He has missed her because she actively deflects credit, and his rating reflects what is visible to him. The Medium is not malicious. It is made on incomplete evidence. The room could only correct it by giving David the explicit prompt to look at what he had not seen.",
+    },
+
+    takeaway: "A calibration room's job is not only to challenge the loud ratings. It is to ask who in the cohort is being quietly under-rated, and to give the manager permission to look again before the form gets locked.",
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // CASE 3: Sam McAllister
+  // SHAPE: the rating actually holds. The lesson is knowing when not to push.
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    id: 'sam',
+    variant: 'defensible',
+    name: 'Sam McAllister',
+    initials: 'SM',
+    role: 'Cement Operations Lead',
+    business: 'Holcim UK, Cement',
+    location: 'Cumbria, North West England',
+    tenure: '4 years in role',
+
+    submitter: 'Helen Forster',
+    submitterRole: 'Country Operations Director, UK',
+    submitterRelationship: "Sam's line manager for 18 months",
+
+    rating: { ability: 'High', aspiration: 'High', agility: 'High', alignment: 'High' },
+    overall: 'High Potential',
+
+    summary: "One of the strongest operations leaders I have worked with. Documented career ambition with a real plan behind it. Led a nine-month cross-BU project end-to-end. Made one of the hardest capex calls of the year and it landed. Backed by peers across functions. Ready for a Country Operations Director role within 24 months.",
+
+    evidence: {
+      ability: [
+        "Cumbria cement operations on plan for three years. More importantly, designed the energy efficiency programme now being adopted across Group operations.",
+        "Made a capex call last year that overrode a popular but weaker proposal. The numbers proved him right within nine months.",
+      ],
+      aspiration: [
+        "Documented career conversation, May 2025. Sam stated he wants to be a Country Operations Director within 4 years, named the experience gaps, and proposed a 24-month plan.",
+        "Self-funded an executive education programme on commercial leadership, in his own time.",
+      ],
+      agility: [
+        "Led the nine-month cross-BU sustainability project. Moved out of operations entirely and returned with measurable cement carbon reductions.",
+        "Peer 360 from outside operations: 'Sam thinks like a commercial leader, not just an operations one.'",
+      ],
+      alignment: [
+        "Refused a quicker capex win because it conflicted with the sustainability roadmap.",
+        "Mentors two younger operations leaders cross-region. On his own time.",
+      ],
+    },
+
+    framing: "You've been pushing on High Potentials all morning. You've found something in almost every case. The room is now primed to push, and tired. Sam is up next.",
+
+    questions: [
+      {
+        text: "What is the evidence that Sam operates at a level above his current role?",
+        opens: "A solid opener that does muscle work, even where it is not strictly needed. Helen will cite the cross-BU project and the capex call without effort, and the rating will move through the room cleanly. You will not have done any damage, but you will not have surfaced anything new either.",
+      },
+      {
+        text: "Helen, what is the question I should be asking that I have not?",
+        opens: "A meta-question that gives the manager space to bring forward what they are privately worried about. In this case Helen pauses, then says she worries he is going too fast and that her concern is burnout, not capability. That is a different conversation from the one the rating implies, and the development action that comes out of it is more valuable than re-litigating a rating that already holds.",
+        pivotal: true,
+      },
+      {
+        text: "This one is well-evidenced across all four dimensions. Helen has clearly done the work. I am content to back the rating.",
+        opens: "A wrong turn that hides as common sense. The rating in this case does hold, and approving it will not produce the wrong number on the form. But it will produce the wrong session. The room never surfaces what Helen is privately carrying, the development action stays generic, and Sam's name leaves the discussion with a confirmed rating and no useful conversation behind it. Calibration is not about agreeing with the strong cases. It is about asking the question the rating itself does not answer.",
+        trap: true,
+      },
+      {
+        text: "Are we sure he is really High on all four? Let us press on every dimension.",
+        opens: "The wrong turn of the over-prepared challenger. The evidence here is genuinely robust, and pressing on each dimension simply re-confirms what is already on the form. The cost is real. The room loses fifteen minutes that should have been spent on a thinner case further down the list. Helen leaves the session with less confidence in the calibration process than she had at the start. The development action becomes thinner because the discussion never moved off the rating itself.",
+        trap: true,
+      },
+    ],
+
+    twist: {
+      kicker: "What the room finds when it actually looks",
+      label: "There is no twist",
+      sourceNote: "Helen speaks at some length about Sam's track record. The room cross-checks what she says against the experience of two other leaders in the session who have worked with him directly.",
+      quote: "The picture Helen provides is consistent. Sam's leadership of the cross-BU project is independently corroborated by two members of the room who worked alongside him. His operational track record speaks for itself, his career intent is documented, and the development action that comes out of Helen's worry about burnout is genuinely useful. The rating is a High Potential.",
+      attribution: "The calibration room's read after a 12-minute discussion",
+      lesson: "Sam is what the rating says he is. The skill in this case was knowing when to back the manager rather than reflexively challenging because the previous three cases had needed challenging. The most useful thing the room did was create the space for Helen to surface a worry that was not about capability, and turn that into a real development action.",
+    },
+
+    takeaway: "Your job in the room is not to lower ratings. It is to make sure every rating is properly defended. The cases that move through fastest are the ones where the manager has done the work in advance. A well-prepared submission earns the room's time on the cases that need it more.",
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // CASE 4: Aisha Bello-Hughes' portfolio
+  // SHAPE: matching exercise. 4 people, 4 challenge approaches. One-to-one.
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    id: 'portfolio',
+    variant: 'portfolio',
+    name: "Aisha Bello-Hughes' team",
+    initials: 'AB',
+    role: 'Four direct reports, all submitted as High Potential',
+    business: 'Holcim UK, Commercial',
+    location: 'London',
+    tenure: 'Aisha has been UK Commercial Director for 4 years',
+
+    submitter: 'Aisha Bello-Hughes',
+    submitterRole: 'UK Commercial Director',
+    submitterRelationship: 'Submitting four of her direct reports together',
+
+    framing: "Aisha has submitted four of her team as High Potential. You have eight minutes for this section of the room. You cannot go deep on all four. Match the right kind of challenge to each person, and spend your real time on the ones where it matters most.",
+
+    people: [
+      {
+        id: 'tom',
+        name: 'Tom Davies',
+        initials: 'TD',
+        role: 'Regional Sales Manager, South West',
+        managerSummary: "The most complete leader in my team. Strong on every dimension. Ready for a UK Commercial Lead role within 18 months.",
+        keyEvidence: [
+          "Documented career conversation Q1 2025. Specific ambition, named gaps, agreed plan.",
+          "Led a cross-functional pricing review across UK and Ireland.",
+          "Self-funded executive education on commercial strategy.",
+          "Took the call to walk away from a major account when the margin economics did not hold. The call was right.",
+        ],
+        correctChallenge: 'back',
+        whyCorrect: "The evidence is across all four dimensions and includes a hard, observable decision. The career conversation is documented and recent. Cross-functional stretch is in his record. There is nothing thin to push on without inventing it. Back the rating and use your time elsewhere.",
+      },
+      {
+        id: 'ravi',
+        name: 'Ravi Singh',
+        initials: 'RS',
+        role: 'Regional Sales Manager, Midlands',
+        managerSummary: "Top biller in the country for three years running. Customers love him. Ready for a country leadership role.",
+        keyEvidence: [
+          "+15% revenue growth in his region, three years running.",
+          "Best customer satisfaction scores in UK Commercial.",
+          "Holds the largest single account in the country by margin.",
+          "Nothing in the assessment about stretch outside his current scope.",
+        ],
+        correctChallenge: 'performance',
+        whyCorrect: "Every line is excellence within his current role. The High rating is being defended on performance, not on evidence of next-level thinking or scaled scope. The right question pushes the conversation off what Ravi has delivered and onto where he has actually operated above his role.",
+      },
+      {
+        id: 'chloe',
+        name: 'Chloe Williams',
+        initials: 'CW',
+        role: 'Strategic Accounts Lead',
+        managerSummary: "Handles our most senior client relationships. The CFO of one of our top three customers asked for her by name.",
+        keyEvidence: [
+          "Senior client relationships and ExCo-level briefings.",
+          "The CEO has mentioned her in two leadership offsites.",
+          "Strategic accounts under her ownership are middle-of-the-pack on growth and margin.",
+          "Most of the line evidence centres on what senior people think of her.",
+        ],
+        correctChallenge: 'sponsor',
+        whyCorrect: "The assessment leans heavily on what powerful people think of Chloe. Strip the senior names out and the line evidence is unremarkable. The right question is the one that asks for direct evidence of independent contribution, with the sponsors out of the picture.",
+      },
+      {
+        id: 'marcus',
+        name: 'Marcus Adeyemi',
+        initials: 'MA',
+        role: 'New Markets Lead',
+        managerSummary: "Closed the biggest new contract in UK Commercial this decade. £40M over five years. A future country leader.",
+        keyEvidence: [
+          "Closed the £40M new-markets contract in May 2025.",
+          "Featured in the Group internal comms and named in a CEO town hall.",
+          "Prior 18 months were unremarkable. On a performance improvement plan as recently as Q3 2024.",
+          "No other body of evidence in the assessment beyond the recent close.",
+        ],
+        correctChallenge: 'recency',
+        whyCorrect: "One huge moment, four months ago, doing the work of two years. The right question is the one that asks what came before the contract close, and tests whether this is a turnaround pattern or a single result anchoring an entire rating.",
+      },
+    ],
+
+    challenges: [
+      {
+        id: 'back',
+        label: "Back the rating",
+        question: "No challenge needed. The evidence is there. The most useful thing you can do is take the time you would have spent here and spend it on someone else in the cohort.",
+      },
+      {
+        id: 'performance',
+        label: "Press on performance vs potential",
+        question: "What's the evidence they operate at a level above their current role, rather than brilliantly within it?",
+      },
+      {
+        id: 'sponsor',
+        label: "Strip the sponsors out",
+        question: "If we take the senior advocates out of the picture for a moment, what's the direct evidence of their independent contribution?",
+      },
+      {
+        id: 'recency',
+        label: "Beyond the recent win",
+        question: "Beyond the most recent project, what's the pattern of evidence over the last 18 months?",
+      },
+    ],
+
+    takeaway: "Real calibration rooms don't process people one at a time. They process cohorts under time pressure. The skill is not always asking the perfect question. It is recognising what kind of challenge each person actually needs, and spending your real attention on the cases where it matters most.",
+  },
+];
+
+</script>
+<script type="text/babel">
+const { useState, useEffect, useMemo, useRef } = React;
+
+// ── Brand ────────────────────────────────────────────────────────────────────
+const NAVY = '#041739';
+const NAVY2 = '#164375';
+const CYAN = '#05b7ed';
+const LIME = '#65c12a';
+const SLATE = '#3d5070';
+const AMBER = '#d97706';
+const RED = '#b91c1c';
+const BRAND_GRADIENT = 'linear-gradient(90deg, #65c12a 0%, #05b7ed 50%, #164375 100%)';
+const PAPER = '#ffffff';
+const BG = '#f4f6fa';
+const MUTE = '#6b7280';
+const LINE = '#e5e7eb';
+const SOFT = '#f1f5f9';
+
+const CASES = window.EVIDENCE_CASES;
+const RATING_COLOR = { High: LIME, Medium: AMBER, Low: RED };
+const DIMS = [
+  { key: 'ability', label: 'Ability' },
+  { key: 'aspiration', label: 'Aspiration' },
+  { key: 'agility', label: 'Agility' },
+  { key: 'alignment', label: 'Alignment' },
+];
+
+// Shuffle helper. Stable per case across renders via React state.
+function shuffleIndices(n, seed) {
+  const arr = Array.from({ length: n }, (_, i) => i);
+  let s = seed || 1;
+  for (let i = arr.length - 1; i > 0; i--) {
+    s = (s * 9301 + 49297) % 233280;
+    const j = Math.floor((s / 233280) * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+// ── Stroke ───────────────────────────────────────────────────────────────────
+function Stroke({ children, fontSize = 56, darkBg = false }) {
+  const h = Math.round(fontSize * 0.24);
+  const ext = Math.round(fontSize / 6);
+  return (
+    <span style={{ display: 'inline-block', position: 'relative' }}>
+      <span style={{
+        position: 'absolute', left: -ext, right: -ext,
+        bottom: Math.round(fontSize * 0.05), height: h,
+        background: BRAND_GRADIENT, zIndex: 0,
+      }}/>
+      <span style={{ position: 'relative', zIndex: 1, color: darkBg ? '#fff' : 'inherit' }}>{children}</span>
+    </span>
+  );
+}
+
+// ── App ──────────────────────────────────────────────────────────────────────
+function App() {
+  const [view, setView] = useState('welcome'); // welcome | case | summary
+  const [caseIdx, setCaseIdx] = useState(0);
+  const [answers, setAnswers] = useState({}); // per-case state
+
+  const start = () => { setView('case'); setCaseIdx(0); window.scrollTo({ top: 0 }); };
+  const next = () => {
+    if (caseIdx + 1 >= CASES.length) setView('summary');
+    else setCaseIdx(caseIdx + 1);
+    window.scrollTo({ top: 0 });
+  };
+  const back = () => {
+    if (caseIdx === 0) { setView('welcome'); }
+    else { setCaseIdx(caseIdx - 1); }
+    window.scrollTo({ top: 0 });
+  };
+  const restart = () => { setView('welcome'); setCaseIdx(0); setAnswers({}); window.scrollTo({ top: 0 }); };
+  const jumpTo = (i) => { setView('case'); setCaseIdx(i); window.scrollTo({ top: 0 }); };
+  const setAnswer = (caseId, patch) => setAnswers(a => ({ ...a, [caseId]: { ...(a[caseId] || {}), ...patch } }));
+
+  return (
+    <div style={{ minHeight: '100vh', background: BG }}>
+      <Header view={view} caseIdx={caseIdx} totalCases={CASES.length} onHome={restart} />
+      <div style={{ maxWidth: 1040, margin: '0 auto', padding: '32px 24px 80px' }}>
+        {view === 'welcome' && <Welcome onStart={start} />}
+        {view === 'case' && (
+          <CaseScreen
+            key={CASES[caseIdx].id}
+            data={CASES[caseIdx]}
+            idx={caseIdx}
+            total={CASES.length}
+            answer={answers[CASES[caseIdx].id] || {}}
+            setAnswer={(patch) => setAnswer(CASES[caseIdx].id, patch)}
+            onNext={next}
+            onBack={back}
+          />
+        )}
+        {view === 'summary' && <Summary onJump={jumpTo} onRestart={restart} answers={answers} />}
+      </div>
+      <Footer />
+    </div>
+  );
+}
+
+// ── Header ───────────────────────────────────────────────────────────────────
+function Header({ view, caseIdx, totalCases, onHome }) {
+  return (
+    <header style={{ background: NAVY, color: '#fff', position: 'sticky', top: 0, zIndex: 10 }}>
+      <div style={{ height: 3, background: BRAND_GRADIENT }} />
+      <div style={{ maxWidth: 1040, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, padding: '16px 24px' }}>
+        <button onClick={onHome} style={{ display: 'flex', alignItems: 'center', gap: 14, color: '#fff', padding: 0 }}>
+          <img src="data:image/png;base64,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" alt="Holcim" style={{ height: 24, filter: 'brightness(0) invert(1)' }} />
+          <div style={{ textAlign: 'left' }}>
+            <div style={{ fontSize: 10, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 1.8, color: CYAN, textTransform: 'uppercase' }}>For calibration sessions</div>
+            <div style={{ fontFamily: 'Montserrat', fontWeight: 700, fontSize: 16, lineHeight: 1.1, marginTop: 2 }}>Evidence Challenge Trainer</div>
+          </div>
+        </button>
+        {view === 'case' && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+            <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', fontFamily: 'Montserrat', fontWeight: 600, letterSpacing: 0.5, textTransform: 'uppercase' }}>Case {caseIdx + 1} of {totalCases}</div>
+            <div style={{ display: 'flex', gap: 4 }}>
+              {Array.from({ length: totalCases }).map((_, i) => (
+                <div key={i} style={{ width: 22, height: 4, borderRadius: 2, background: i <= caseIdx ? CYAN : 'rgba(255,255,255,0.18)' }} />
+              ))}
+            </div>
+          </div>
+        )}
+        {view === 'summary' && (
+          <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', fontFamily: 'Montserrat', fontWeight: 600, letterSpacing: 0.5, textTransform: 'uppercase' }}>Reference</div>
+        )}
+      </div>
+    </header>
+  );
+}
+
+function Footer() {
+  return (
+    <footer style={{ borderTop: `1px solid ${LINE}`, background: '#fff', padding: '20px 24px' }}>
+      <div style={{ maxWidth: 1040, margin: '0 auto', fontSize: 12, color: MUTE, textAlign: 'center', fontFamily: 'Reddit Sans' }}>
+        Evidence Challenge Trainer · Holcim Talent Toolkit · Pre-work for regional calibration sessions
+      </div>
+    </footer>
+  );
+}
+
+// ── Welcome ──────────────────────────────────────────────────────────────────
+function Welcome({ onStart }) {
+  return (
+    <div>
+      <div style={{ background: NAVY, color: '#fff', borderRadius: 16, padding: '56px 48px 48px', marginBottom: 28, position: 'relative', overflow: 'hidden' }}>
+        <div aria-hidden style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 4, background: BRAND_GRADIENT }} />
+        <div aria-hidden style={{ position: 'absolute', right: -100, bottom: -120, width: 320, height: 320, borderRadius: '50%', background: `radial-gradient(circle, ${CYAN}26, transparent 70%)` }} />
+        <div style={{ position: 'relative', maxWidth: 740 }}>
+          <div style={{ fontSize: 12, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 2, color: CYAN, textTransform: 'uppercase', marginBottom: 18 }}>Pre-work for the regional calibration</div>
+          <h1 style={{ fontFamily: 'Montserrat', fontWeight: 800, fontSize: 50, lineHeight: 1.05, margin: '0 0 22px', letterSpacing: -1.3 }}>
+            Sharper questions for the <Stroke fontSize={50} darkBg>room.</Stroke>
+          </h1>
+          <p style={{ fontSize: 17.5, lineHeight: 1.55, color: 'rgba(255,255,255,0.82)', margin: '0 0 26px', maxWidth: 660 }}>
+            Regional calibration sessions cover cases from across the whole patch, North, Midlands and South. You will know some of the colleagues being discussed; for many others, the form and the manager's words are all you have to go on. Four short cases to sharpen the way you read the evidence and the way you ask about it before the session.
+          </p>
+          <button onClick={onStart} style={{ padding: '14px 24px', borderRadius: 10, background: CYAN, color: NAVY, fontFamily: 'Montserrat', fontWeight: 700, fontSize: 14.5, letterSpacing: 0.3, display: 'inline-flex', alignItems: 'center', gap: 10 }}>
+            Begin <span>→</span>
+          </button>
+          <div style={{ marginTop: 16, fontSize: 13, color: 'rgba(255,255,255,0.55)', fontFamily: 'Reddit Sans' }}>About 12 minutes. Pre-work for the regional calibration sessions. The in-person training will go further.</div>
+        </div>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 28 }}>
+        <WelcomeCard n="1" title="Reading the evidence on the form" body="Working out what is missing from an assessment, not just what is on the page. The most common patterns are performance presented as potential, aspiration that has been inferred rather than evidenced, and one strong dimension carrying three weaker ones." />
+        <WelcomeCard n="2" title="Choosing the right challenge for the case" body="Different cases call for different kinds of question. In each case you will choose between four options, see what each one would have surfaced, and consider which was the most productive use of the room's time." />
+        <WelcomeCard n="3" title="The cases that deserve more time than they typically get" body="A High rating is not always the one to push hardest on. A Medium rating can mask the most important case in the cohort. A manager who has rated every direct report identically is a different problem again." />
+      </div>
+
+      <div style={{ background: PAPER, borderRadius: 14, padding: '24px 28px', border: `1px solid ${LINE}`, marginBottom: 28 }}>
+        <div style={{ fontSize: 11, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 1.5, color: NAVY, textTransform: 'uppercase', marginBottom: 10 }}>One useful frame before you start</div>
+        <p style={{ fontSize: 14.5, lineHeight: 1.65, color: SLATE, margin: '0 0 10px' }}>
+          In a regional calibration you cannot lean on personal knowledge of every colleague in the room. For half the cohort, the form and the manager's words are the whole picture. That puts the weight on the evidence, and on the question you ask about it.
+        </p>
+        <p style={{ fontSize: 14.5, lineHeight: 1.65, color: SLATE, margin: '0 0 10px' }}>
+          A High that survives a sharp question is a much stronger High than a High no one asked about. Your job is not to lower ratings. It is to make sure the evidence has done its work, including, and especially, for the people you do not know.
+        </p>
+        <p style={{ fontSize: 14.5, lineHeight: 1.65, color: SLATE, margin: 0 }}>
+          The reverse of all of this is also true. The conversations that flow most easily in the room are the ones where the manager has done the work in advance. A strong rating defended on strong evidence moves quickly. A correct rating with thin evidence costs the room time it cannot get back.
+        </p>
+      </div>
+
+      <button onClick={onStart} style={{ width: '100%', padding: '16px 24px', borderRadius: 10, background: NAVY, color: '#fff', fontFamily: 'Montserrat', fontWeight: 700, fontSize: 15, letterSpacing: 0.3, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
+        Begin
+      </button>
+    </div>
+  );
+}
+
+function WelcomeCard({ n, title, body }) {
+  return (
+    <div style={{ background: PAPER, borderRadius: 12, padding: '24px 22px', border: `1px solid ${LINE}` }}>
+      <div style={{ width: 28, height: 28, borderRadius: '50%', background: NAVY, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Montserrat', fontWeight: 700, fontSize: 13, marginBottom: 14 }}>{n}</div>
+      <div style={{ fontFamily: 'Montserrat', fontWeight: 700, fontSize: 16, color: NAVY, lineHeight: 1.3, marginBottom: 8 }}>{title}</div>
+      <div style={{ fontSize: 13.5, lineHeight: 1.55, color: SLATE }}>{body}</div>
+    </div>
+  );
+}
+
+// ── Case dispatcher ──────────────────────────────────────────────────────────
+function CaseScreen({ data, idx, total, answer, setAnswer, onNext, onBack }) {
+  const isLast = idx + 1 >= total;
+  if (data.variant === 'portfolio') {
+    return <PortfolioCase data={data} idx={idx} isLast={isLast} answer={answer} setAnswer={setAnswer} onNext={onNext} onBack={onBack} />;
+  }
+  return <StandardCase data={data} idx={idx} isLast={isLast} answer={answer} setAnswer={setAnswer} onNext={onNext} onBack={onBack} />;
+}
+
+// ── Standard case (cases 1, 2, 3) ────────────────────────────────────────────
+function StandardCase({ data, idx, isLast, answer, setAnswer, onNext, onBack }) {
+  // Stable shuffle of question options for this case
+  const order = useMemo(() => shuffleIndices(data.questions.length, (idx + 7) * 13 + data.id.charCodeAt(0)), [data.id]);
+  const shuffled = order.map(i => data.questions[i]);
+  const pickedIdx = answer.question; // index into shuffled
+  const pickedQuestion = pickedIdx !== undefined ? shuffled[pickedIdx] : null;
+  const hasPicked = pickedQuestion !== null && pickedQuestion !== undefined;
+
+  return (
+    <div>
+      <button onClick={onBack} style={{ color: NAVY, fontSize: 13, fontFamily: 'Reddit Sans', marginBottom: 18, display: 'flex', alignItems: 'center', gap: 6 }}>
+        ← {idx === 0 ? 'Back to welcome' : `Case ${idx}`}
+      </button>
+
+      <SubmissionCard data={data} />
+
+      {/* Framing */}
+      <div style={{ background: NAVY, color: '#fff', borderRadius: 12, padding: '20px 24px', marginBottom: 16, position: 'relative', overflow: 'hidden' }}>
+        <div aria-hidden style={{ position: 'absolute', top: 0, left: 0, bottom: 0, width: 3, background: BRAND_GRADIENT }} />
+        <div style={{ fontSize: 11, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 1.5, color: CYAN, textTransform: 'uppercase', marginBottom: 8 }}>Where you are</div>
+        <div style={{ fontSize: 15.5, lineHeight: 1.55, fontFamily: 'Reddit Sans', color: '#fff' }}>{data.framing}</div>
+      </div>
+
+      {/* Question step */}
+      <QuestionStep
+        questions={shuffled}
+        pickedIdx={pickedIdx}
+        onPick={(i) => setAnswer({ question: i })}
+        scratch={answer.scratch || ''}
+        onScratch={(s) => setAnswer({ scratch: s })}
+      />
+
+      {/* Twist + Takeaway (after question pick) */}
+      {hasPicked && (
+        <div className="anim-twist">
+          <TwistCard twist={data.twist} pickedTrap={pickedQuestion.trap} pickedPivotal={pickedQuestion.pivotal} />
+          <TakeawayCard text={data.takeaway} />
+          <button onClick={onNext} style={{ width: '100%', padding: '15px 22px', borderRadius: 10, background: NAVY, color: '#fff', fontFamily: 'Montserrat', fontWeight: 700, fontSize: 14.5, letterSpacing: 0.3, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
+            {isLast ? 'See your reference card →' : `Case ${idx + 2} of ${CASES.length} →`}
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── SubmissionCard (shared) ──────────────────────────────────────────────────
+function SubmissionCard({ data }) {
+  // For portfolio variant, render compactly (no rating row)
+  const isPortfolio = data.variant === 'portfolio';
+  return (
+    <div style={{ background: PAPER, borderRadius: 14, border: `1px solid ${LINE}`, borderTop: `4px solid ${CYAN}`, marginBottom: 16, overflow: 'hidden' }}>
+      <div style={{ padding: '24px 28px 18px', borderBottom: isPortfolio ? 'none' : `1px solid ${LINE}` }}>
+        <div style={{ fontSize: 11, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 1.5, color: CYAN, textTransform: 'uppercase', marginBottom: 10 }}>The submission</div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 18, marginBottom: 12 }}>
+          <div style={{ width: 56, height: 56, borderRadius: '50%', background: NAVY, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Montserrat', fontWeight: 700, fontSize: 19 }}>{data.initials}</div>
+          <div>
+            <div style={{ fontFamily: 'Montserrat', fontWeight: 800, fontSize: 22, color: NAVY, lineHeight: 1.15 }}>{data.name}</div>
+            <div style={{ fontSize: 13.5, color: SLATE, marginTop: 4 }}>{data.role}</div>
+            <div style={{ fontSize: 12.5, color: MUTE, marginTop: 2 }}>{data.business} · {data.location} · {data.tenure}</div>
+          </div>
+        </div>
+        <div style={{ fontSize: 12.5, color: MUTE, paddingTop: 6, display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+          <span><strong style={{ color: NAVY, fontFamily: 'Montserrat', fontWeight: 600 }}>Submitted by</strong> {data.submitter}, {data.submitterRole}</span>
+          <span style={{ color: '#cbd5e1' }}>·</span>
+          <span style={{ color: SLATE }}>{data.submitterRelationship}</span>
+        </div>
+      </div>
+
+      {!isPortfolio && (
+        <>
+          {/* 4A rating row */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', borderBottom: `1px solid ${LINE}` }}>
+            {DIMS.map((d, i) => (
+              <div key={d.key} style={{ padding: '16px 20px', borderRight: i < 3 ? `1px solid ${LINE}` : 'none' }}>
+                <div style={{ fontSize: 10.5, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 1.2, color: SLATE, textTransform: 'uppercase', marginBottom: 8 }}>{d.label}</div>
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                  <div style={{ width: 10, height: 10, borderRadius: '50%', background: RATING_COLOR[data.rating[d.key]] }} />
+                  <div style={{ fontFamily: 'Montserrat', fontWeight: 700, fontSize: 14.5, color: NAVY }}>{data.rating[d.key]}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Overall */}
+          <div style={{ background: SOFT, padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ fontSize: 12, fontFamily: 'Montserrat', fontWeight: 600, color: SLATE, textTransform: 'uppercase', letterSpacing: 1 }}>Manager's overall</div>
+            <div style={{ fontFamily: 'Montserrat', fontWeight: 700, fontSize: 15, color: NAVY }}>{data.overall}</div>
+          </div>
+
+          {/* Summary */}
+          <div style={{ padding: '20px 28px 16px' }}>
+            <div style={{ fontSize: 11, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 1.5, color: NAVY, textTransform: 'uppercase', marginBottom: 10 }}>Manager's summary</div>
+            <p style={{ fontSize: 15.5, lineHeight: 1.6, color: '#1f2937', margin: 0, fontStyle: 'italic', borderLeft: `3px solid ${CYAN}`, paddingLeft: 14 }}>"{data.summary}"</p>
+          </div>
+
+          {/* Evidence per dimension */}
+          <div style={{ padding: '4px 28px 24px' }}>
+            <div style={{ fontSize: 11, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 1.5, color: NAVY, textTransform: 'uppercase', marginBottom: 12, marginTop: 8 }}>The evidence the manager has put forward</div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+              {DIMS.map(d => (
+                <div key={d.key} style={{ background: SOFT, borderRadius: 10, padding: '14px 16px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+                    <div style={{ fontFamily: 'Montserrat', fontWeight: 700, fontSize: 13, color: NAVY }}>{d.label}</div>
+                    <div style={{ fontSize: 10.5, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 0.5, color: RATING_COLOR[data.rating[d.key]], textTransform: 'uppercase' }}>{data.rating[d.key]}</div>
+                  </div>
+                  <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 7 }}>
+                    {data.evidence[d.key].map((ev, j) => (
+                      <li key={j} style={{ fontSize: 13, lineHeight: 1.5, color: '#1f2937', display: 'flex', gap: 8 }}>
+                        <span style={{ color: MUTE, flexShrink: 0 }}>·</span>
+                        <span>{ev}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+// ── Question step ────────────────────────────────────────────────────────────
+function QuestionStep({ questions, pickedIdx, onPick, scratch, onScratch }) {
+  const picked = pickedIdx !== undefined ? questions[pickedIdx] : null;
+  const hasPicked = !!picked;
+
+  return (
+    <div style={{ background: PAPER, borderRadius: 14, border: `1px solid ${LINE}`, padding: '24px 28px', marginBottom: 16 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 6 }}>
+        <div style={{ width: 32, height: 32, borderRadius: '50%', background: NAVY, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Montserrat', fontWeight: 700, fontSize: 14 }}>?</div>
+        <div style={{ fontFamily: 'Montserrat', fontWeight: 700, fontSize: 17, color: NAVY }}>The chair invites you in. Which question do you open with?</div>
+      </div>
+      <div style={{ fontSize: 13.5, color: SLATE, marginBottom: 18, marginLeft: 46, lineHeight: 1.5 }}>
+        Each option below would take the discussion in a different direction. Choose the one you would actually use in the room. After you commit, you will see what each option would have surfaced.
+      </div>
+
+      {/* Scratch - optional. Encourages thinking first. */}
+      {!hasPicked && (
+        <div style={{ marginBottom: 18 }}>
+          <div style={{ fontSize: 11, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 1.2, color: MUTE, textTransform: 'uppercase', marginBottom: 8 }}>Optional, before you look at the options</div>
+          <textarea
+            value={scratch}
+            onChange={(e) => onScratch(e.target.value)}
+            placeholder="Take a moment to write the question you would ask in your own words. You will not be marked on it. It is here to make sure you have thought about it before clicking."
+            rows={2}
+            style={{
+              width: '100%', resize: 'vertical', border: `1px dashed ${LINE}`, borderRadius: 8,
+              padding: '10px 12px', fontFamily: 'Reddit Sans', fontSize: 14, color: '#1f2937',
+              background: '#fafbfc', lineHeight: 1.5, fontStyle: scratch ? 'normal' : 'italic',
+            }}
+          />
+        </div>
+      )}
+
+      {/* Question options. Letters labels (A, B, C, D) on each. */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        {questions.map((q, i) => {
+          const isSelected = pickedIdx === i;
+          // Visual treatment of the option button.
+          // Wrong turns get an amber accent when picked, pivotal gets lime, other gets cyan.
+          let bg = '#fff', border = LINE;
+          if (hasPicked) {
+            if (isSelected) {
+              if (q.trap) { bg = '#fef8e8'; border = AMBER; }
+              else if (q.pivotal) { bg = '#f3fbe8'; border = LIME; }
+              else { bg = '#eff8fe'; border = CYAN; }
+            } else {
+              bg = '#fafbfc'; border = LINE;
+            }
+          } else if (isSelected) {
+            bg = '#eff8fe'; border = CYAN;
+          }
+
+          // Commentary label and accent. Different treatment for picked vs unpicked,
+          // and for trap, pivotal, and ordinary options.
+          let commentBorder = LINE, labelColor = MUTE, labelText = 'What this option would have surfaced';
+          if (isSelected) {
+            if (q.trap) {
+              commentBorder = AMBER; labelColor = '#92400e';
+              labelText = 'Your choice. A common wrong turn, and the consequence below.';
+            } else if (q.pivotal) {
+              commentBorder = LIME; labelColor = '#3d7d18';
+              labelText = 'Your choice. The sharpest of the four questions in this case.';
+            } else {
+              commentBorder = CYAN; labelColor = CYAN;
+              labelText = 'Your choice. What this question would surface in the room.';
+            }
+          } else if (q.trap) {
+            commentBorder = '#fcd34d'; labelColor = '#92400e';
+            labelText = 'Another wrong turn the room can take here.';
+          } else if (q.pivotal) {
+            commentBorder = '#bbf7d0'; labelColor = '#3d7d18';
+            labelText = 'The sharpest of the four questions in this case.';
+          }
+
+          return (
+            <button
+              key={i}
+              onClick={() => !hasPicked && onPick(i)}
+              disabled={hasPicked}
+              style={{
+                textAlign: 'left', background: bg, border: `1px solid ${border}`,
+                borderRadius: 10, padding: '14px 18px',
+                cursor: hasPicked ? 'default' : 'pointer',
+                transition: 'all .12s ease',
+                display: 'flex', flexDirection: 'column', gap: 10,
+              }}
+              onMouseEnter={e => { if (!hasPicked) e.currentTarget.style.borderColor = CYAN; }}
+              onMouseLeave={e => { if (!hasPicked && !isSelected) e.currentTarget.style.borderColor = LINE; }}
+            >
+              <div style={{ fontSize: 14.5, lineHeight: 1.55, color: '#1f2937', fontFamily: 'Reddit Sans' }}>
+                <span style={{ fontFamily: 'Montserrat', fontWeight: 700, color: hasPicked ? NAVY : MUTE, marginRight: 10 }}>{String.fromCharCode(65 + i)}.</span>
+                "{q.text}"
+              </div>
+              {hasPicked && (
+                <div className="anim-fade" style={{ marginLeft: 24, paddingLeft: 14, borderLeft: `2px solid ${commentBorder}`, fontSize: 13.5, lineHeight: 1.6, color: SLATE }}>
+                  <div style={{ fontSize: 10.5, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 0.6, color: labelColor, textTransform: 'uppercase', marginBottom: 4 }}>
+                    {labelText}
+                  </div>
+                  {q.opens}
+                </div>
+              )}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ── Twist card ───────────────────────────────────────────────────────────────
+function TwistCard({ twist, pickedTrap, pickedPivotal }) {
+  return (
+    <div style={{ background: PAPER, borderRadius: 14, border: `1px solid ${LINE}`, padding: '24px 28px', marginBottom: 16, position: 'relative', overflow: 'hidden' }}>
+      <div aria-hidden style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: BRAND_GRADIENT }} />
+      <div style={{ fontSize: 10.5, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 1.5, color: CYAN, textTransform: 'uppercase', marginBottom: 8 }}>{twist.kicker}</div>
+      <div style={{ fontFamily: 'Montserrat', fontWeight: 800, fontSize: 22, color: NAVY, lineHeight: 1.25, marginBottom: 10 }}>{twist.label}</div>
+      <div style={{ fontSize: 13, color: MUTE, marginBottom: 16, lineHeight: 1.55 }}>{twist.sourceNote}</div>
+
+      <blockquote style={{
+        margin: 0, padding: '18px 22px', background: '#fdfaf3',
+        border: `1px solid #f1e3c1`, borderLeft: `4px solid ${AMBER}`,
+        borderRadius: 8, fontFamily: 'Reddit Sans',
+        fontSize: 15.5, lineHeight: 1.65, color: '#1f2937',
+        fontStyle: 'italic', position: 'relative',
+      }}>
+        "{twist.quote}"
+        <div style={{ fontStyle: 'normal', fontSize: 12, color: MUTE, marginTop: 12, fontFamily: 'Montserrat', fontWeight: 600, letterSpacing: 0.3 }}>{twist.attribution}</div>
+      </blockquote>
+
+      <div style={{ marginTop: 18, padding: '14px 16px', background: SOFT, borderRadius: 8, borderLeft: `3px solid ${NAVY}` }}>
+        <div style={{ fontSize: 11, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 1.2, color: NAVY, textTransform: 'uppercase', marginBottom: 6 }}>What this means</div>
+        <div style={{ fontSize: 14, lineHeight: 1.65, color: '#1f2937' }}>{twist.lesson}</div>
+      </div>
+
+      {/* Reflection on the user's choice. Sits below the twist content. */}
+      {(pickedTrap || pickedPivotal) && (
+        <div style={{ marginTop: 16, padding: '12px 14px', borderRadius: 8, background: pickedPivotal ? '#f0fbf3' : '#fef8e8', border: `1px solid ${pickedPivotal ? `${LIME}55` : '#fcd34d55'}`, fontSize: 13.5, color: SLATE, lineHeight: 1.6 }}>
+          {pickedPivotal && (
+            <span><strong style={{ color: '#3d7d18', fontFamily: 'Montserrat', fontWeight: 700 }}>You chose the question that opened this up.</strong> In a real session the room reaches this evidence quickly when the right question is asked first. When it is not, the same evidence often does not reach the room at all.</span>
+          )}
+          {pickedTrap && (
+            <span><strong style={{ color: '#92400e', fontFamily: 'Montserrat', fontWeight: 700 }}>You chose a wrong turn.</strong> It is the most common one in regional calibration sessions, which is why it is here. Worth catching in this exercise so you catch it in the room.</span>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Takeaway card ────────────────────────────────────────────────────────────
+function TakeawayCard({ text }) {
+  return (
+    <div style={{ background: NAVY, color: '#fff', borderRadius: 12, padding: '22px 26px', marginBottom: 18, position: 'relative', overflow: 'hidden' }}>
+      <div aria-hidden style={{ position: 'absolute', top: 0, left: 0, bottom: 0, width: 4, background: BRAND_GRADIENT }} />
+      <div style={{ fontSize: 11, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 1.5, color: CYAN, textTransform: 'uppercase', marginBottom: 8 }}>Carry this into the room</div>
+      <div style={{ fontFamily: 'Montserrat', fontWeight: 700, fontSize: 17.5, lineHeight: 1.45 }}>{text}</div>
+    </div>
+  );
+}
+
+// ── Portfolio case (case 4) ──────────────────────────────────────────────────
+function PortfolioCase({ data, idx, isLast, answer, setAnswer, onNext, onBack }) {
+  const picks = answer.picks || {}; // { personId: challengeId }
+  const allPicked = data.people.every(p => picks[p.id]);
+  const matrixLocked = !!answer.locked;
+
+  const setPick = (personId, challengeId) => {
+    if (matrixLocked) return;
+    setAnswer({ picks: { ...picks, [personId]: challengeId } });
+  };
+  const lockIn = () => setAnswer({ locked: true });
+
+  return (
+    <div>
+      <button onClick={onBack} style={{ color: NAVY, fontSize: 13, fontFamily: 'Reddit Sans', marginBottom: 18, display: 'flex', alignItems: 'center', gap: 6 }}>
+        ← Case {idx}
+      </button>
+
+      {/* Simplified submission header (no 4A grid for portfolio) */}
+      <SubmissionCard data={data} />
+
+      {/* Framing */}
+      <div style={{ background: NAVY, color: '#fff', borderRadius: 12, padding: '20px 24px', marginBottom: 18, position: 'relative', overflow: 'hidden' }}>
+        <div aria-hidden style={{ position: 'absolute', top: 0, left: 0, bottom: 0, width: 3, background: BRAND_GRADIENT }} />
+        <div style={{ fontSize: 11, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 1.5, color: CYAN, textTransform: 'uppercase', marginBottom: 8 }}>Where you are</div>
+        <div style={{ fontSize: 15.5, lineHeight: 1.55, fontFamily: 'Reddit Sans', color: '#fff' }}>{data.framing}</div>
+      </div>
+
+      {/* Matching grid */}
+      <div style={{ background: PAPER, borderRadius: 14, border: `1px solid ${LINE}`, padding: '24px 24px 12px', marginBottom: 16 }}>
+        <div style={{ fontSize: 11, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 1.5, color: NAVY, textTransform: 'uppercase', marginBottom: 6 }}>The team. Match a challenge to each.</div>
+        <div style={{ fontSize: 13.5, color: SLATE, marginBottom: 18, lineHeight: 1.5 }}>
+          Four people, four kinds of challenge. One of them needs no challenge at all. One is a sponsor halo. One is performance-as-potential. One is anchored on a single recent win.
+        </div>
+
+        <div style={{ display: 'grid', gap: 14 }}>
+          {data.people.map(person => (
+            <PersonRow
+              key={person.id}
+              person={person}
+              challenges={data.challenges}
+              picked={picks[person.id]}
+              correctId={person.correctChallenge}
+              onPick={(cid) => setPick(person.id, cid)}
+              revealed={matrixLocked}
+            />
+          ))}
+        </div>
+      </div>
+
+      {!matrixLocked && (
+        <button
+          onClick={lockIn}
+          disabled={!allPicked}
+          style={{
+            width: '100%', padding: '15px 22px', borderRadius: 10,
+            background: allPicked ? NAVY : '#c5cdda',
+            color: '#fff', fontFamily: 'Montserrat', fontWeight: 700, fontSize: 14.5, letterSpacing: 0.3,
+            display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 10,
+            cursor: allPicked ? 'pointer' : 'not-allowed',
+            marginBottom: 16,
+          }}
+        >
+          {allPicked ? 'Lock in your matches →' : `${4 - Object.keys(picks).length} more to pick`}
+        </button>
+      )}
+
+      {matrixLocked && (
+        <div className="anim-twist">
+          {/* What an experienced HoP would have matched */}
+          <div style={{ background: PAPER, borderRadius: 14, border: `1px solid ${LINE}`, padding: '24px 28px', marginBottom: 16, position: 'relative', overflow: 'hidden' }}>
+            <div aria-hidden style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: BRAND_GRADIENT }} />
+            <div style={{ fontSize: 10.5, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 1.5, color: CYAN, textTransform: 'uppercase', marginBottom: 8 }}>What an experienced HoP would have done</div>
+            <div style={{ fontFamily: 'Montserrat', fontWeight: 800, fontSize: 22, color: NAVY, lineHeight: 1.25, marginBottom: 16 }}>The four challenges, matched.</div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+              {data.people.map(person => {
+                const correct = data.challenges.find(c => c.id === person.correctChallenge);
+                const yours = data.challenges.find(c => c.id === picks[person.id]);
+                const matched = picks[person.id] === person.correctChallenge;
+                return (
+                  <div key={person.id} style={{
+                    background: matched ? '#f0fbf3' : '#fef3f2',
+                    border: `1px solid ${matched ? `${LIME}55` : '#fca5a555'}`,
+                    borderRadius: 10, padding: '14px 16px',
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, marginBottom: 8 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                        <div style={{ width: 28, height: 28, borderRadius: '50%', background: NAVY, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Montserrat', fontWeight: 700, fontSize: 11 }}>{person.initials}</div>
+                        <div style={{ fontFamily: 'Montserrat', fontWeight: 700, fontSize: 14.5, color: NAVY }}>{person.name}</div>
+                      </div>
+                      <div style={{ fontSize: 10.5, fontFamily: 'Montserrat', fontWeight: 700, color: matched ? '#3d7d18' : RED, letterSpacing: 0.5 }}>
+                        {matched ? '✓ MATCHED' : 'NOT THIS ONE'}
+                      </div>
+                    </div>
+                    <div style={{ fontSize: 13.5, lineHeight: 1.6, color: '#1f2937', marginBottom: 8 }}>
+                      <strong style={{ color: NAVY, fontFamily: 'Montserrat', fontWeight: 700 }}>The right challenge here: {correct.label}.</strong>
+                    </div>
+                    {!matched && yours && (
+                      <div style={{ fontSize: 12.5, color: MUTE, marginBottom: 8 }}>You picked: {yours.label}.</div>
+                    )}
+                    <div style={{ fontSize: 13.5, lineHeight: 1.6, color: SLATE }}>{person.whyCorrect}</div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          <TakeawayCard text={data.takeaway} />
+          <button onClick={onNext} style={{ width: '100%', padding: '15px 22px', borderRadius: 10, background: NAVY, color: '#fff', fontFamily: 'Montserrat', fontWeight: 700, fontSize: 14.5, letterSpacing: 0.3, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
+            See your reference card →
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function PersonRow({ person, challenges, picked, correctId, onPick, revealed }) {
+  return (
+    <div style={{ background: SOFT, borderRadius: 12, padding: '16px 18px' }}>
+      <div style={{ display: 'flex', gap: 14, marginBottom: 12 }}>
+        <div style={{ width: 40, height: 40, borderRadius: '50%', background: NAVY, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Montserrat', fontWeight: 700, fontSize: 14, flexShrink: 0 }}>{person.initials}</div>
+        <div style={{ flex: 1 }}>
+          <div style={{ fontFamily: 'Montserrat', fontWeight: 700, fontSize: 16, color: NAVY, lineHeight: 1.2 }}>{person.name}</div>
+          <div style={{ fontSize: 13, color: SLATE, marginTop: 2 }}>{person.role}</div>
+          <div style={{ fontSize: 13.5, color: '#1f2937', fontStyle: 'italic', marginTop: 8, borderLeft: `2px solid ${CYAN}`, paddingLeft: 10, lineHeight: 1.5 }}>"{person.managerSummary}"</div>
+          <ul style={{ margin: '10px 0 0', padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 4 }}>
+            {person.keyEvidence.map((ev, i) => (
+              <li key={i} style={{ fontSize: 12.5, lineHeight: 1.55, color: SLATE, display: 'flex', gap: 6 }}>
+                <span style={{ color: MUTE, flexShrink: 0 }}>·</span>
+                <span>{ev}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+        {challenges.map(c => {
+          const isPicked = picked === c.id;
+          const isCorrect = c.id === correctId;
+          let bg = '#fff', border = LINE, color = NAVY;
+          if (revealed) {
+            if (isCorrect) { bg = '#f0fbf3'; border = LIME; color = '#3d7d18'; }
+            else if (isPicked) { bg = '#fef3f2'; border = '#fca5a5'; color = RED; }
+            else { bg = '#fafbfc'; border = LINE; color = MUTE; }
+          } else if (isPicked) {
+            bg = NAVY; border = NAVY; color = '#fff';
+          }
+          return (
+            <button
+              key={c.id}
+              onClick={() => onPick(c.id)}
+              disabled={revealed}
+              style={{
+                background: bg, border: `1px solid ${border}`, color,
+                fontFamily: 'Montserrat', fontWeight: 600, fontSize: 12.5,
+                padding: '7px 12px', borderRadius: 999, letterSpacing: 0.2,
+                cursor: revealed ? 'default' : 'pointer',
+                transition: 'all .12s ease',
+              }}
+            >
+              {c.label}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ── Summary / Reference Card ─────────────────────────────────────────────────
+function Summary({ onJump, onRestart, answers }) {
+  return (
+    <div>
+      <div style={{ background: NAVY, color: '#fff', borderRadius: 16, padding: '44px 40px 36px', marginBottom: 24, position: 'relative', overflow: 'hidden' }}>
+        <div aria-hidden style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 4, background: BRAND_GRADIENT }} />
+        <div aria-hidden style={{ position: 'absolute', right: -80, top: -80, width: 280, height: 280, borderRadius: '50%', background: `radial-gradient(circle, ${LIME}22, transparent 70%)` }} />
+        <div style={{ position: 'relative' }}>
+          <div style={{ fontSize: 12, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 2, color: CYAN, textTransform: 'uppercase', marginBottom: 16 }}>Done. Your reference card.</div>
+          <h1 style={{ fontFamily: 'Montserrat', fontWeight: 800, fontSize: 40, lineHeight: 1.08, margin: '0 0 16px', letterSpacing: -1 }}>
+            Four cases. Four <Stroke fontSize={40} darkBg>instincts.</Stroke>
+          </h1>
+          <p style={{ fontSize: 15.5, lineHeight: 1.6, color: 'rgba(255,255,255,0.82)', margin: '0 0 22px', maxWidth: 640 }}>
+            Open this on a second screen during the calibration session. The questions are not a script. They are reminders of the moments where a room usually skips a step.
+          </p>
+          <div style={{ display: 'flex', gap: 10 }}>
+            <button onClick={() => window.print()} style={{ padding: '9px 14px', borderRadius: 8, background: CYAN, color: NAVY, fontFamily: 'Montserrat', fontWeight: 700, fontSize: 12.5, letterSpacing: 0.3, display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4"><path d="M6 9V2h12v7"/><rect x="4" y="9" width="16" height="9" rx="1"/><rect x="6" y="14" width="12" height="7"/></svg>
+              Save as PDF
+            </button>
+            <button onClick={onRestart} style={{ padding: '9px 14px', borderRadius: 8, background: 'transparent', color: '#fff', border: '1px solid rgba(255,255,255,0.3)', fontFamily: 'Montserrat', fontWeight: 600, fontSize: 12.5, letterSpacing: 0.3 }}>Restart</button>
+          </div>
+        </div>
+      </div>
+
+      <div style={{ display: 'grid', gap: 12, marginBottom: 28 }}>
+        {CASES.map((c, i) => {
+          const tag = caseTag(c);
+          return (
+            <div key={c.id} style={{ background: PAPER, borderRadius: 12, border: `1px solid ${LINE}`, padding: '22px 24px' }}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 }}>
+                <div style={{ flexShrink: 0, width: 36, height: 36, borderRadius: '50%', background: NAVY, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Montserrat', fontWeight: 700, fontSize: 13 }}>{String(i + 1).padStart(2, '0')}</div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, flexWrap: 'wrap', marginBottom: 6 }}>
+                    <div style={{ fontFamily: 'Montserrat', fontWeight: 700, fontSize: 15.5, color: NAVY }}>{c.name}</div>
+                    <div style={{ fontSize: 10.5, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 0.6, color: tag.color, textTransform: 'uppercase' }}>{tag.label}</div>
+                  </div>
+                  <div style={{ fontSize: 13, color: MUTE, marginBottom: 12 }}>{c.business}, {c.location}</div>
+                  <div style={{ background: SOFT, borderLeft: `3px solid ${CYAN}`, padding: '12px 14px', borderRadius: 6, marginBottom: 10 }}>
+                    <div style={{ fontSize: 10.5, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 0.8, color: CYAN, textTransform: 'uppercase', marginBottom: 4 }}>{summaryQuestionLabel(c)}</div>
+                    <div style={{ fontSize: 14.5, lineHeight: 1.55, color: '#1f2937', fontStyle: 'italic' }}>"{summaryQuestion(c)}"</div>
+                  </div>
+                  <div style={{ fontSize: 13.5, lineHeight: 1.6, color: SLATE }}><strong style={{ color: NAVY, fontFamily: 'Montserrat', fontWeight: 600 }}>The instinct:</strong> {c.takeaway}</div>
+                </div>
+                <button onClick={() => onJump(i)} style={{ fontSize: 12, color: CYAN, fontFamily: 'Montserrat', fontWeight: 600, padding: '6px 10px', borderRadius: 6, border: `1px solid ${LINE}`, background: '#fff', flexShrink: 0 }}>Revisit →</button>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <div style={{ background: PAPER, borderRadius: 14, border: `1px solid ${LINE}`, padding: '28px 32px', marginBottom: 24 }}>
+        <div style={{ fontSize: 11, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 1.5, color: NAVY, textTransform: 'uppercase', marginBottom: 12 }}>One last thing</div>
+        <p style={{ fontSize: 15, lineHeight: 1.7, color: '#1f2937', margin: '0 0 12px' }}>
+          The best calibration sessions are not the ones where every rating gets dropped. They are the ones where every rating gets properly defended, including the ones that hold. A High that survives a sharp question is a much stronger High than a High that nobody asked about.
+        </p>
+        <p style={{ fontSize: 15, lineHeight: 1.7, color: SLATE, margin: 0 }}>
+          And the conversations that flow most easily in the room are the ones where the manager has done the work in advance. Time invested in a thoughtful, evidence-led submission pays back many times over when the case reaches calibration. That makes preparing managers well, before the session, one of the most useful things any of us can do for the quality of the day.
+        </p>
+      </div>
+
+      <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+        <a href="Conversation Cards.html" style={{ flex: 1, minWidth: 240, padding: '14px 18px', borderRadius: 10, background: NAVY, color: '#fff', fontFamily: 'Montserrat', fontWeight: 600, fontSize: 14, display: 'inline-flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <span>Open the Conversation Cards reference</span>
+          <span>→</span>
+        </a>
+        <a href="Talent Review Facilitation Guide.html#calibration" style={{ flex: 1, minWidth: 240, padding: '14px 18px', borderRadius: 10, background: '#fff', color: NAVY, border: `1px solid ${LINE}`, fontFamily: 'Montserrat', fontWeight: 600, fontSize: 14, display: 'inline-flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <span>Facilitation Guide, calibration section</span>
+          <span>→</span>
+        </a>
+        <a href="Holcim Potential Workshop.html" style={{ flex: 1, minWidth: 240, padding: '14px 18px', borderRadius: 10, background: '#fff', color: NAVY, border: `1px solid ${LINE}`, fontFamily: 'Montserrat', fontWeight: 600, fontSize: 14, display: 'inline-flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <span>Potential Workshop, practise the 4A assessment</span>
+          <span>→</span>
+        </a>
+      </div>
+    </div>
+  );
+}
+
+function caseTag(c) {
+  if (c.variant === 'underclaim') return { label: 'The quiet one', color: AMBER };
+  if (c.variant === 'defensible') return { label: 'The rating holds', color: '#3d7d18' };
+  if (c.variant === 'portfolio') return { label: 'The whole cohort', color: NAVY2 };
+  return { label: 'The over-claim', color: CYAN };
+}
+
+function summaryQuestionLabel(c) {
+  if (c.variant === 'portfolio') return 'Different questions for different people';
+  return 'The question that opened it up';
+}
+
+function summaryQuestion(c) {
+  if (c.variant === 'portfolio') {
+    return "Match the challenge to the person. Back the one whose evidence holds, press performance vs potential on the top deliverer, strip the sponsors out of the visible one, and look beyond the recent win on the comeback story.";
+  }
+  const pivotal = c.questions.find(q => q.pivotal);
+  return pivotal ? pivotal.text : c.questions[0].text;
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
