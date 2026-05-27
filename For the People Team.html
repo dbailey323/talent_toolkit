@@ -2,48 +2,59 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>For the People Team · Holcim</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght=400;500;600;700;800&family=Reddit+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin></script>
 <style>
-  * { box-sizing: border-box; }
-  body { margin: 0; font-family: 'Reddit Sans', system-ui, sans-serif; background: #f4f6fa; color: #1f2937; -webkit-font-smoothing: antialiased; }
-  html { scroll-behavior: smooth; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; font-size: 16px; }
+  body { font-family: 'DM Sans', sans-serif; background: #f4f5f7; color: #1a2038; min-height: 100vh; -webkit-font-smoothing: antialiased; }
   button { cursor: pointer; border: none; background: none; font-family: inherit; }
   a { color: inherit; text-decoration: none; }
-  ::-webkit-scrollbar { width: 8px; height: 8px; }
-  ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
+  ::-webkit-scrollbar { width: 5px; height: 5px; } 
+  ::-webkit-scrollbar-thumb { background: #c5cad8; border-radius: 3px; }
   ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-  .anim-in { animation: fadeIn .3s ease-out both; }
 </style>
 </head>
 <body>
 <div id="root"></div>
 
-<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin></script>
-<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin></script>
-<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin></script>
-
 <script type="text/babel">
 const { useState, useMemo, useEffect } = React;
 
-// ── Brand ────────────────────────────────────────────────────────────────────
-const NAVY = '#041739';
-const NAVY2 = '#164375';
-const CYAN = '#05b7ed';
-const LIME = '#65c12a';
-const SLATE = '#3d5070';
-const AMBER = '#d97706';
+// ── Brand Tokens ─────────────────────────────────────────────────────────────
+const NAVY = '#041739';        // Holcim primary navy
+const NAVY2 = '#164375';       // Deep accent navy
+const CYAN = '#05b7ed';        // Holcim cyan
+const LIME = '#65c12a';        // Holcim bright green
+const SLATE = '#3d5070';       // Slate secondary Muted
+const AMBER = '#b45309';       // Warning accent
 const BRAND_GRADIENT = 'linear-gradient(90deg, #65c12a 0%, #05b7ed 50%, #164375 100%)';
-const PAPER = '#ffffff';
-const BG = '#f4f6fa';
-const MUTE = '#6b7280';
-const LINE = '#e5e7eb';
-const SOFT = '#f1f5f9';
+const LIGHT = '#f4f5f7';       // Section gray panels
+const LINE = '#e5e7eb';        // Standard divider gray
 
-// ── Audience meta ───────────────────────────────────────────────────────────
+// ── Signature Stroke Component ───────────────────────────────────────────────
+const Stroke = ({ children, fontSize = 28 }) => {
+  const h = Math.round(fontSize * 0.22);
+  const ext = Math.round(fontSize / 6);
+  return (
+    <span style={{ display: 'inline-block', position: 'relative' }}>
+      <span style={{
+        position: 'absolute', left: -ext, right: -ext,
+        bottom: Math.round(fontSize * 0.04),
+        height: h,
+        background: BRAND_GRADIENT,
+        zIndex: 0,
+      }}></span>
+      <span style={{ position: 'relative', zIndex: 1 }}>{children}</span>
+    </span>
+  );
+};
+
+// ── Audience Metadata ────────────────────────────────────────────────────────
 const AUDIENCE = {
   colleague: { label: 'Colleague in scope', color: LIME },
   manager:   { label: 'Manager',            color: CYAN },
@@ -52,7 +63,7 @@ const AUDIENCE = {
   exco:      { label: 'ExCo',               color: '#7c3aed' },
 };
 
-// ── The phases of the cycle ─────────────────────────────────────────────────
+// ── The Seven Phases Core Cycle Data ─────────────────────────────────────────
 const PHASES = [
   {
     id: 'brief',
@@ -240,19 +251,68 @@ const PHASES = [
   },
 ];
 
-// ── App ──────────────────────────────────────────────────────────────────────
+// ── Shared Layout Structure Wrapper Components ────────────────────────────────
+const Section = ({ id, children, bg }) => (
+  <section id={id} style={{ background: bg || '#fff', borderRadius: 16, padding: '40px', marginBottom: 24, boxShadow: '0 1px 4px rgba(0,0,0,0.06)', scrollMarginTop: 80 }}>
+    {children}
+  </section>
+);
+
+const SectionTitle = ({ label, title, color }) => (
+  <div style={{ marginBottom: 24 }}>
+    <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: color || CYAN, marginBottom: 6 }}>{label}</div>
+    <h2 style={{ fontFamily: 'Montserrat, sans-serif', fontSize: 26, fontWeight: 800, color: NAVY, letterSpacing: '-0.005em', lineHeight: 1.15, margin: 0, textTransform: 'uppercase' }}>{title}</h2>
+  </div>
+);
+
+const Pill = ({ text, color }) => (
+  <span style={{ display: 'inline-block', padding: '2px 10px', borderRadius: 99, fontSize: 11, fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase', background: `${color}18`, color, border: `1px solid ${color}44` }}>{text}</span>
+);
+
+// ── Application Base Controller ──────────────────────────────────────────────
 function App() {
+  const [activeSection, setActiveSection] = useState('brief');
+
+  useEffect(() => {
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) setActiveSection(e.target.id); });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('section[id]').forEach(el => obs.observe(el));
+    return () => obs.disconnect();
+  }, []);
+
   const onJump = (id) => {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
+
   return (
-    <div style={{ minHeight: '100vh', background: BG }}>
-      <Header />
-      <div style={{ maxWidth: 1240, margin: '0 auto', padding: '32px 24px 80px' }}>
+    <div style={{ minHeight: '100vh', background: LIGHT }}>
+      <NavBar active={activeSection} onJump={onJump} />
+      
+      {/* Hero Structure Container */}
+      <div style={{ maxWidth: 1080, margin: '32px auto 0', padding: '0 24px' }}>
         <Hero onJump={onJump} />
         <PhaseStrip onJump={onJump} />
-        {PHASES.map((p, i) => <PhaseSection key={p.id} phase={p} idx={i} />)}
+      </div>
+
+      {/* Main Core Workflow Document Stream */}
+      <div style={{ maxWidth: 960, margin: '0 auto', padding: '0 24px 80px' }}>
+        {PHASES.map((p) => (
+          <Section id={p.id} key={p.id}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12, marginBottom: 16 }}>
+              <SectionTitle label={`Phase ${p.n} · ${p.label}`} title={p.promise} color={p.accent} />
+              <Pill text={p.when} color={p.accent} />
+            </div>
+            
+            <p style={{ fontSize: 15, color: '#374151', lineHeight: 1.7, marginBottom: 28, fontWeight: 400 }}>{p.blurb}</p>
+            
+            <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.07em', textTransform: 'uppercase', color: '#9ca3af', marginBottom: 14 }}>Available Toolkits &amp; Collateral</div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: 16 }}>
+              {p.tools.map((t, idx) => <ToolCard key={idx} tool={t} accent={p.accent} />)}
+            </div>
+          </Section>
+        ))}
         <Closer />
       </div>
       <Footer />
@@ -260,71 +320,64 @@ function App() {
   );
 }
 
-// ── Header ───────────────────────────────────────────────────────────────────
-function Header() {
+// ── Top Docking Navigation Bar Component ─────────────────────────────────────
+function NavBar({ active, onJump }) {
   return (
-    <header style={{ background: NAVY, color: '#fff', position: 'sticky', top: 0, zIndex: 10 }}>
-      <div style={{ height: 3, background: BRAND_GRADIENT }} />
-      <div style={{ maxWidth: 1240, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, padding: '16px 24px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-          <div style={{ width: 24, height: 24, background: BRAND_GRADIENT, borderRadius: 4 }} />
-          <div>
-            <div style={{ fontSize: 10, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 1.8, color: CYAN, textTransform: 'uppercase' }}>For Heads of People, Talent and ExCo</div>
-            <div style={{ fontFamily: 'Montserrat', fontWeight: 700, fontSize: 16, lineHeight: 1.1, marginTop: 2 }}>For the People Team</div>
-          </div>
-        </div>
+    <nav style={{ position: 'sticky', top: 0, zIndex: 50, background: NAVY, display: 'flex', alignItems: 'center', padding: '0 32px', height: 52, gap: 4, boxShadow: '0 2px 12px rgba(0,0,0,0.2)', overflowX: 'auto' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginRight: 24, flexShrink: 0 }}>
+        <div style={{ width: 16, height: 16, background: BRAND_GRADIENT, borderRadius: 3 }} />
+        <span style={{ fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,0.6)', borderLeft: '1px solid rgba(255,255,255,0.18)', paddingLeft: 10, marginLeft: 4, fontFamily: 'Montserrat, sans-serif', letterSpacing: '0.05em', textTransform: 'uppercase' }}>People Toolkit</span>
       </div>
-    </header>
+      {PHASES.map(p => (
+        <button key={p.id} onClick={() => onJump(p.id)} style={{
+          padding: '6px 14px', borderRadius: 6, fontSize: 12, fontWeight: 600,
+          color: active === p.id ? '#fff' : 'rgba(255,255,255,0.5)',
+          background: active === p.id ? 'rgba(255,255,255,0.12)' : 'transparent',
+          textTransform: 'uppercase', letterSpacing: '0.03em', whiteSpace: 'nowrap', transition: 'all 0.15s',
+        }}>{p.n} {p.id}</button>
+      ))}
+    </nav>
   );
 }
 
-function Footer() {
-  return (
-    <footer style={{ borderTop: `1px solid ${LINE}`, padding: '24px 32px', textAlign: 'center', fontSize: 12, color: MUTE, fontFamily: 'Reddit Sans' }}>
-      For the People Team · Holcim UK · The talent review toolkit, organised by phase
-    </footer>
-  );
-}
-
-// ── Hero ─────────────────────────────────────────────────────────────────────
+// ── Hero Section Layout Block ────────────────────────────────────────────────
 function Hero({ onJump }) {
   return (
-    <div style={{ background: NAVY, color: '#fff', borderRadius: 20, padding: '56px 56px 48px', position: 'relative', overflow: 'hidden', marginBottom: 36 }}>
+    <div style={{ background: NAVY, color: '#fff', borderRadius: 20, padding: '48px 48px 44px', position: 'relative', overflow: 'hidden', marginBottom: 36 }}>
       <div aria-hidden style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 4, background: BRAND_GRADIENT }} />
-      <div aria-hidden style={{ position: 'absolute', right: -120, bottom: -140, width: 380, height: 380, borderRadius: '50%', background: `radial-gradient(circle, ${CYAN}33, transparent 70%)` }} />
-      <div aria-hidden style={{ position: 'absolute', right: 200, top: -80, width: 240, height: 240, borderRadius: '50%', background: `radial-gradient(circle, ${LIME}22, transparent 70%)` }} />
-      <div style={{ position: 'relative', maxWidth: 780 }}>
-        <div style={{ fontSize: 11, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 2, color: CYAN, textTransform: 'uppercase', marginBottom: 18 }}>The 2026 talent review cycle</div>
-        <h1 style={{ fontFamily: 'Montserrat', fontWeight: 800, fontSize: 54, lineHeight: 1.04, margin: '0 0 22px', color: '#fff', letterSpacing: -1.4 }}>
-          Facilitate the talent review in your <span style={{ color: CYAN }}>business area.</span>
+      <div aria-hidden style={{ position: 'absolute', right: -120, bottom: -140, width: 360, height: 360, borderRadius: '50%', background: `radial-gradient(circle, ${CYAN}33, transparent 70%)` }} />
+      <div style={{ position: 'relative', maxWidth: 760 }}>
+        <div style={{ fontSize: 11, fontFamily: 'Montserrat, sans-serif', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: CYAN, marginBottom: 18 }}>The 2026 talent review cycle</div>
+        <h1 style={{ fontFamily: 'Montserrat, sans-serif', fontSize: 48, fontWeight: 800, color: '#fff', letterSpacing: '-0.025em', margin: '0 0 22px', lineHeight: 1.06 }}>
+          Facilitate the talent review in your <Stroke fontSize={48}>business area.</Stroke>
         </h1>
-        <p style={{ fontSize: 17, lineHeight: 1.6, color: 'rgba(255,255,255,0.85)', maxWidth: 680, margin: '0 0 28px' }}>
-          Every tool, organised by when in the cycle you reach for it. Seven phases, each with its own work and its own reference.
+        <p style={{ fontSize: 16.5, color: 'rgba(255,255,255,0.85)', lineHeight: 1.6, maxWidth: 660, margin: '0 0 24px' }}>
+          Every tool, organised by when in the cycle you reach for it. Seven phases, each with its own work and its own operational reference points.
         </p>
-        <button onClick={() => onJump('brief')} style={{ padding: '14px 22px', borderRadius: 10, background: '#fff', color: NAVY, fontFamily: 'Montserrat', fontWeight: 700, fontSize: 14.5, letterSpacing: 0.3, display: 'inline-flex', alignItems: 'center', gap: 10 }}>
-          Start at the beginning <span>→</span>
+        <button onClick={() => onJump('brief')} style={{ padding: '10px 20px', borderRadius: 8, background: CYAN, color: NAVY, fontFamily: 'DM Sans, sans-serif', fontWeight: 700, fontSize: 14, display: 'inline-flex', alignItems: 'center', gap: 8, transition: 'background 0.15s' }}>
+          Start execution flow <span>→</span>
         </button>
       </div>
     </div>
   );
 }
 
-// ── Phase strip ──────────────────────────────────────────────────────────────
+// ── Linear Process Navigation Node Strip ──────────────────────────────────────
 function PhaseStrip({ onJump }) {
   return (
-    <div style={{ marginBottom: 48 }}>
-      <div style={{ fontSize: 11, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 1.8, color: NAVY, textTransform: 'uppercase', marginBottom: 14 }}>The seven phases of the cycle</div>
-      <div style={{ position: 'relative', padding: '12px 0 4px' }}>
-        <div aria-hidden style={{ position: 'absolute', left: 32, right: 32, top: 44, height: 2, background: BRAND_GRADIENT, opacity: 0.35, borderRadius: 999 }} />
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 8, position: 'relative' }}>
+    <div style={{ marginBottom: 40, background: '#fff', padding: '24px', borderRadius: 16, boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
+      <div style={{ fontSize: 11, fontFamily: 'Montserrat, sans-serif', fontWeight: 700, letterSpacing: '0.1em', color: NAVY, textTransform: 'uppercase', marginBottom: 20 }}>The seven phases of the cycle</div>
+      <div style={{ position: 'relative' }}>
+        <div aria-hidden style={{ position: 'absolute', left: 32, right: 32, top: 22, height: 2, background: BRAND_GRADIENT, opacity: 0.25 }} />
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 12, position: 'relative' }}>
           {PHASES.map(p => (
-            <button key={p.id} onClick={() => onJump(p.id)} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', padding: '0 4px' }}>
+            <button key={p.id} onClick={() => onJump(p.id)} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
               <div style={{
-                width: 50, height: 50, borderRadius: '50%', background: '#fff',
+                width: 44, height: 44, borderRadius: '50%', background: '#fff',
                 border: `3px solid ${p.accent}`,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontFamily: 'Montserrat', fontWeight: 800, fontSize: 14, color: NAVY,
-                boxShadow: '0 4px 12px rgba(4,23,57,0.06)',
+                fontFamily: 'Montserrat, sans-serif', fontWeight: 800, fontSize: 13, color: NAVY,
+                boxShadow: '0 2px 6px rgba(4,23,57,0.08)',
                 marginBottom: 10, transition: 'transform .15s',
               }}
               onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
@@ -332,8 +385,8 @@ function PhaseStrip({ onJump }) {
               >
                 {p.n}
               </div>
-              <div style={{ fontFamily: 'Montserrat', fontWeight: 700, fontSize: 11.5, color: NAVY, letterSpacing: -0.1, lineHeight: 1.3, marginBottom: 3, maxWidth: 130 }}>{p.label}</div>
-              <div style={{ fontSize: 10.5, color: MUTE, fontFamily: 'Reddit Sans', lineHeight: 1.3 }}>{p.when}</div>
+              <div style={{ fontFamily: 'DM Sans, sans-serif', fontWeight: 700, fontSize: 13, color: NAVY, lineHeight: 1.2, marginBottom: 2 }}>{p.label}</div>
+              <div style={{ fontSize: 11, color: '#6b7280' }}>{p.when.split(',')[0]}</div>
             </button>
           ))}
         </div>
@@ -342,39 +395,7 @@ function PhaseStrip({ onJump }) {
   );
 }
 
-// ── Phase section ────────────────────────────────────────────────────────────
-function PhaseSection({ phase, idx }) {
-  return (
-    <section id={phase.id} style={{ marginBottom: 64, scrollMarginTop: 96 }}>
-      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 22, marginBottom: 28 }}>
-        <div style={{
-          flexShrink: 0,
-          width: 76, height: 76, borderRadius: '50%',
-          background: '#fff', border: `3px solid ${phase.accent}`,
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontFamily: 'Montserrat', fontWeight: 800, fontSize: 24, color: NAVY,
-          boxShadow: '0 6px 18px rgba(4,23,57,0.07)',
-        }}>
-          {phase.n}
-        </div>
-        <div style={{ flex: 1, paddingTop: 6 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 6, flexWrap: 'wrap' }}>
-            <div style={{ fontSize: 11, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 1.8, color: phase.accent, textTransform: 'uppercase' }}>Phase {phase.n} · {phase.label}</div>
-            <div style={{ fontSize: 11.5, color: MUTE, fontFamily: 'Reddit Sans', padding: '3px 9px', borderRadius: 999, background: SOFT, fontWeight: 500 }}>{phase.when}</div>
-          </div>
-          <h2 style={{ fontFamily: 'Montserrat', fontWeight: 700, fontSize: 26, color: NAVY, margin: '0 0 10px', letterSpacing: -0.4 }}>{phase.promise}</h2>
-          <p style={{ fontSize: 15, color: SLATE, lineHeight: 1.6, margin: 0, maxWidth: 760 }}>{phase.blurb}</p>
-        </div>
-      </div>
-
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: 16, marginLeft: 98 }}>
-        {phase.tools.map((t, i) => <ToolCard key={i} tool={t} accent={phase.accent} />)}
-      </div>
-    </section>
-  );
-}
-
-// ── Tool card ────────────────────────────────────────────────────────────────
+// ── Asset Attachment Card Display Element ─────────────────────────────────────
 function ToolCard({ tool, accent }) {
   const [hover, setHover] = useState(false);
   return (
@@ -385,58 +406,68 @@ function ToolCard({ tool, accent }) {
       style={{
         display: 'flex', flexDirection: 'column',
         background: '#fff', border: `1px solid ${hover ? accent : LINE}`,
-        borderLeft: `3px solid ${accent}`,
-        borderRadius: 12, padding: '22px 22px 20px',
+        borderLeft: `4px solid ${accent}`,
+        borderRadius: 10, padding: '20px',
         cursor: 'pointer', textDecoration: 'none',
-        transition: 'transform .15s ease, box-shadow .15s ease, border-color .15s ease',
+        transition: 'all 0.15s ease',
         transform: hover ? 'translateY(-2px)' : 'translateY(0)',
-        boxShadow: hover ? '0 12px 28px rgba(4,23,57,0.10)' : '0 1px 0 rgba(4,23,57,0.02)',
+        boxShadow: hover ? '0 6px 16px rgba(4,23,57,0.08)' : 'none',
         position: 'relative', overflow: 'hidden',
       }}
     >
       {tool.starred && (
-        <div style={{ position: 'absolute', top: 14, right: 14, fontSize: 9.5, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 0.8, color: AMBER, background: '#fef8e8', border: `1px solid #fcd34d`, padding: '3px 7px', borderRadius: 4, textTransform: 'uppercase' }}>
+        <div style={{ position: 'absolute', top: 16, right: 16, fontSize: 10, fontFamily: 'Montserrat, sans-serif', fontWeight: 700, letterSpacing: '0.05em', color: AMBER, background: '#fef3c7', border: `1px solid #fcd34d`, padding: '2px 6px', borderRadius: 4, textTransform: 'uppercase' }}>
           Pre-work
         </div>
       )}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap', marginBottom: 10 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap', marginBottom: 12, paddingRight: tool.starred ? 64 : 0 }}>
         {tool.audience.map(a => {
-          const meta = AUDIENCE[a];
+          const meta = AUDIENCE[a] || { label: a, color: SLATE };
           return (
             <span key={a} style={{
-              fontSize: 10.5, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 0.5,
-              color: meta.color, background: '#fff', border: `1px solid ${meta.color}`,
-              padding: '3px 8px', borderRadius: 999, textTransform: 'uppercase',
+              fontSize: 10, fontFamily: 'Montserrat, sans-serif', fontWeight: 700, letterSpacing: '0.03em',
+              color: meta.color, background: '#fff', border: `1px solid ${meta.color}55`,
+              padding: '2px 8px', borderRadius: 999, textTransform: 'uppercase',
             }}>{meta.label}</span>
           );
         })}
-        <span style={{ marginLeft: 'auto', fontSize: 11.5, color: MUTE, fontFamily: 'Montserrat', fontWeight: 600 }}>{tool.time}</span>
+        <span style={{ marginLeft: 'auto', fontSize: 12, color: '#6b7280', fontWeight: 500 }}>{tool.time}</span>
       </div>
-      <h3 style={{ fontFamily: 'Montserrat', fontWeight: 700, fontSize: 18, color: NAVY, margin: '0 0 8px', letterSpacing: -0.3 }}>{tool.title}</h3>
-      <p style={{ fontSize: 14, lineHeight: 1.55, color: SLATE, margin: '0 0 16px', flex: 1 }}>{tool.blurb}</p>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: NAVY, fontFamily: 'Montserrat', fontWeight: 700, fontSize: 13 }}>
-        <span>Open</span>
-        <span style={{ transition: 'transform .15s ease', transform: hover ? 'translateX(4px)' : 'translateX(0)' }}>→</span>
+      <h3 style={{ fontFamily: 'DM Sans, sans-serif', fontWeight: 700, fontSize: 16, color: NAVY, margin: '0 0 6px', letterSpacing: '-0.01em' }}>{tool.title}</h3>
+      <p style={{ fontSize: 13.5, lineHeight: 1.6, color: '#4b5563', margin: '0 0 16px', flex: 1 }}>{tool.blurb}</p>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 4, color: accent, fontFamily: 'Montserrat, sans-serif', fontWeight: 700, fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+        <span>Access Asset</span>
+        <span style={{ transition: 'transform .15s ease', transform: hover ? 'translateX(3px)' : 'translateX(0)' }}>→</span>
       </div>
     </a>
   );
 }
 
-// ── Closer ───────────────────────────────────────────────────────────────────
+// ── Closer Callout Container Section ──────────────────────────────────────────
 function Closer() {
   return (
-    <div style={{ background: NAVY, color: '#fff', borderRadius: 16, padding: '36px 40px', marginTop: 24, position: 'relative', overflow: 'hidden' }}>
+    <div style={{ background: NAVY, color: '#fff', borderRadius: 16, padding: '40px', position: 'relative', overflow: 'hidden' }}>
       <div aria-hidden style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: BRAND_GRADIENT }} />
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 32, alignItems: 'center' }}>
-        <div>
-          <div style={{ fontSize: 11, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 2, color: CYAN, textTransform: 'uppercase', marginBottom: 10 }}>The point of the cycle</div>
-          <h3 style={{ fontFamily: 'Montserrat', fontWeight: 700, fontSize: 24, margin: '0 0 10px', letterSpacing: -0.3 }}>Better evidence, sharper questions, real development.</h3>
-          <p style={{ fontSize: 15, lineHeight: 1.65, color: 'rgba(255,255,255,0.82)', margin: 0, maxWidth: 720 }}>
-            Not the right number on a form. Every colleague in scope having one honest career conversation, with a development action behind it.
-          </p>
-        </div>
+      <div style={{ position: 'relative', maxWidth: 720 }}>
+        <div style={{ fontSize: 11, fontFamily: 'Montserrat, sans-serif', fontWeight: 700, letterSpacing: '0.1em', color: CYAN, textTransform: 'uppercase', marginBottom: 10 }}>The point of the cycle</div>
+        <h3 style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 700, fontSize: 22, margin: '0 0 12px', letterSpacing: '-0.01em', textTransform: 'uppercase' }}>Better evidence, sharper questions, real development.</h3>
+        <p style={{ fontSize: 14.5, lineHeight: 1.7, color: 'rgba(255,255,255,0.82)', margin: 0 }}>
+          Not the right number on a form. Every colleague in scope having one honest career conversation, with a definitive, trackable development action behind it.
+        </p>
       </div>
     </div>
+  );
+}
+
+// ── Footer System Block ──────────────────────────────────────────────────────
+function Footer() {
+  return (
+    <footer style={{ background: NAVY, color: 'rgba(255,255,255,0.5)', padding: '32px 40px', borderTop: `1px solid rgba(255,255,255,0.1)` }}>
+      <div style={{ maxWidth: 1000, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16, fontSize: 12, fontFamily: 'DM Sans, sans-serif' }}>
+        <span>For the People Team · Holcim UK · The talent review toolkit, organised by phase</span>
+        <span style={{ textTransform: 'uppercase', fontFamily: 'Montserrat, sans-serif', fontWeight: 700, letterSpacing: '0.05em' }}>People Review 2026</span>
+      </div>
+    </footer>
   );
 }
 
