@@ -1,1 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4A Potential Assessment</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: oklch(0.96 0.005 240);
+    color: oklch(0.18 0.02 240);
+    min-height: 100vh;
+    padding: 32px 24px 80px;
+  }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: oklch(0.75 0.01 240); border-radius: 3px; }
+</style>
 
+<template id="__bundler_thumbnail">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 56">
+  <rect width="80" height="56" fill="#1a2e52"/>
+  <rect x="12" y="10" width="56" height="8" rx="2" fill="#00868a"/>
+  <rect x="12" y="22" width="56" height="8" rx="2" fill="#1b6b8a"/>
+  <rect x="12" y="34" width="56" height="8" rx="2" fill="#3d5070"/>
+  <rect x="12" y="46" width="36" height="4" rx="2" fill="rgba(255,255,255,0.3)"/>
+</svg>
+</template>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useCallback } = React;
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "accentAbility": "#1a2e52",
+  "accentAspiration": "#00868a",
+  "accentAgility": "#1b6b8a",
+  "accentAlignment": "#3d5070",
+  "showPromptsByDefault": true
+}/*EDITMODE-END*/;
+
+// ─── Prompt questions per dimension ───────────────────────────────────────────
+const PROMPTS = {
+  ability: [
+    "What evidence shows they operate at the next level of complexity - not just performing well in their current role?",
+    "Can you point to a specific decision, project, or moment where their thinking stood out?",
+    "How have they responded when stretched beyond their comfort zone?",
+    "Is this assessment based on demonstrated capability, or potential you're assuming?"
+  ],
+  aspiration: [
+    "Have they explicitly expressed what they want, or are you inferring from behaviour?",
+    "Do they seek broader scope, not just progression in title or salary?",
+    "How have they shown initiative in driving their own development?",
+    "Have you had a direct career conversation with this person on record?"
+  ],
+  agility: [
+    "Can you describe a time they changed course in response to new information or feedback?",
+    "How do they respond to ambiguity - do they freeze, follow, or lead?",
+    "Do they learn from failure and adapt their approach, or repeat patterns?",
+    "Have they successfully operated across different cultures, functions, or contexts?"
+  ],
+  alignment: [
+    "Does their personal ambition align with where the organisation needs to go?",
+    "Are they willing to take moves that serve the business, even if not their preference?",
+    "Do they demonstrate the values and behaviours we need at the next level?",
+    "Have there been any signals - in conversations or behaviour - that alignment is fragile?"
+  ]
+};
+
+const DIMENSIONS = [
+  { key: "ability",    label: "Ability",    subtitle: "Capacity to perform at the next level" },
+  { key: "aspiration", label: "Aspiration", subtitle: "Drive and ambition to grow and take on more" },
+  { key: "agility",   label: "Agility",    subtitle: "Adaptability, learning speed, resilience to change" },
+  { key: "alignment", label: "Alignment",  subtitle: "Values, culture fit, and organisational direction" },
+];
+
+const LEVELS = ["Low", "Medium", "High"];
+const LEVEL_SCORES = { Low: 1, Medium: 2, High: 3 };
+
+// ─── Overall rating logic ─────────────────────────────────────────────────────
+function computeOverall(ratings) {
+  const vals = Object.values(ratings);
+  if (vals.some(v => v === null)) return null;
+  const sum = vals.reduce((a, b) => a + LEVEL_SCORES[b], 0);
+  const hasLow = vals.includes("Low");
+  // Any Low caps at Emerging unless majority are High
+  const highCount = vals.filter(v => v === "High").length;
+  if (hasLow && highCount < 3) return "Emerging Potential";
+  if (sum >= 10) return "High Potential";
+  if (sum >= 7) return "Medium Potential";
+  return "Emerging Potential";
+}
+
+const OVERALL_COLORS = {
+  "High Potential":    { bg: "#1a2e52", text: "#fff", badge: "#2d9d6b" },
+  "Medium Potential":  { bg: "#1b6b8a", text: "#fff", badge: "#f59e0b" },
+  "Emerging Potential":{ bg: "#3d5070", text: "#fff", badge: "#e05c3a" },
+};
+
+// ─── Slider component ─────────────────────────────────────────────────────────
+function RatingSlider({ value, onChange, color }) {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+      <div style={{ display: "flex", gap: 0, borderRadius: 8, overflow: "hidden", border: "1px solid oklch(0.85 0.01 240)" }}>
+        {LEVELS.map((level, i) => {
+          const active = value === level;
+          const idx = LEVELS.indexOf(value);
+          const isPast = i <= idx;
+          return (
+            <button
+              key={level}
+              onClick={() => onChange(level)}
+              style={{
+                flex: 1,
+                padding: "10px 4px",
+                border: "none",
+                cursor: "pointer",
+                fontFamily: "DM Sans, sans-serif",
+                fontSize: 13,
+                fontWeight: active ? 700 : 500,
+                letterSpacing: "0.03em",
+                transition: "all 0.18s ease",
+                background: active ? color : isPast && value ? `${color}28` : "oklch(0.98 0.005 240)",
+                color: active ? "#fff" : isPast && value ? color : "oklch(0.5 0.01 240)",
+                borderRight: i < 2 ? "1px solid oklch(0.88 0.01 240)" : "none",
+                position: "relative",
+              }}
+            >
+              {level}
+              {active && (
+                <span style={{
+                  display: "block",
+                  width: 6, height: 6,
+                  background: "rgba(255,255,255,0.7)",
+                  borderRadius: "50%",
+                  margin: "4px auto 0",
+                }} />
+              )}
+            </button>
+          );
+        })}
+      </div>
+      <div style={{ display: "flex", justifyContent: "space-between", padding: "0 2px" }}>
+        <span style={{ fontSize: 11, color: "oklch(0.6 0.01 240)" }}>Less evidence at next level</span>
+        <span style={{ fontSize: 11, color: "oklch(0.6 0.01 240)" }}>Clear evidence at next level</span>
+      </div>
+    </div>
+  );
+}
+
+// ─── Prompt accordion ─────────────────────────────────────────────────────────
+function PromptList({ questions, open, onToggle }) {
+  return (
+    <div>
+      <button
+        onClick={onToggle}
+        style={{
+          background: "none", border: "none", cursor: "pointer",
+          display: "flex", alignItems: "center", gap: 6,
+          fontSize: 12, fontWeight: 600, letterSpacing: "0.06em",
+          color: "oklch(0.5 0.015 240)", textTransform: "uppercase",
+          padding: "6px 0", fontFamily: "DM Sans, sans-serif",
+        }}
+      >
+        <span style={{ fontSize: 16, lineHeight: 1, transform: open ? "rotate(90deg)" : "none", transition: "transform 0.15s", display:"inline-block" }}>›</span>
+        Evidence prompts
+      </button>
+      {open && (
+        <ul style={{
+          listStyle: "none", display: "flex", flexDirection: "column", gap: 8, marginTop: 4,
+          borderLeft: "2px solid oklch(0.88 0.01 240)", paddingLeft: 14,
+        }}>
+          {questions.map((q, i) => (
+            <li key={i} style={{ fontSize: 13.5, color: "oklch(0.38 0.015 240)", lineHeight: 1.55 }}>
+              {q}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+// ─── Dimension card ───────────────────────────────────────────────────────────
+function DimensionCard({ dim, rating, evidence, onRating, onEvidence, color, showPrompts }) {
+  const [promptsOpen, setPromptsOpen] = useState(showPrompts);
+  useEffect(() => { setPromptsOpen(showPrompts); }, [showPrompts]);
+
+  return (
+    <div style={{
+      background: "#fff",
+      borderRadius: 12,
+      overflow: "hidden",
+      boxShadow: "0 1px 4px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04)",
+    }}>
+      {/* Header strip */}
+      <div style={{
+        background: color,
+        padding: "18px 24px",
+        display: "flex", alignItems: "baseline", gap: 14,
+      }}>
+        <h2 style={{ color: "#fff", fontSize: 20, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" }}>
+          {dim.label}
+        </h2>
+        <span style={{ color: "rgba(255,255,255,0.65)", fontSize: 13, fontWeight: 400 }}>{dim.subtitle}</span>
+      </div>
+
+      <div style={{ padding: "20px 24px", display: "flex", flexDirection: "column", gap: 20 }}>
+        {/* Rating slider */}
+        <div>
+          <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", color: "oklch(0.45 0.015 240)", marginBottom: 10 }}>
+            Rating
+          </div>
+          <RatingSlider value={rating} onChange={onRating} color={color} />
+        </div>
+
+        {/* Evidence */}
+        <div>
+          <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", color: "oklch(0.45 0.015 240)", marginBottom: 8 }}>
+            Evidence - specific examples, outcomes, context
+          </div>
+          <textarea
+            value={evidence}
+            onChange={e => onEvidence(e.target.value)}
+            placeholder="What have you observed? What did they do, what was the outcome?"
+            style={{
+              width: "100%", minHeight: 90, padding: "12px 14px",
+              border: "1px solid oklch(0.87 0.01 240)", borderRadius: 8,
+              fontSize: 14, fontFamily: "DM Sans, sans-serif", lineHeight: 1.6,
+              color: "oklch(0.2 0.015 240)", background: "oklch(0.985 0.004 240)",
+              resize: "vertical", outline: "none", transition: "border-color 0.15s",
+            }}
+            onFocus={e => e.target.style.borderColor = color}
+            onBlur={e => e.target.style.borderColor = "oklch(0.87 0.01 240)"}
+          />
+        </div>
+
+        {/* Prompts */}
+        <PromptList
+          questions={PROMPTS[dim.key]}
+          open={promptsOpen}
+          onToggle={() => setPromptsOpen(p => !p)}
+        />
+      </div>
+    </div>
+  );
+}
+
+// ─── Overall rating panel ─────────────────────────────────────────────────────
+function OverallPanel({ ratings, keyGap, onKeyGap, readiness, onReadiness }) {
+  const overall = computeOverall(ratings);
+  const rated = Object.values(ratings).filter(v => v !== null).length;
+  const pct = rated / 4;
+  const colors = overall ? OVERALL_COLORS[overall] : null;
+
+  return (
+    <div style={{
+      background: "#fff",
+      borderRadius: 12,
+      overflow: "hidden",
+      boxShadow: "0 1px 4px rgba(0,0,0,0.06), 0 8px 32px rgba(0,0,0,0.06)",
+    }}>
+      <div style={{ padding: "24px 28px", display: "flex", flexDirection: "column", gap: 20 }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
+          <div>
+            <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "oklch(0.5 0.01 240)", marginBottom: 4 }}>
+              Overall Potential Judgement
+            </div>
+            {overall ? (
+              <div style={{
+                display: "inline-flex", alignItems: "center", gap: 10,
+                background: colors.bg, borderRadius: 8, padding: "10px 18px",
+              }}>
+                <span style={{
+                  width: 10, height: 10, borderRadius: "50%", background: colors.badge, flexShrink: 0
+                }} />
+                <span style={{ color: colors.text, fontWeight: 700, fontSize: 18, letterSpacing: "0.03em" }}>
+                  {overall}
+                </span>
+              </div>
+            ) : (
+              <div style={{
+                display: "inline-flex", alignItems: "center", gap: 8,
+                background: "oklch(0.94 0.01 240)", borderRadius: 8, padding: "10px 18px",
+              }}>
+                <span style={{ color: "oklch(0.5 0.015 240)", fontWeight: 500, fontSize: 15 }}>
+                  Rate all 4 dimensions to generate judgement
+                </span>
+              </div>
+            )}
+          </div>
+
+          {/* Mini score bar */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 6, minWidth: 160 }}>
+            <div style={{ fontSize: 11, color: "oklch(0.55 0.01 240)", fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase" }}>
+              {rated}/4 dimensions rated
+            </div>
+            <div style={{ height: 6, background: "oklch(0.9 0.01 240)", borderRadius: 99, overflow: "hidden" }}>
+              <div style={{
+                height: "100%", width: `${pct * 100}%`, borderRadius: 99,
+                background: overall ? colors.bg : "oklch(0.7 0.015 240)",
+                transition: "width 0.4s ease",
+              }} />
+            </div>
+            {overall && (
+              <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
+                {Object.entries(ratings).map(([key, val]) => (
+                  <span key={key} style={{
+                    fontSize: 11, padding: "2px 7px", borderRadius: 99,
+                    background: val === "High" ? "#d1fae5" : val === "Medium" ? "#fef3c7" : "#fee2e2",
+                    color: val === "High" ? "#065f46" : val === "Medium" ? "#92400e" : "#991b1b",
+                    fontWeight: 600, textTransform: "capitalize",
+                  }}>
+                    {key.charAt(0).toUpperCase() + key.slice(1,2)}: {val}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Interpretation note */}
+        {overall && (
+          <div style={{
+            background: `${OVERALL_COLORS[overall].bg}0f`,
+            borderLeft: `3px solid ${OVERALL_COLORS[overall].bg}`,
+            padding: "10px 14px", borderRadius: "0 8px 8px 0",
+            fontSize: 13, color: "oklch(0.3 0.015 240)", lineHeight: 1.6,
+          }}>
+            {overall === "High Potential" && "Strong evidence across all four dimensions. This individual has the capacity, drive, adaptability and alignment to grow significantly beyond their current role."}
+            {overall === "Medium Potential" && "Solid evidence in several dimensions, with some areas still developing. Growth is likely with the right support, stretch, and development focus."}
+            {overall === "Emerging Potential" && "Evidence is limited or mixed in one or more dimensions. Potential exists but is not yet sufficiently demonstrated - revisit with more data or targeted development."}
+          </div>
+        )}
+
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+          {/* Key gap */}
+          <div>
+            <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", color: "oklch(0.45 0.015 240)", marginBottom: 8 }}>
+              Key Gap to Next Role
+            </div>
+            <textarea
+              value={keyGap}
+              onChange={e => onKeyGap(e.target.value)}
+              placeholder="Name the single most important capability or experience gap to close."
+              style={{
+                width: "100%", minHeight: 80, padding: "10px 12px",
+                border: "1px solid oklch(0.87 0.01 240)", borderRadius: 8,
+                fontSize: 13.5, fontFamily: "DM Sans, sans-serif", lineHeight: 1.6,
+                color: "oklch(0.2 0.015 240)", background: "oklch(0.985 0.004 240)",
+                resize: "vertical", outline: "none",
+              }}
+            />
+          </div>
+          {/* Readiness */}
+          <div>
+            <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", color: "oklch(0.45 0.015 240)", marginBottom: 8 }}>
+              Readiness for Next Role
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+              {["Ready now", "1–2 years", "2–3 years"].map(opt => (
+                <label key={opt} style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer" }}>
+                  <div
+                    onClick={() => onReadiness(opt)}
+                    style={{
+                      width: 18, height: 18, borderRadius: "50%", flexShrink: 0,
+                      border: `2px solid ${readiness === opt ? "#1a2e52" : "oklch(0.78 0.01 240)"}`,
+                      background: readiness === opt ? "#1a2e52" : "transparent",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      transition: "all 0.15s",
+                    }}
+                  >
+                    {readiness === opt && <div style={{ width: 7, height: 7, borderRadius: "50%", background: "#fff" }} />}
+                  </div>
+                  <span style={{ fontSize: 14, color: "oklch(0.3 0.015 240)", fontWeight: readiness === opt ? 600 : 400 }}>{opt}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── App ──────────────────────────────────────────────────────────────────────
+function App() {
+  const [tweaks, setTweaks] = useState(TWEAK_DEFAULTS);
+  const [tweaksVisible, setTweaksVisible] = useState(false);
+
+  const DIM_COLORS = {
+    ability:    tweaks.accentAbility,
+    aspiration: tweaks.accentAspiration,
+    agility:    tweaks.accentAgility,
+    alignment:  tweaks.accentAlignment,
+  };
+
+  // Load from localStorage
+  const [person, setPerson] = useState(() => {
+    try { return JSON.parse(localStorage.getItem("4a_person")) || { name: "", role: "", nextRole: "" }; }
+    catch { return { name: "", role: "", nextRole: "" }; }
+  });
+  const [ratings, setRatings] = useState(() => {
+    try { return JSON.parse(localStorage.getItem("4a_ratings")) || { ability: null, aspiration: null, agility: null, alignment: null }; }
+    catch { return { ability: null, aspiration: null, agility: null, alignment: null }; }
+  });
+  const [evidence, setEvidence] = useState(() => {
+    try { return JSON.parse(localStorage.getItem("4a_evidence")) || { ability: "", aspiration: "", agility: "", alignment: "" }; }
+    catch { return { ability: "", aspiration: "", agility: "", alignment: "" }; }
+  });
+  const [keyGap, setKeyGap] = useState(() => localStorage.getItem("4a_keygap") || "");
+  const [readiness, setReadiness] = useState(() => localStorage.getItem("4a_readiness") || null);
+
+  useEffect(() => { localStorage.setItem("4a_person", JSON.stringify(person)); }, [person]);
+  useEffect(() => { localStorage.setItem("4a_ratings", JSON.stringify(ratings)); }, [ratings]);
+  useEffect(() => { localStorage.setItem("4a_evidence", JSON.stringify(evidence)); }, [evidence]);
+  useEffect(() => { localStorage.setItem("4a_keygap", keyGap); }, [keyGap]);
+  useEffect(() => { if (readiness) localStorage.setItem("4a_readiness", readiness); }, [readiness]);
+
+  // Tweaks messaging
+  useEffect(() => {
+    const handler = (e) => {
+      if (e.data?.type === "__activate_edit_mode") setTweaksVisible(true);
+      if (e.data?.type === "__deactivate_edit_mode") setTweaksVisible(false);
+    };
+    window.addEventListener("message", handler);
+    window.parent.postMessage({ type: "__edit_mode_available" }, "*");
+    return () => window.removeEventListener("message", handler);
+  }, []);
+
+  const updateTweak = (key, val) => {
+    const next = { ...tweaks, [key]: val };
+    setTweaks(next);
+    window.parent.postMessage({ type: "__edit_mode_set_keys", edits: { [key]: val } }, "*");
+  };
+
+  const handleReset = () => {
+    if (!confirm("Clear all data for this assessment?")) return;
+    setRatings({ ability: null, aspiration: null, agility: null, alignment: null });
+    setEvidence({ ability: "", aspiration: "", agility: "", alignment: "" });
+    setKeyGap(""); setReadiness(null);
+    setPerson({ name: "", role: "", nextRole: "" });
+    localStorage.clear();
+  };
+
+  return (
+    <div style={{ maxWidth: 860, margin: "0 auto" }}>
+      {/* Page header */}
+      <div style={{ marginBottom: 28, display: "flex", alignItems: "flex-end", justifyContent: "space-between" }}>
+        <div>
+          <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "oklch(0.55 0.015 240)", marginBottom: 4 }}>
+            Holcim · People Review
+          </div>
+          <h1 style={{ fontSize: 26, fontWeight: 700, color: "oklch(0.18 0.02 240)", letterSpacing: "-0.01em" }}>
+            4A Potential Assessment
+          </h1>
+        </div>
+        <button onClick={handleReset} style={{
+          background: "none", border: "1px solid oklch(0.85 0.01 240)", borderRadius: 8,
+          padding: "7px 14px", fontSize: 12.5, cursor: "pointer", color: "oklch(0.5 0.01 240)",
+          fontFamily: "DM Sans, sans-serif", fontWeight: 500,
+        }}>
+          Clear & reset
+        </button>
+      </div>
+
+      {/* Person fields */}
+      <div style={{
+        background: "#fff", borderRadius: 12, padding: "20px 24px", marginBottom: 20,
+        boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
+        display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16,
+      }}>
+        {[
+          { label: "Name", key: "name", placeholder: "Full name" },
+          { label: "Current Role", key: "role", placeholder: "Job title" },
+          { label: "Likely Next Role", key: "nextRole", placeholder: "Successor target or move" },
+        ].map(f => (
+          <div key={f.key}>
+            <div style={{ fontSize: 11.5, fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", color: "oklch(0.5 0.01 240)", marginBottom: 6 }}>{f.label}</div>
+            <input
+              value={person[f.key]}
+              onChange={e => setPerson(p => ({ ...p, [f.key]: e.target.value }))}
+              placeholder={f.placeholder}
+              style={{
+                width: "100%", padding: "9px 12px", border: "1px solid oklch(0.87 0.01 240)",
+                borderRadius: 8, fontSize: 14, fontFamily: "DM Sans, sans-serif",
+                outline: "none", background: "oklch(0.985 0.004 240)", color: "oklch(0.2 0.015 240)",
+              }}
+            />
+          </div>
+        ))}
+      </div>
+
+      {/* Dimension cards */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 16, marginBottom: 20 }}>
+        {DIMENSIONS.map(dim => (
+          <DimensionCard
+            key={dim.key}
+            dim={dim}
+            rating={ratings[dim.key]}
+            evidence={evidence[dim.key]}
+            onRating={v => setRatings(r => ({ ...r, [dim.key]: v }))}
+            onEvidence={v => setEvidence(ev => ({ ...ev, [dim.key]: v }))}
+            color={DIM_COLORS[dim.key]}
+            showPrompts={tweaks.showPromptsByDefault}
+          />
+        ))}
+      </div>
+
+      {/* Overall */}
+      <OverallPanel
+        ratings={ratings}
+        keyGap={keyGap}
+        onKeyGap={setKeyGap}
+        readiness={readiness}
+        onReadiness={setReadiness}
+      />
+
+      {/* Guidance footer */}
+      <div style={{
+        marginTop: 24, padding: "16px 20px", borderRadius: 10,
+        background: "oklch(0.98 0.006 240)", border: "1px solid oklch(0.9 0.01 240)",
+        display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20,
+      }}>
+        <div>
+          <div style={{ fontSize: 11.5, fontWeight: 700, letterSpacing: "0.07em", textTransform: "uppercase", color: "#2d9d6b", marginBottom: 6 }}>
+            A strong output includes
+          </div>
+          {[
+            "A rating per dimension supported by specific evidence",
+            "A named key gap - not just a vague development area",
+            "A readiness indicator linked to evidence, not optimism",
+            "Disagreements surfaced, not smoothed over",
+          ].map((t, i) => (
+            <div key={i} style={{ fontSize: 12.5, color: "oklch(0.35 0.015 240)", display: "flex", gap: 7, marginBottom: 4, lineHeight: 1.5 }}>
+              <span style={{ color: "#2d9d6b", flexShrink: 0 }}>✓</span> {t}
+            </div>
+          ))}
+        </div>
+        <div>
+          <div style={{ fontSize: 11.5, fontWeight: 700, letterSpacing: "0.07em", textTransform: "uppercase", color: "#e05c3a", marginBottom: 6 }}>
+            Watch out for
+          </div>
+          {[
+            "Ratings that mirror performance, not potential",
+            "Aspiration assumed - not based on a real conversation",
+            "Unanimous High across all four without clear evidence",
+            "Development plans that amount to attending a course",
+          ].map((t, i) => (
+            <div key={i} style={{ fontSize: 12.5, color: "oklch(0.35 0.015 240)", display: "flex", gap: 7, marginBottom: 4, lineHeight: 1.5 }}>
+              <span style={{ color: "#e05c3a", flexShrink: 0 }}>✗</span> {t}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Tweaks panel */}
+      {tweaksVisible && (
+        <div style={{
+          position: "fixed", bottom: 24, right: 24, width: 280,
+          background: "#fff", borderRadius: 12, padding: "18px 20px",
+          boxShadow: "0 8px 32px rgba(0,0,0,0.15)", zIndex: 999,
+          fontFamily: "DM Sans, sans-serif",
+        }}>
+          <div style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", color: "oklch(0.35 0.015 240)", marginBottom: 14 }}>Tweaks</div>
+          {[
+            { label: "Ability colour", key: "accentAbility" },
+            { label: "Aspiration colour", key: "accentAspiration" },
+            { label: "Agility colour", key: "accentAgility" },
+            { label: "Alignment colour", key: "accentAlignment" },
+          ].map(t => (
+            <div key={t.key} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+              <label style={{ fontSize: 13, color: "oklch(0.4 0.015 240)" }}>{t.label}</label>
+              <input type="color" value={tweaks[t.key]} onChange={e => updateTweak(t.key, e.target.value)}
+                style={{ width: 36, height: 28, border: "none", borderRadius: 6, cursor: "pointer", background: "none" }} />
+            </div>
+          ))}
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 4 }}>
+            <label style={{ fontSize: 13, color: "oklch(0.4 0.015 240)" }}>Show prompts by default</label>
+            <button
+              onClick={() => updateTweak("showPromptsByDefault", !tweaks.showPromptsByDefault)}
+              style={{
+                width: 40, height: 22, borderRadius: 99, border: "none", cursor: "pointer",
+                background: tweaks.showPromptsByDefault ? "#1a2e52" : "oklch(0.85 0.01 240)",
+                position: "relative", transition: "background 0.2s",
+              }}
+            >
+              <div style={{
+                width: 16, height: 16, borderRadius: "50%", background: "#fff",
+                position: "absolute", top: 3,
+                left: tweaks.showPromptsByDefault ? 21 : 3,
+                transition: "left 0.2s",
+              }} />
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>
