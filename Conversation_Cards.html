@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Conversation Cards · Holcim</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Reddit+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: 'Reddit Sans', system-ui, sans-serif; background: #f4f6fa; color: #1f2937; -webkit-font-smoothing: antialiased; }
+  html { scroll-behavior: smooth; }
+  button { cursor: pointer; border: none; background: none; font-family: inherit; }
+  a { color: inherit; text-decoration: none; }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  .anim-in { animation: fadeIn .25s ease-out both; }
+
+  /* ── Print stylesheet ─────────────────────────────────────────────── */
+  @page { size: A4; margin: 11mm; }
+  .print-only { display: none; }
+  @media print {
+    html, body, * {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+    body { background: #fff !important; }
+    /* Hide the on-screen experience entirely. */
+    .no-print { display: none !important; }
+    /* Show only the compact print reference. */
+    .print-only { display: block !important; }
+    /* Page break helper between sides 1 and 2 of the single A4 sheet. */
+    .print-page-break {
+      page-break-after: always;
+      break-after: page;
+      height: 0;
+    }
+    /* Compact tiles must not split across pages. */
+    .print-tile {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+  }
+</style>
+<template id="__bundler_thumbnail">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 56">
+  <rect width="80" height="56" fill="#041739"/>
+  <rect x="12" y="12" width="24" height="32" rx="3" fill="#fff" opacity="0.92"/>
+  <rect x="40" y="16" width="24" height="32" rx="3" fill="#05b7ed"/>
+  <rect x="16" y="18" width="16" height="2" rx="1" fill="#041739"/>
+  <rect x="16" y="24" width="12" height="2" rx="1" fill="#041739" opacity="0.6"/>
+  <rect x="16" y="30" width="14" height="2" rx="1" fill="#041739" opacity="0.6"/>
+  <rect x="44" y="22" width="14" height="2" rx="1" fill="#fff"/>
+  <rect x="44" y="28" width="11" height="2" rx="1" fill="#fff" opacity="0.6"/>
+  <rect x="44" y="34" width="13" height="2" rx="1" fill="#fff" opacity="0.6"/>
+</svg>
+</template>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script>
+/* Inlined from conversation_cards_data.js so the file works when opened directly (file://). */
+// Conversation Cards - reference questions to ask against the 4As
+// and against the patterns the Evidence Challenge Trainer covers.
+
+window.CONVERSATION_CARDS = [
+
+  // ── 4A Dimension cards ──────────────────────────────────────────────────
+  {
+    id: 'ability',
+    category: 'dimension',
+    label: 'Ability',
+    short: 'Capability, judgement and scale of thinking at the level above',
+    definition: 'Capability, judgement and scale of thinking required to operate at the next leadership level. This is not the same as performance in the current role.',
+    coreQuestion: 'What is the evidence that they operate at a level above their current role, not just brilliantly within it?',
+    questions: [
+      'Can you describe a specific situation in the last 12 months where their judgement stood out as above their current level?',
+      'When they have been stretched beyond their current scope, what happened? Did they lead, follow, or struggle?',
+      'What is the hardest call they have made independently, when you were not in the room?',
+      'If you removed their job title, would their thinking still stand out in a room of more senior leaders?',
+      'Where have they shown they can operate with complexity at scale, rather than within a familiar environment?',
+    ],
+    watchFor: 'Performance evidence presented as potential evidence. Top-quartile delivery, customer satisfaction and operational excellence are all current-role signals. They confirm the person is excellent now. They do not tell you about the level above.',
+    whatGoodSoundsLike: 'The manager names a specific moment, a specific decision, a specific stretch. The evidence is concrete enough that another room member could recognise it. If the answer is general (strong leader, impressive thinker, real presence), the rating is built on impressions rather than evidence.',
+  },
+
+  {
+    id: 'aspiration',
+    category: 'dimension',
+    label: 'Aspiration',
+    short: 'Evidenced desire for broader scope, in the colleague\'s own words',
+    definition: 'Evidenced desire for broader scope, complexity and impact. The colleague\'s own words, in their own time, are the primary evidence. Aspiration is not the same as being hardworking or committed to the current role.',
+    coreQuestion: 'When did they last tell you, in their own words, what they want from their career?',
+    questions: [
+      'Is there a documented career conversation on file in the last 12 months?',
+      'What have they said about where they see themselves in three to five years?',
+      'What experiences have they actively sought out, outside their current remit?',
+      'Have they pursued development at their own cost or in their own time?',
+      'Have they declined a development opportunity, and what did that signal?',
+      'Is their ambition specific, naming a role or a scope, or general?',
+    ],
+    watchFor: 'Aspiration inferred from energy, presence or visibility. Phrases like "she is clearly going places" or "he has the drive" are observations the manager has made, not statements the colleague has made about themselves. The Aspiration rating belongs to the colleague.',
+    whatGoodSoundsLike: 'The manager can name when, where, and what was said. Better still, they can paraphrase the colleague\'s own words. If they cannot, the rating reflects the manager\'s ambition for the person rather than the person\'s ambition for themselves.',
+  },
+
+  {
+    id: 'agility',
+    category: 'dimension',
+    label: 'Agility',
+    short: 'Adaptation in unfamiliar, complex or changing environments',
+    definition: 'Adaptation, learning and performance in unfamiliar, complex or changing environments. Different from competence in a familiar one.',
+    coreQuestion: 'What is a moment in the last 18 months when their agility was genuinely tested?',
+    questions: [
+      'When have they moved out of a familiar environment, and how did they handle it?',
+      'How did they respond the last time the strategy or business context shifted significantly?',
+      'What did they learn from their most recent stretch that they did not know before?',
+      'Where have they been wrong, and what did they do about it?',
+      'Have they worked across functions, geographies or business units, or only within one?',
+    ],
+    watchFor: 'Long tenure presented as agility. Years of experience in one environment is competence, not agility. The same applies to fast adoption of routine tools or systems (a new ERP, a new reporting framework) without a genuine change in context.',
+    whatGoodSoundsLike: 'The manager can name a real change in context, not a change in workload. They can describe what the colleague did when the environment shifted, what they learned, and where they adjusted. The best answers include a moment of being wrong, and of doing it better next time.',
+  },
+
+  {
+    id: 'alignment',
+    category: 'dimension',
+    label: 'Alignment',
+    short: 'Values, behaviours and direction of travel',
+    definition: 'Values, behaviours, and direction of travel. Doing the right work, in a way that matches where the organisation is going, not just where it is today.',
+    coreQuestion: 'When have they put a value above a short-term win?',
+    questions: [
+      'Where have they shown leadership consistent with where the organisation is heading, not just with where it is today?',
+      'Have they actively engaged with the strategic direction of the business, beyond their own remit?',
+      'How do they handle pressure to compromise on values?',
+      'What is the evidence they bring others with them on the values, rather than only living them personally?',
+      'When have they pushed back on a decision because it was not aligned, even when the decision was popular?',
+    ],
+    watchFor: 'Strong values-behaviour scores from the annual review presented as the whole alignment case. These show current alignment, which is necessary but not sufficient. A preference for stability over change is not a values problem, but it is an alignment question worth surfacing.',
+    whatGoodSoundsLike: 'The manager can describe a specific moment of values-led behaviour under pressure, and can also describe how the colleague engages with the strategic direction of the business beyond their own scope. If the evidence is only behavioural and entirely local in scope, the alignment rating is partial at best.',
+  },
+
+  // ── Pattern cards (cross-cutting failure modes) ─────────────────────────
+  {
+    id: 'performance-as-potential',
+    category: 'pattern',
+    label: 'Performance dressed up as potential',
+    short: 'When the evidence is about how well they do the current role',
+    signal: 'Every line of evidence cites excellence in the current role. KPIs, customer satisfaction, operational delivery, peer admiration. Strong on what they have done; quiet on what they could do next.',
+    coreQuestion: 'What is the evidence they operate at the level above, not just brilliantly within their current role?',
+    questions: [
+      'What stretch outside their current scope have they handled, and what happened?',
+      'When have they covered for someone more senior, and how did the rest of the business respond?',
+      'What is a decision they have made above their job level, that you did not need to make for them?',
+      'Have they ever reframed a problem in a way that surprised you?',
+    ],
+    watchFor: 'The instinct to reward a top performer with a High Potential rating. They are different ratings, measuring different things. A potential rating is not the reward for excellent delivery.',
+    whatGoodSoundsLike: 'A specific stretch experience. A named decision. A moment of operating at scale, not just in scope. If the manager cannot describe one, the rating is for the wrong thing and a recalibration to Medium is usually the honest move, with a clear development action to generate the missing evidence.',
+  },
+
+  {
+    id: 'assumed-aspiration',
+    category: 'pattern',
+    label: 'Aspiration assumed, not evidenced',
+    short: 'When the manager is ambitious for the colleague, not the other way around',
+    signal: 'The Aspiration rating is asserted by the manager using words like "clearly ambitious", "high energy" or "going places". The colleague\'s own words are not in the case.',
+    coreQuestion: 'When did they last tell you, in their own words, what they want from their career?',
+    questions: [
+      'Is there a documented career conversation on file in the last 12 months?',
+      'What did they say they wanted, and what experiences have they sought out since?',
+      'Have they ever asked for stretch, mobility or development directly?',
+      'If you imagine the role you have in mind for them, has anyone asked them whether they want it?',
+    ],
+    watchFor: 'Energy mistaken for aspiration. A high-performing, visible colleague is not necessarily ambitious for the next level. Some of your strongest performers want to stay where they are, and that is a legitimate position.',
+    whatGoodSoundsLike: 'The manager names a date, a setting, and the colleague\'s own words. If they cannot, the next development action is a real career conversation, before the form is locked, and the Aspiration rating moves to Medium until the evidence is there.',
+  },
+
+  {
+    id: 'recency-anchor',
+    category: 'pattern',
+    label: 'Recency: one event doing the work of a year',
+    short: 'When a single recent project is carrying the whole assessment',
+    signal: 'The evidence repeatedly cites one project, one win, one moment. The prior 18 months are not really in the assessment.',
+    coreQuestion: 'Beyond that piece of work, what is the pattern of evidence over the last 18 months?',
+    questions: [
+      'What was happening in the 12 months before that recent project?',
+      'If you set aside that one piece of work, what does the body of evidence look like?',
+      'Is this a person, or is this a project?',
+      'How were they performing before they got the big platform?',
+    ],
+    watchFor: 'CEO or ExCo recognition of a single project. A standout moment is a signal, not a body of evidence. Recognising one project is not the same as evidencing potential.',
+    whatGoodSoundsLike: 'A pattern over time. Multiple data points across different contexts. The recent moment is one in a series, not the series itself. If the manager can only describe the recent moment, the rating should hold for another cycle before it is treated as settled.',
+  },
+
+  {
+    id: 'halo-from-one-dimension',
+    category: 'pattern',
+    label: 'Halo from one strong dimension',
+    short: 'When one brilliant area is doing the work of three weaker ones',
+    signal: 'One dimension, usually Ability, has strong, detailed evidence. The other three dimensions have one or two general lines that read like afterthoughts.',
+    coreQuestion: 'If we set aside their strongest dimension, what is the evidence for the other three on their own merits?',
+    questions: [
+      'What is the specific evidence for Aspiration, independent of their Ability?',
+      'What is the specific evidence for Agility, independent of their operational excellence?',
+      'What is the specific evidence for Alignment, beyond a values score?',
+      'Could you describe their development gaps with the same level of specificity as their strengths?',
+    ],
+    watchFor: 'A long, well-written paragraph on one dimension followed by short, generic lines on the others. The shape of the evidence often tells you where the case actually sits.',
+    whatGoodSoundsLike: 'Each dimension is separately defended with its own evidence. If one carries the others, the rating is a one-dimension assessment with three echoes, and the right move is to keep the strong dimension and revise the others to where the evidence supports.',
+  },
+
+  {
+    id: 'sponsor-halo',
+    category: 'pattern',
+    label: 'Sponsor halo',
+    short: 'When the rating reflects who likes them, not what they have done',
+    signal: 'The evidence leans heavily on the views of senior people. Names of senior leaders appear in the case. The colleague\'s line outcomes are less prominent than the senior validations.',
+    coreQuestion: 'If we take the senior advocates out of the picture, what is the evidence of their independent contribution?',
+    questions: [
+      'What is the hardest call they have made, when no senior was watching?',
+      'What have they shipped or owned independently end-to-end, with measurable outcomes?',
+      'How are they regarded by their peers, rather than by their senior stakeholders?',
+      'What would the case for the rating look like, written with all the senior names removed?',
+    ],
+    watchFor: 'Quoting senior leaders by name. "Mr Sanchez personally requested..." or "the CEO mentioned them by name..." are useful signals but they are signals about the sponsors, not about the person.',
+    whatGoodSoundsLike: 'A specific piece of work that the colleague ran independently. Outcomes that can be described without reference to who liked them. Peer respect alongside senior approval. If the manager can only describe sponsorship, the rating reflects a network position rather than a person.',
+  },
+
+  {
+    id: 'discrimination-failure',
+    category: 'pattern',
+    label: 'No discrimination across the cohort',
+    short: 'When a manager has rated everyone the same way',
+    signal: 'A manager has rated all or most direct reports identically, often all High Potential.',
+    coreQuestion: 'If you could only put your weight behind one of them for a stretch role next quarter, which one, and what is the evidence over the others?',
+    questions: [
+      'Looking across the team, who is the strongest on Aspiration specifically, and how would you order them?',
+      'Which one of these has surprised you upwards in the last six months?',
+      'Which one would you struggle most to lose, and why?',
+      'If one of them had to step into a role today, who would you back, and what is missing from the others?',
+    ],
+    watchFor: 'A flat distribution in a cohort of any meaningful size. Real cohorts have shape. If the shape is missing, the discrimination work has not been done, and the room cannot calibrate it.',
+    whatGoodSoundsLike: 'The manager pauses, then names one without hesitation, and articulates what makes that person different. Often they revise one or two of the other ratings on their own as they speak. The conversation that follows is usually the right calibration of the team.',
+  },
+
+  {
+    id: 'quiet-under-recognition',
+    category: 'pattern',
+    label: 'Quiet under-recognition',
+    short: 'When the room is about to walk past the case that matters most',
+    signal: 'A Medium rating with thin evidence. The manager\'s language is generic ("reliable", "solid", "gets the job done"). The case is the kind the room would otherwise move past in a minute.',
+    coreQuestion: 'Is there anyone in your team you might be quietly under-recognising?',
+    questions: [
+      'What is the most ambitious work anyone on your team has done in the last 12 months, and who actually did it?',
+      'Who in your team is hardest to see day-to-day, and how do you know what they are contributing?',
+      'When did you last have a structured conversation with this person about what they are working on?',
+      'Is there anyone on your team you have learned something from in the last six months?',
+    ],
+    watchFor: 'Tired-room momentum on quiet cases. The most consequential calibration failures are not the loud disagreements. They are the quiet cases the room had the chance to slow down on, and did not.',
+    whatGoodSoundsLike: 'The manager pauses, names something they had not put in the assessment, then frames a revision of the rating. The conversation that follows is often the most useful in the whole session.',
+  },
+
+  {
+    id: 'rating-holds',
+    category: 'pattern',
+    label: 'Sometimes the rating holds',
+    short: 'When the work is done and the question is what is missing from the rating',
+    signal: 'The submission is detailed, well-evidenced across all four dimensions, includes documented conversations, and is supported by more than one source.',
+    coreQuestion: 'What is the question I should be asking that I have not?',
+    questions: [
+      'What are you privately worried about with this person that is not in the assessment?',
+      'Where do you most need help from us, in supporting them?',
+      'What is the development action you would commit to, beyond confirming the rating?',
+      'If this person hits a wall in the next 12 months, where will it be?',
+    ],
+    watchFor: 'Reflexive challenge on well-evidenced cases. Pressing on every dimension when the evidence is already there wastes the room\'s time and erodes the manager\'s confidence in the calibration process.',
+    whatGoodSoundsLike: 'The manager has done the work and the rating holds. The conversation moves onto the development action that should sit underneath the rating, and often onto a private worry the manager has been carrying. That is a more valuable use of the room than re-litigating a rating that is right.',
+  },
+];
+
+window.CARD_GROUPS = [
+  { id: 'dimension', label: 'The four dimensions', short: '4As' },
+  { id: 'pattern', label: 'Common patterns in the room', short: 'Patterns' },
+];
+
+</script>
+<script type="text/babel">
+const { useState, useMemo } = React;
+
+// ── Brand ────────────────────────────────────────────────────────────────────
+const NAVY = '#041739';
+const NAVY2 = '#164375';
+const CYAN = '#05b7ed';
+const LIME = '#65c12a';
+const SLATE = '#3d5070';
+const AMBER = '#d97706';
+const BRAND_GRADIENT = 'linear-gradient(90deg, #65c12a 0%, #05b7ed 50%, #164375 100%)';
+const PAPER = '#ffffff';
+const BG = '#f4f6fa';
+const MUTE = '#6b7280';
+const LINE = '#e5e7eb';
+const SOFT = '#f1f5f9';
+
+const CARDS = window.CONVERSATION_CARDS;
+const GROUPS = window.CARD_GROUPS;
+
+const CATEGORY_META = {
+  dimension: { accent: CYAN, accentSoft: '#eff8fe', label: '4A dimension' },
+  pattern: { accent: NAVY2, accentSoft: '#eef2f9', label: 'Pattern' },
+};
+
+// ── Stroke ───────────────────────────────────────────────────────────────────
+function Stroke({ children, fontSize = 44, darkBg = false }) {
+  const h = Math.round(fontSize * 0.24);
+  const ext = Math.round(fontSize / 6);
+  return (
+    <span style={{ display: 'inline-block', position: 'relative' }}>
+      <span style={{
+        position: 'absolute', left: -ext, right: -ext,
+        bottom: Math.round(fontSize * 0.05), height: h,
+        background: BRAND_GRADIENT, zIndex: 0,
+      }}/>
+      <span style={{ position: 'relative', zIndex: 1, color: darkBg ? '#fff' : 'inherit' }}>{children}</span>
+    </span>
+  );
+}
+
+// ── App ──────────────────────────────────────────────────────────────────────
+function App() {
+  const [filter, setFilter] = useState('all'); // 'all' | 'dimension' | 'pattern' | <card id>
+  const [expandedId, setExpandedId] = useState(null);
+
+  const filtered = useMemo(() => {
+    if (filter === 'all') return CARDS;
+    if (filter === 'dimension' || filter === 'pattern') return CARDS.filter(c => c.category === filter);
+    return CARDS;
+  }, [filter]);
+
+  const grouped = useMemo(() => {
+    return GROUPS.map(g => ({ ...g, cards: filtered.filter(c => c.category === g.id) })).filter(g => g.cards.length > 0);
+  }, [filtered]);
+
+  return (
+    <div style={{ minHeight: '100vh', background: BG }}>
+      <Header />
+      <PrintReferenceSheet />
+      <div className="no-print" style={{ maxWidth: 1120, margin: '0 auto', padding: '36px 24px 80px' }}>
+        <Hero />
+        <FilterBar value={filter} onChange={setFilter} counts={{
+          all: CARDS.length,
+          dimension: CARDS.filter(c => c.category === 'dimension').length,
+          pattern: CARDS.filter(c => c.category === 'pattern').length,
+        }} />
+        {grouped.map(g => (
+          <section key={g.id} className="section-header" style={{ marginTop: 28 }}>
+            <SectionHeader group={g} />
+            <div className="card-grid card-grid-cols-2" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(420px, 1fr))', gap: 18 }}>
+              {g.cards.map(card => (
+                <Card key={card.id} card={card} expanded={expandedId === card.id} onToggle={() => setExpandedId(expandedId === card.id ? null : card.id)} />
+              ))}
+            </div>
+          </section>
+        ))}
+        <Footer />
+      </div>
+    </div>
+  );
+}
+
+// ── Header ───────────────────────────────────────────────────────────────────
+function Header() {
+  return (
+    <header className="site-header no-print" style={{ background: NAVY, color: '#fff', position: 'sticky', top: 0, zIndex: 10 }}>
+      <div style={{ height: 3, background: BRAND_GRADIENT }} />
+      <div style={{ maxWidth: 1120, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, padding: '16px 24px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14, color: '#fff' }}>
+          <img src="data:image/png;base64,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" alt="Holcim" style={{ height: 24, filter: 'brightness(0) invert(1)' }} />
+          <div style={{ textAlign: 'left' }}>
+            <div style={{ fontSize: 10, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 1.8, color: CYAN, textTransform: 'uppercase' }}>Reference for the room</div>
+            <div style={{ fontFamily: 'Montserrat', fontWeight: 700, fontSize: 16, lineHeight: 1.1, marginTop: 2 }}>Conversation Cards</div>
+          </div>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+          <button onClick={() => window.print()} style={{
+            padding: '8px 14px', borderRadius: 8, background: CYAN, color: NAVY,
+            fontFamily: 'Montserrat', fontWeight: 700, fontSize: 13, letterSpacing: 0.3,
+            display: 'inline-flex', alignItems: 'center', gap: 6,
+          }}>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4"><path d="M6 9V2h12v7"/><rect x="4" y="9" width="16" height="9" rx="1"/><rect x="6" y="14" width="12" height="7"/></svg>
+            Print as one sheet
+          </button>
+        </div>
+      </div>
+    </header>
+  );
+}
+
+function PrintReferenceSheet() {
+  const dims = CARDS.filter(c => c.category === 'dimension');
+  const patterns = CARDS.filter(c => c.category === 'pattern');
+  return (
+    <div className="print-only">
+      <PrintBranding />
+      <div style={{ fontFamily: 'Montserrat', fontWeight: 800, fontSize: 13, color: NAVY, textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: '4mm' }}>The four dimensions</div>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '5mm' }}>
+        {dims.map(c => <PrintTile key={c.id} card={c} size="large" />)}
+      </div>
+
+      <div className="print-page-break"></div>
+
+      <PrintBranding subtitle="The patterns the room sees most often. Match the signal to the question." />
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4mm' }}>
+        {patterns.map(c => <PrintTile key={c.id} card={c} size="small" />)}
+      </div>
+    </div>
+  );
+}
+
+function PrintBranding({ subtitle }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', borderBottom: `2px solid ${NAVY}`, paddingBottom: '4mm', marginBottom: '6mm', gap: 12 }}>
+      <div>
+        <div style={{ fontSize: 10, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 1.8, color: CYAN, textTransform: 'uppercase', marginBottom: 4 }}>Holcim · Conversation Cards · For the calibration room</div>
+        <div style={{ fontFamily: 'Montserrat', fontWeight: 800, fontSize: 16, color: NAVY, lineHeight: 1.15 }}>Questions to ask against the 4As, and the patterns that come up most.</div>
+        {subtitle && <div style={{ fontSize: 11, color: SLATE, marginTop: 4 }}>{subtitle}</div>}
+      </div>
+      <div style={{ fontSize: 9, color: MUTE, fontFamily: 'Montserrat', fontWeight: 600, textAlign: 'right', flexShrink: 0 }}>Companion to the<br/>Evidence Challenge Trainer</div>
+    </div>
+  );
+}
+
+function PrintTile({ card, size = 'large' }) {
+  const meta = CATEGORY_META[card.category];
+  const isLarge = size === 'large';
+
+  // Shorten the watch-for line for the compact tiles by taking the first sentence.
+  const shortWatch = (() => {
+    if (!card.watchFor) return '';
+    const firstStop = card.watchFor.indexOf('. ');
+    return firstStop > 0 ? card.watchFor.slice(0, firstStop + 1) : card.watchFor;
+  })();
+
+  return (
+    <div className="print-tile" style={{
+      border: '1px solid #94a3b8',
+      borderRadius: 4,
+      overflow: 'hidden',
+      display: 'flex',
+      flexDirection: 'column',
+      background: '#fff',
+    }}>
+      {/* Header */}
+      <div style={{ background: NAVY, color: '#fff', padding: isLarge ? '7px 10px 8px' : '5px 9px 6px', position: 'relative' }}>
+        <div aria-hidden style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, background: meta.accent }} />
+        <div style={{ fontSize: 8, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 1.2, color: meta.accent, textTransform: 'uppercase', marginBottom: 2 }}>{meta.label}</div>
+        <div style={{ fontFamily: 'Montserrat', fontWeight: 800, fontSize: isLarge ? 13.5 : 11.5, lineHeight: 1.15 }}>{card.label}</div>
+      </div>
+
+      {/* Body */}
+      <div style={{ padding: isLarge ? '8px 10px 9px' : '6px 9px 7px', display: 'flex', flexDirection: 'column', gap: isLarge ? 6 : 4, flex: 1 }}>
+        {isLarge && (
+          <div style={{ fontSize: 9.5, color: SLATE, lineHeight: 1.4 }}>{card.definition || card.signal}</div>
+        )}
+        {!isLarge && (
+          <div style={{ fontSize: 8.5, color: SLATE, lineHeight: 1.35, fontStyle: 'italic' }}>{card.signal}</div>
+        )}
+
+        {/* Core question */}
+        <div style={{ background: '#f1f5f9', borderLeft: `3px solid ${meta.accent}`, padding: isLarge ? '6px 8px' : '5px 7px', borderRadius: 2 }}>
+          <div style={{ fontSize: 7.5, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 0.9, color: meta.accent, textTransform: 'uppercase', marginBottom: 3 }}>The core question</div>
+          <div style={{ fontFamily: 'Montserrat', fontWeight: 600, fontSize: isLarge ? 10.5 : 9.5, color: NAVY, lineHeight: 1.35 }}>"{card.coreQuestion}"</div>
+        </div>
+
+        {/* Follow-ups, only on the large dimension tiles */}
+        {isLarge && (
+          <div>
+            <div style={{ fontSize: 7.5, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 0.9, color: NAVY, textTransform: 'uppercase', marginBottom: 3 }}>Follow-ups</div>
+            <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 2 }}>
+              {card.questions.slice(0, 4).map((q, i) => (
+                <li key={i} style={{ fontSize: 9, lineHeight: 1.35, color: '#1f2937', display: 'flex', gap: 5 }}>
+                  <span style={{ color: meta.accent, flexShrink: 0 }}>·</span>
+                  <span>"{q}"</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {/* Watch for (compact). Shortened on small tiles. */}
+        {shortWatch && (
+          <div style={{ fontSize: isLarge ? 9 : 8, color: '#92400e', lineHeight: 1.35, paddingTop: 2, borderTop: '1px dashed #d6dde7' }}>
+            <strong style={{ fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 0.3 }}>Watch for. </strong>
+            {shortWatch}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="site-footer no-print" style={{ borderTop: `1px solid ${LINE}`, marginTop: 60, paddingTop: 24, paddingBottom: 8, textAlign: 'center', fontSize: 12, color: MUTE, fontFamily: 'Reddit Sans' }}>
+      Conversation Cards · Holcim Talent Toolkit · Companion to the Evidence Challenge Trainer
+    </footer>
+  );
+}
+
+// ── Hero ─────────────────────────────────────────────────────────────────────
+function Hero() {
+  return (
+    <div className="no-print" style={{ background: NAVY, color: '#fff', borderRadius: 16, padding: '40px 40px 36px', marginBottom: 24, position: 'relative', overflow: 'hidden' }}>
+      <div aria-hidden style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 4, background: BRAND_GRADIENT }} />
+      <div aria-hidden style={{ position: 'absolute', right: -80, bottom: -100, width: 280, height: 280, borderRadius: '50%', background: `radial-gradient(circle, ${CYAN}26, transparent 70%)` }} />
+      <div style={{ position: 'relative', maxWidth: 760 }}>
+        <div style={{ fontSize: 12, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 2, color: CYAN, textTransform: 'uppercase', marginBottom: 16 }}>Reference for the room</div>
+        <h1 style={{ fontFamily: 'Montserrat', fontWeight: 800, fontSize: 42, lineHeight: 1.08, margin: '0 0 18px', letterSpacing: -1.1 }}>
+          Questions to ask against the <Stroke fontSize={42} darkBg>4As.</Stroke>
+        </h1>
+        <p style={{ fontSize: 16, lineHeight: 1.6, color: 'rgba(255,255,255,0.82)', margin: '0 0 22px', maxWidth: 680 }}>
+          A short reference, designed for use in three places. By line managers preparing an assessment, when the form is open and the evidence still needs work. By Heads of People and Talent leads preparing for a calibration session, when you need to know what you will probe on. And in the room itself, when the chair turns to you and you need the next question. Browse by 4A dimension or by the pattern you are seeing.
+        </p>
+        <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+          <button onClick={() => window.print()} style={{
+            padding: '11px 18px', borderRadius: 8, background: CYAN, color: NAVY,
+            fontFamily: 'Montserrat', fontWeight: 700, fontSize: 13.5, letterSpacing: 0.3,
+            display: 'inline-flex', alignItems: 'center', gap: 8,
+          }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4"><path d="M6 9V2h12v7"/><rect x="4" y="9" width="16" height="9" rx="1"/><rect x="6" y="14" width="12" height="7"/></svg>
+            Print as one sheet, double-sided
+          </button>
+          <a href="Evidence Challenge Trainer.html" style={{ padding: '11px 18px', borderRadius: 8, background: 'transparent', color: '#fff', border: '1px solid rgba(255,255,255,0.3)', fontFamily: 'Montserrat', fontWeight: 600, fontSize: 13.5, letterSpacing: 0.3 }}>
+            Practise these questions →
+          </a>
+        </div>
+        <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.55)', fontFamily: 'Reddit Sans', marginTop: 14 }}>The print version compresses to a single A4 sheet, double-sided. Four dimensions on one side, eight patterns on the other.</div>
+      </div>
+    </div>
+  );
+}
+
+// ── Filter bar ───────────────────────────────────────────────────────────────
+function FilterBar({ value, onChange, counts }) {
+  const chips = [
+    { id: 'all', label: 'All cards', count: counts.all },
+    { id: 'dimension', label: 'The four dimensions', count: counts.dimension },
+    { id: 'pattern', label: 'Common patterns', count: counts.pattern },
+  ];
+  return (
+    <div className="no-print" style={{ background: PAPER, border: `1px solid ${LINE}`, borderRadius: 12, padding: '10px 14px', display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+        {chips.map(c => {
+          const active = value === c.id;
+          return (
+            <button
+              key={c.id}
+              onClick={() => onChange(c.id)}
+              style={{
+                padding: '8px 14px', borderRadius: 999,
+                background: active ? NAVY : 'transparent',
+                color: active ? '#fff' : NAVY,
+                fontFamily: 'Montserrat', fontWeight: 600, fontSize: 13,
+                border: `1px solid ${active ? NAVY : LINE}`,
+                transition: 'all .15s ease',
+                display: 'inline-flex', alignItems: 'center', gap: 8,
+              }}
+            >
+              {c.label}
+              <span style={{ fontSize: 11.5, fontFamily: 'Montserrat', fontWeight: 600, color: active ? 'rgba(255,255,255,0.65)' : MUTE, background: active ? 'rgba(255,255,255,0.12)' : SOFT, padding: '2px 7px', borderRadius: 999 }}>{c.count}</span>
+            </button>
+          );
+        })}
+      </div>
+      <div style={{ fontSize: 12, color: MUTE, fontFamily: 'Reddit Sans' }}>Tap any card to expand it.</div>
+    </div>
+  );
+}
+
+// ── Section header ───────────────────────────────────────────────────────────
+function SectionHeader({ group }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'baseline', gap: 14, marginBottom: 14 }}>
+      <div style={{ fontFamily: 'Montserrat', fontWeight: 700, fontSize: 11.5, letterSpacing: 1.5, color: NAVY, textTransform: 'uppercase' }}>{group.label}</div>
+      <div style={{ flex: 1, height: 1, background: LINE }} />
+      <div style={{ fontSize: 12, fontFamily: 'Montserrat', fontWeight: 600, color: MUTE }}>{group.cards.length} {group.cards.length === 1 ? 'card' : 'cards'}</div>
+    </div>
+  );
+}
+
+// ── Card ─────────────────────────────────────────────────────────────────────
+function Card({ card, expanded, onToggle }) {
+  const meta = CATEGORY_META[card.category];
+  const intro = card.definition || card.signal;
+  return (
+    <div className="card" style={{
+      background: PAPER, borderRadius: 14, border: `1px solid ${LINE}`,
+      overflow: 'hidden', display: 'flex', flexDirection: 'column',
+      boxShadow: '0 1px 0 rgba(4,23,57,0.03)',
+    }}>
+      {/* Top: category strip + title */}
+      <div style={{ background: NAVY, color: '#fff', padding: '18px 22px', position: 'relative' }}>
+        <div aria-hidden style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: meta.accent }} />
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, marginBottom: 6 }}>
+          <div style={{ fontSize: 10, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 1.4, color: meta.accent, textTransform: 'uppercase' }}>{meta.label}</div>
+        </div>
+        <div style={{ fontFamily: 'Montserrat', fontWeight: 800, fontSize: 21, lineHeight: 1.2, letterSpacing: -0.2 }}>{card.label}</div>
+        <div style={{ fontSize: 12.5, color: 'rgba(255,255,255,0.7)', marginTop: 6, lineHeight: 1.5 }}>{card.short}</div>
+      </div>
+
+      {/* Body */}
+      <div style={{ padding: '20px 22px 18px', display: 'flex', flexDirection: 'column', gap: 14, flex: 1 }}>
+        <div style={{ fontSize: 13.5, lineHeight: 1.6, color: SLATE, fontFamily: 'Reddit Sans' }}>{intro}</div>
+
+        {/* Core question */}
+        <div style={{ background: SOFT, borderLeft: `4px solid ${meta.accent}`, borderRadius: 6, padding: '14px 16px' }}>
+          <div style={{ fontSize: 10.5, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 1.2, color: meta.accent, textTransform: 'uppercase', marginBottom: 6 }}>The core question</div>
+          <div style={{ fontFamily: 'Montserrat', fontWeight: 600, fontSize: 15, color: NAVY, lineHeight: 1.5 }}>"{card.coreQuestion}"</div>
+        </div>
+
+        {/* Follow-ups */}
+        <div>
+          <div style={{ fontSize: 10.5, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 1.2, color: NAVY, textTransform: 'uppercase', marginBottom: 8 }}>Follow-ups</div>
+          <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 7 }}>
+            {card.questions.map((q, i) => (
+              <li key={i} style={{ display: 'flex', gap: 10, fontSize: 13.5, lineHeight: 1.55, color: '#1f2937' }}>
+                <span style={{ flexShrink: 0, color: meta.accent, fontFamily: 'Montserrat', fontWeight: 700, fontSize: 12, paddingTop: 1 }}>·</span>
+                <span>"{q}"</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Expandable: Watch for + What good sounds like. Hidden on screen until
+            toggled, but always shown in print via .card-extras CSS override. */}
+        <div className="no-print">
+          <button
+            onClick={onToggle}
+            style={{
+              width: '100%', textAlign: 'left',
+              padding: '10px 0', fontSize: 12.5, fontFamily: 'Montserrat', fontWeight: 700, color: NAVY,
+              letterSpacing: 0.5, textTransform: 'uppercase',
+              borderTop: `1px solid ${LINE}`,
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            }}
+          >
+            <span>{expanded ? 'Hide' : 'Show'} what to watch for and what good sounds like</span>
+            <span style={{ transform: expanded ? 'rotate(180deg)' : 'rotate(0)', transition: 'transform .15s ease', color: meta.accent, fontSize: 14 }}>▾</span>
+          </button>
+        </div>
+        <div className="card-extras" style={{ display: expanded ? 'flex' : 'none', flexDirection: 'column', gap: 12 }}>
+          <Callout
+            accent={AMBER}
+            accentSoft="#fef8e8"
+            borderSoft="#fcd34d"
+            labelColor="#92400e"
+            label="Watch for"
+            body={card.watchFor}
+          />
+          <Callout
+            accent={LIME}
+            accentSoft="#f0fbf3"
+            borderSoft={`${LIME}55`}
+            labelColor="#3d7d18"
+            label="What good sounds like"
+            body={card.whatGoodSoundsLike}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Callout({ accent, accentSoft, borderSoft, labelColor, label, body }) {
+  return (
+    <div style={{
+      background: accentSoft, border: `1px solid ${borderSoft}`,
+      borderLeft: `3px solid ${accent}`,
+      borderRadius: 8, padding: '12px 14px',
+    }}>
+      <div style={{ fontSize: 10.5, fontFamily: 'Montserrat', fontWeight: 700, letterSpacing: 1, color: labelColor, textTransform: 'uppercase', marginBottom: 6 }}>{label}</div>
+      <div style={{ fontSize: 13, lineHeight: 1.55, color: '#1f2937' }}>{body}</div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
